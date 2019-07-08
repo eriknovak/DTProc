@@ -1,0 +1,46 @@
+{
+  "name": "document-enrichment-tool",
+  "version": "1.0.0",
+  "description": "Extracts document metadata, raw text, and annotates it with Wikipedia concepts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErikNovak/document-enrichment-tool.git"
+  },
+  "keywords": [
+    "enrichment",
+    "Wikipedia",
+    "concepts",
+    "text",
+    "mining",
+    "pre-processing"
+  ],
+  "author": "Erik Novak",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/ErikNovak/document-enrichment-tool/issues"
+  },
+  "homepage": "https://github.com/ErikNovak/document-enrichment-tool#readme",
+  "dependencies": {
+    "async": "^3.0.1",
+    "dotenv": "^8.0.0",
+    "file-type": "^12.0.0",
+    "jsonschema": "^1.2.4",
+    "kafka-node": "^4.1.3",
+    "pg": "^7.11.0",
+    "pg-cursor": "^2.0.0",
+    "qtopology": "^2.2.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  },
+  "devDependencies": {
+    "link-module-alias": "^1.2.0"
+  },
+  "_moduleAliases": {
+    "alias:config": "src/config",
+    "alias:lib": "src/library"
+  }
+}
