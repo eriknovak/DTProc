@@ -30,9 +30,10 @@ class MaterialFormat {
         this._prefix = `[MaterialFormat ${this._name}]`;
         // which field to use to check the material type
         this._documentUrlPath = config.url_path;
+        // where to store the document type
         this._documentTypePath = config.type_path;
-        // create the postgres connection
-        this._pg = require('alias:lib/postgresql')(config.pg);
+        // where to store the errors if any
+        this._documentErrorPath = config.error_path || 'error';
         // use other fields from config to control your execution
         callback();
     }
@@ -110,12 +111,12 @@ class MaterialFormat {
                 return this._makeProtocolRequest(https, message, stream_id, callback);
             } else {
                 // cannot detect the protocol for getting materials
-                message.message = `${this._profix} Cannot detect protocol for getting materials`;
+                message[this._documentErrorPath] = `${this._profix} Cannot detect protocol for getting materials`;
                 return this._onEmit(message, 'stream_error', callback);
             }
         } else {
             // unable to get the url of the material
-            message.message = `${this._prefix} No material url provided`;
+            message[this._documentErrorPath] = `${this._prefix} No material url provided`;
             return this._onEmit(message, 'stream_error', callback);
         }
     }
@@ -140,7 +141,7 @@ class MaterialFormat {
             this._handleHTTPResponse(response, message, stream_id, callback);
         }).on('error', error => {
             // send formated material to the next component
-            message.message = `${self._prefix} Error when making an http(s) request= ${error.message}`;
+            message[this._documentErrorPath] = `${self._prefix} Error when making an http(s) request= ${error.message}`;
             return this._onEmit(message, 'stream_error', callback);
         });
     }
@@ -157,17 +158,26 @@ class MaterialFormat {
         const statusCode = response.statusCode;
         if (statusCode !== 200) {
             // send formated material to the next component
-            message.message = `${this._prefix} Error when making a request, invalid status code= ${statusCode}`;
+            message[this._documentErrorPath] = `${this._prefix} Error when making a request, invalid status code= ${statusCode}`;
             return this._onEmit(message, 'stream_error', callback);
         } else {
-            response.on('data', () => {
+            response.on('readable', (d) => {
                 // get the minimum number of bytes to detect type
                 const chunk = response.read(fileTypeResponse.minimumBytes);
                 // destroy the response of the http(s)
                 response.destroy();
                 // assign the material type
-                this.set(message, this._documentTypePath, fileTypeResponse(chunk));
-                return this._onEmit(material, stream_id, callback);
+
+                if (chunk) {
+                    this.set(message, this._documentTypePath, fileTypeResponse(chunk));
+                    return this._onEmit(message, stream_id, callback);
+                } else {
+                    // send formated material to the next component
+                    message[this._documentErrorPath] = `${this._prefix} Error when making request, response object empty`;
+                    return this._onEmit(message, 'stream_error', callback);
+                }
+
+
             });
         }
     }

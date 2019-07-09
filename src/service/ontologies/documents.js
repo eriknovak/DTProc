@@ -13,22 +13,11 @@ module.exports = {
             "working_dir": "./spouts",
             "cmd": "kafka-spout.js",
             "init": {
-                // "kafka_host": config.kafka.host,
-                // "topic": "PROCESSING.MATERIAL.TEXT",
-                // "group_id": `${config.kafka.groupId}-text`
+                "kafka_host": config.kafka.host,
+                "topic": "DOCUMENT.TEXT",
+                "group_id": `${config.kafka.groupId}`
             }
         },
-        //
-        {
-            "name": "text-input-reader",
-            "working_dir": ".",
-            "type": "sys",
-            "cmd": "file_reader",
-            "init": {
-                "file_name": "/some/file.txt",
-                "file_format": "json"
-            }
-        }
     ],
     "bolts": [
         {

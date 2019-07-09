@@ -19,11 +19,9 @@ class MaterialValidator {
         this._context = context;
         this._onEmit = config.onEmit;
         this._prefix = `[MaterialValidator ${this._name}]`;
-        // create the postgres connection
-        this._pg = require('alias:lib/postgresQL')(config.pg);
 
         // initialize validator with
-        this._validator = require('alias:lib/schema-validator')();
+        this._validator = require('alias:library/schema-validator')();
         // the validation schema
         this._schema = config.schema;
 

@@ -146,9 +146,7 @@ class Wikification {
 
             // sort annotations by pageRank
             annotations.sort((concept1, concept2) =>
-                concept2.pageRank > concept1.pageRank
-                ? 1 : concept2.pageRank < concept1.pageRank
-                ? -1 : 0
+                concept2.pageRank - concept1.pageRank
             );
 
             /******************************
@@ -191,6 +189,8 @@ class Wikification {
                     supportLen: concept.supportLen
                 };
             });
+
+
             // return the concept list
             return callback(null, concepts);
 
@@ -282,12 +282,14 @@ class ExtractionWikipedia {
         this._onEmit = config.onEmit;
         this._prefix = `[Wikification ${this._name}]`;
         // wikifier request object
-        this._wikifier = new Wikification(config.userKey, config.wikifierUrl);
+        this._wikifier = new Wikification(config.wikifier.userKey, config.wikifier.wikifierUrl);
 
         // determine the text to use for wikipedia extraction
         this._textPath = config.text_path;
         // determine the location to store the concepts
         this._conceptPath = config.concept_path;
+        // the path to where to store the error
+        this._documentErrorPath = config.error_path || 'error';
         // use other fields from config to control your execution
         callback();
     }
@@ -343,7 +345,7 @@ class ExtractionWikipedia {
 
         if (!text) {
             //send it to the next component in the pipeline
-            material.message = `${this._prefix} No text provided.`;
+            material[self._documentErrorPath] = `${this._prefix} No text provided.`;
             return this._onEmit(material, 'stream_error', callback);
         }
 
@@ -355,7 +357,7 @@ class ExtractionWikipedia {
 
             if (!wikipediaConcepts.length) {
                 // no wikipedia concepts extracted - send it to partial material table
-                material.message = `${this._prefix} No wikipedia concepts found`;
+                material[self._documentErrorPath] = `${this._prefix} No wikipedia concepts found`;
                 return this._onEmit(material, 'stream_error', callback);
             }
 

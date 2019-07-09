@@ -9,8 +9,6 @@
 // external libraries
 const textract = require('alias:lib/textract');
 
-
-
 /**
  * Formats Material into a common schema.
  */
@@ -42,9 +40,8 @@ class ExtractionText {
         this._documentTypePath = config.text_type_path;
         // the path to where to store the text
         this._documentTextPath = config.text_path;
-
-        // create the postgres connection
-        this._pg = require('alias:lib/postgresQL')(config.pg);
+        // the path to where to store the error
+        this._documentErrorPath = config.error_path || 'error';
         // use other fields from config to control your execution
         callback();
     }
@@ -102,7 +99,7 @@ class ExtractionText {
             // extract raw text from materialURL
             textract.fromUrl(materialUrl, self.textConfig, (error, text) => {
                 if (error) {
-                    message.message = `${this._prefix} Not able to extract text.`;
+                    message[this._documentErrorPath] = `${this._prefix} Not able to extract text.`;
                     return this._changeStatus(message, 'stream_error', callback);
                 }
                 // save the raw text within the metadata
@@ -111,7 +108,7 @@ class ExtractionText {
             });
         } else {
             // send the material to the partial table
-            message.message = `${this._prefix} Material does not have type provided.`;
+            message[this._documentErrorPath] = `${this._prefix} Material does not have type provided.`;
             return this._onEmit(message, 'stream_error', callback)
         }
     }
