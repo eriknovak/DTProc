@@ -8,7 +8,7 @@
 // external modules
 const async = require('async');
 const rp = require('request-promise-native');
-
+const querystring = require('querystring');
 
 class Wikification {
 
@@ -106,20 +106,21 @@ class Wikification {
 
         // create a wikifier request promise object
         return rp({
-            method: 'POST',
-            url: `${self._wikifierUrl}/annotate-article`,
-            body: {
-                text: text,
-                lang: 'auto',
-                support: true,
-                ranges: false,
-                includeCosines: true,
-                userKey: self._userKey,
-                nTopDfValuesToIgnore: 50,
-                nWordsToIgnoreFromList: 50
-            },
-            json: true
-        });
+	      method: 'POST',
+	      headers: {'content-type': 'application/x-www-form-urlencoded'},
+	      url: `${self._wikifierUrl}/annotate-article`,
+	      body: querystring.stringify({
+	        text: text,
+	        lang: 'auto',
+	        support: true,
+	        ranges: false,
+	        includeCosines: true,
+	        userKey: self._userKey,
+	        nTopDfValuesToIgnore: 50,
+	        nWordsToIgnoreFromList: 50
+	      }),
+	      json: true
+	    });
 
     }
 

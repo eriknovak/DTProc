@@ -7,7 +7,7 @@
  */
 
 // external libraries
-const textract = require('alias:lib/textract');
+const textract = require('../../library/textract');
 
 /**
  * Formats Material into a common schema.

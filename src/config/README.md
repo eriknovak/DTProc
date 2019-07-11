@@ -74,7 +74,7 @@ TEST_KAFKA_GROUP=kafka-group(optional)
 ######################################
 
 # wikifier url and userkey - required for concept extraction
-PREPROC_WIKIFIER_URL=http://www.wikifier.org
-PREPROC_WIKIFIER_USERKEY=wikifier-userkey
+WIKIFIER_URL=http://www.wikifier.org
+WIKIFIER_USERKEY=wikifier-userkey
 
 ```

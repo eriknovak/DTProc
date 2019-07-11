@@ -21,7 +21,7 @@ class MaterialValidator {
         this._prefix = `[MaterialValidator ${this._name}]`;
 
         // initialize validator with
-        this._validator = require('alias:library/schema-validator')();
+        this._validator = require('../../library/schema-validator')();
         // the validation schema
         this._schema = config.schema;
 

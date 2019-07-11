@@ -21,7 +21,7 @@ class PostgresqlStorage {
         this._prefix = `[PostgresqlStorage ${this._name}]`;
 
         // create the postgres connection
-        this._pg = require('alias:library/postgresql')(config.pg);
+        this._pg = require('../../library/postgresql')(config.pg);
 
         callback();
     }
