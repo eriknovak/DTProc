@@ -5,7 +5,7 @@ and/or create their own pipeline by defining the ontology file in the
 command:
 
 ```bash
-TOPOLOGY=name-of-ontology-file node pipeline
+node pipeline -tn {topology-name} -tp {topology-path}
 ```
 
 To add new spouts and bolts, please look at the list of available components
@@ -22,7 +22,7 @@ object sent to the pipeline. The example ontology is found in `ontologies/exampl
 To run the ontology simply run
 
 ```bash
-TOPOLOGY=example-text node pipeline
+node pipeline -tn uuid.topology.text -tp ./ontologies/example-text
 ```
 
 The output should be available in the [example](../example) folder in the `example_text_output.json` file.
@@ -38,7 +38,7 @@ store it. The ontology is found in `ontologies/example-url.json`.
 To run the ontology run
 
 ```bash
-TOPOLOGY=example-url node pipeline
+node pipeline -tn uuid.topology.url -tp ./ontologies/example-url
 ```
 
 The output should be available in the [example](../example) folder in the `example_url_output.json` file.

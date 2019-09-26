@@ -1,5 +1,5 @@
 // configurations
-const config = require('alias:config/config');
+const config = require('@config/config');
 
 module.exports = {
     "general": {
@@ -20,44 +20,45 @@ module.exports = {
     ],
     "bolts": [
         {
-            "name": "document-type",
+            "name": "document-type-extraction",
             "type": "inproc",
             "working_dir": "./bolts",
-            "cmd": "document-type.js",
+            "cmd": "extract-type.js",
             "inputs": [{
                 "source": "text-input-reader",
             }],
             "init": {
-                "url_path": "url",
-                "type_path": "type"
+                "document_url_path": "url",
+                "document_type_path": "type"
             }
         },
         {
-            "name": "text-content-extraction",
+            "name": "document-content-extraction",
             "type": "inproc",
             "working_dir": "./bolts",
-            "cmd": "extraction-text.js",
+            "cmd": "extract-text-raw.js",
             "inputs": [{
-                "source": "document-type",
+                "source": "document-type-extraction",
             }],
             "init": {
                 // textract specific configurations
-                "text_config": {
-                    "preserveLineBreaks": false,
-                    "includeAltText": false
+                "textract_config": {
+                    "preserveLineBreaks": true,
+                    "preserveOnlyMultipleLineBreaks": true,
+                    "includeAltText": true
                 },
-                "text_url_path": "url",
-                "text_type_path": "type",
-                "text_path": "metadata.text",
+                "document_url_path": "url",
+                "document_type_path": "type",
+                "document_text_path": "metadata.text",
             }
         },
         {
-            "name": "wikification",
+            "name": "wikipedia-concept-extraction",
             "type": "inproc",
             "working_dir": "./bolts",
-            "cmd": "extraction-wikipedia.js",
+            "cmd": "extract-wikipedia.js",
             "inputs": [{
-                "source": "text-content-extraction",
+                "source": "document-content-extraction",
             }],
             "init": {
                 // wikifier related configurations
@@ -65,8 +66,8 @@ module.exports = {
                     "userKey": config.wikifier.userKey,
                     "wikifierUrl": config.wikifier.wikifierUrl,
                 },
-                "text_path": "metadata.text",
-                "concept_path": "metadata.wiki"
+                "document_text_path": "metadata.text",
+                "wikipedia_concept_path": "metadata.wiki"
             }
         },
         {
@@ -75,7 +76,7 @@ module.exports = {
             "type": "sys",
             "cmd": "file_append",
             "inputs": [
-                { "source": "wikification" }
+                { "source": "wikipedia-concept-extraction" }
             ],
             "init": {
                 "file_name_template": "../example/example_url_output.json"
@@ -88,15 +89,15 @@ module.exports = {
             "cmd": "console",
             "inputs": [
                 {
-                    "source": "document-type",
+                    "source": "document-type-extraction",
                     "stream_id": "stream_error"
                 },
                 {
-                    "source": "text-content-extraction",
+                    "source": "document-content-extraction",
                     "stream_id": "stream_error"
                 },
                 {
-                    "source": "wikification",
+                    "source": "wikipedia-concept-extraction",
                     "stream_id": "stream_error"
                 }
             ],

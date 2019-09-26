@@ -1,5 +1,5 @@
 // configurations
-const config = require('alias:config/config');
+const config = require('@config/config');
 
 module.exports = {
     "general": {
@@ -20,10 +20,10 @@ module.exports = {
     ],
     "bolts": [
         {
-            "name": "wikification",
+            "name": "extract-wikipedia",
             "type": "inproc",
             "working_dir": "./bolts",
-            "cmd": "extraction-wikipedia.js",
+            "cmd": "extract-wikipedia.js",
             "inputs": [{
                 "source": "text-input-reader",
             }],
@@ -32,8 +32,8 @@ module.exports = {
                     "userKey": config.wikifier.userKey,
                     "wikifierUrl": config.wikifier.wikifierUrl,
                 },
-                "text_path": "text",
-                "concept_path": "wiki"
+                "document_text_path": "text",
+                "wikipedia_concept_path": "wiki"
             }
         },
         {
@@ -42,7 +42,7 @@ module.exports = {
             "type": "sys",
             "cmd": "file_append",
             "inputs": [
-                { "source": "wikification" }
+                { "source": "extract-wikipedia" }
             ],
             "init": {
                 "file_name_template": "../example/example_text_output.json"
@@ -55,7 +55,7 @@ module.exports = {
             "cmd": "console",
             "inputs": [
                 {
-                    "source": "wikification",
+                    "source": "extract-wikipedia",
                     "stream_id": "stream_error"
                 }
             ],

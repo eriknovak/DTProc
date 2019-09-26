@@ -27,7 +27,19 @@ To install the project run
 npm install
 ```
 
-## Acknowledgments
+### Textract Dependencies
+
+### Textract
+
+The pipeline uses a nodejs module called [textract](./lib/textract) which allows
+text extraction of most of text files. For some file types additional libraries need to be installed:
+
+- **PDF** extraction requires `pdftotext` be installed, [link](http://www.xpdfreader.com/download.html).
+- **DOC** extraction requires `antiword` be installed, [link](http://www.winfield.demon.nl/), unless on OSX
+    in which case textutil (installed by default) is used.
+
+
+# Acknowledgments
 
 This work is developed by [AILab](http://ailab.ijs.si/) at [Jozef Stefan Institute](https://www.ijs.si/).
 

@@ -1,20 +1,24 @@
 /********************************************************************
- * Extraction: Text
+ * Extract: Text Raw
  * This component extracts raw content text from the file provided.
  * To do this we use textract <https://github.com/dbashford/textract>
  * which is a text extraction library. It returns the content in raw
  * text.
  */
 
+// basic bolt template
+const BasicBolt = require('./basic-bolt');
+
 // external libraries
-const textract = require('alias:lib/textract');
+const textract = require('@library/textract');
 
 /**
  * Formats Material into a common schema.
  */
-class ExtractionText {
+class ExtractTextRaw extends BasicBolt {
 
     constructor() {
+        super();
         this._name = null;
         this._onEmit = null;
         this._context = null;
@@ -33,15 +37,15 @@ class ExtractionText {
         ];
 
         // configuration for textract
-        this.textConfig = config.text_config;
+        this._textractConfig = config.textract_config;
         // text extraction fields
-        this._documentUrlPath = config.text_url_path;
+        this._documentUrlPath = config.document_url_path;
         // text extraction result fields
-        this._documentTypePath = config.text_type_path;
+        this._documentTypePath = config.document_type_path;
         // the path to where to store the text
-        this._documentTextPath = config.text_path;
+        this._documentTextPath = config.document_text_path;
         // the path to where to store the error
-        this._documentErrorPath = config.error_path || 'error';
+        this._documentErrorPath = config.document_error_path || 'error';
         // use other fields from config to control your execution
         callback();
     }
@@ -55,40 +59,6 @@ class ExtractionText {
         callback();
     }
 
-    /**
-     * @description Extracts the data from the object.
-     * @param {Object} object - The object from which we wish to extract information.
-     * @param {String} path - The path of the value to be extracted.
-     */
-    get(object, path) {
-        let schema = object;
-        let pathList = path.split('.');
-        for (let val of pathList) {
-            schema = schema[val];
-        }
-        return schema;
-    }
-
-    /**
-     * @description Sets the value from the object.
-     * @param {Object} object - The object from which we wish to set value.
-     * @param {String} path - The path of the value to be assigned.
-     * @param {Object} value - The value to be assigned.
-     */
-    set(object, path, value) {
-        let schema = object;
-        let pathList = path.split('.');
-        let pathLength = pathList.length;
-        for (let i = 0; i < pathLength - 1; i++) {
-            var el = pathList[i];
-            if (!schema[el]) {
-                schema[el] = {};
-            }
-            schema = schema[el];
-        }
-        schema[pathList[pathLength - 1]] = value;
-    }
-
     receive(message, stream_id, callback) {
         const self = this;
 
@@ -97,10 +67,10 @@ class ExtractionText {
 
         if (materialType && !this._invalidTypes.includes(materialType.ext)) {
             // extract raw text from materialURL
-            textract.fromUrl(materialUrl, self.textConfig, (error, text) => {
+            textract.fromUrl(materialUrl, self._textractConfig, (error, text) => {
                 if (error) {
                     message[this._documentErrorPath] = `${this._prefix} Not able to extract text.`;
-                    return this._changeStatus(message, 'stream_error', callback);
+                    return this._onEmit(message, 'stream_error', callback)
                 }
                 // save the raw text within the metadata
                 this.set(message, this._documentTextPath, text);
@@ -116,5 +86,5 @@ class ExtractionText {
 }
 
 exports.create = function (context) {
-    return new ExtractionText(context);
+    return new ExtractTextRaw(context);
 };

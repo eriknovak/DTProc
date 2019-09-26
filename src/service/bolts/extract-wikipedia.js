@@ -1,16 +1,19 @@
 /********************************************************************
- * Extraction: Wikification
+ * Extract: Wikipedia
  * This component wikifies the OER material using the raw text extracted in the
  * previous steps of the pre-processing pipeline. The wikipedia concepts are then
  * stored within the material object and sent to the next component.
  */
+
+// basic bolt template
+const BasicBolt = require('./basic-bolt');
 
 // external modules
 const async = require('async');
 const rp = require('request-promise-native');
 
 
-class Wikification {
+class Wikifier {
 
     /**
      * @description The construction of the wikification object.
@@ -24,23 +27,24 @@ class Wikification {
         this._maxLength = maxLength || 10000;
     }
 
-
     /**
      * @description Extracts wikipedia concepts out of text.
      * @param {String} text - The text being wikified.
-     */
-    processText(text) {
+     * @returns {Promise} The promise of wikipedia concepts and dominant language.
+    */
+    async processText(text) {
         let self = this;
 
         // separate text and prepare tasks for retrieving wiki concepts
-        let tasks = self._prepareWikificationTasks(text, self._maxLength);
+        let tasks = self._prepareWikifierTasks(text, self._maxLength);
 
         if (tasks.length === 0) {
             // there is nothing to extract - return empty objects
             return Promise.reject(new Error('No tasks produced for text'));
         }
 
-        return new Promise((resolve, reject) => {
+        // create the parallel processing promise
+        let promise = new Promise((resolve, reject) => {
             // get wikipedia concepts from text
             async.parallelLimit(tasks, 5, (error, concepts) => {
                 if (error) { return reject(error); }
@@ -50,45 +54,16 @@ class Wikification {
                     return reject(new Error('No concepts were extracted'));
                 }
 
-                // wikipedia concepts storage
-                let conceptMap = { };
+                // merge the returned wikipedia concepts
+                const wikipedia = self._mergeWikipediaConcepts(concepts);
+                const language = self._getDominantLanguage(wikipedia);
 
-                // merge concepts with matching uri
-                for (let conceptsBundle of concepts) {
-                    for (let concept of conceptsBundle) {
-                        if (conceptMap[concept.uri]) {
-                            // concept exists in mapping - add weighted pageRank
-                            conceptMap[concept.uri].pageRank   += concept.pageRank;
-                            conceptMap[concept.uri].cosine     += concept.cosine;
-                            conceptMap[concept.uri].supportLen += concept.supportLen;
-
-                        } else {
-                            //  add concept to the mapping
-                            conceptMap[concept.uri] = concept;
-                        }
-                    }
-                }
-                // store merged concepts within the material object
-                const wikipediaConcepts = Object.values(conceptMap);
-
-                // get the dominant language of the material
-                let languages = { };
-                for (let concept of wikipediaConcepts) {
-                    if (languages[concept.lang]) {
-                        languages[concept.lang] += 1;
-                    } else {
-                        languages[concept.lang] = 1;
-                    }
-                }
-
-                // get the maximum language
-                const language = Object.keys(languages)
-                    .reduce((a, b) => languages[a] > languages[b] ? a : b);
-
-                return resolve({ wikipediaConcepts, language });
+                // return the statistics
+                return resolve({ wikipedia, language });
             });
         });
-
+        // return the promise of the wikipedia concepts
+        return await promise;
     }
 
     /////////////////////////////////////////////
@@ -101,11 +76,11 @@ class Wikification {
      * @returns {Promise} The promise containing the wiki concepts request.
      * @private
      */
-    _wikipediaRequest(text) {
+    async _createRequest(text) {
         let self = this;
 
         // create a wikifier request promise object
-        return rp({
+        return await rp({
             method: 'POST',
             url: `${self._wikifierUrl}/annotate-article`,
             body: {
@@ -129,19 +104,20 @@ class Wikification {
      * @param {Object} text - The text to be wikified.
      * @param {Object} weight - The weight to be added to the material
      * pageRank. Used when text was sliced into chunks.
-     * @param {Function} callback - The function called after all is done.
+     * @returns {}
      */
-    _enrichMaterial(text, weight, callback) {
+    async _getWikipediaConcepts(text, weight) {
         let self = this;
 
-        // make wikipedia concept request and handle concepts
-        self._wikipediaRequest(text).then(data => {
+        try {
+            // make wikipedia concept request and handle concepts
+            let data = await self._createRequest(text);
 
             // get found concepts/annotations
             let annotations = data.annotations;
             if (!annotations || !annotations.length) {
                 // return the concept list
-                return callback(new Error('No annotations found for text'));
+                throw new Error('No annotations found for text');
             }
 
             // sort annotations by pageRank
@@ -192,12 +168,12 @@ class Wikification {
 
 
             // return the concept list
-            return callback(null, concepts);
+            return concepts;
 
-        }, error => {
+        } catch (error) {
             console.log(error.message);
-            return callback(error);
-        });
+            return error;
+        }
     }
 
 
@@ -209,7 +185,7 @@ class Wikification {
      * to wikifier.
      * @returns {Function[]} Array of tasks.
      */
-    _prepareWikificationTasks(text, maxLength) {
+    _prepareWikifierTasks(text, maxLength) {
         let self = this;
 
         /**
@@ -218,8 +194,11 @@ class Wikification {
          * @param {Number} weight - The weight used to normalize the response.
          * @returns {Function} The enriching task.
          */
-        function _createEnrichTask(chunk, weight) {
-            return callback => self._enrichMaterial(chunk, weight, callback);
+        function _createWikifierTask(chunk, weight) {
+            return callback =>
+                // get the enriched materials
+                self._getWikipediaConcepts(chunk, weight)
+                    .then(concepts => callback(null, concepts));
         }
 
         // set placeholders
@@ -257,20 +236,72 @@ class Wikification {
             // calculate the weight we add to the found wikipedia concepts
             let weight = chunk.length / text.length;
             // add a new wikification task on text chunk
-            tasks.push(_createEnrichTask(chunk, weight));
+            tasks.push(_createWikifierTask(chunk, weight));
         }
         return tasks;
     }
+
+
+    /**
+     * Merges the wikipedia concepts extract via text chunks.
+     * @param {Object[]} concepts - The array of wikipedia concepts.
+     * @returns {Object[]} The merged wikipedia concepts.
+     * @private
+     */
+    _mergeWikipediaConcepts(concepts) {
+        // wikipedia concepts storage
+        let conceptMapping = { };
+
+        // merge concepts with matching uri
+        for (let conceptsBundle of concepts) {
+            for (let concept of conceptsBundle) {
+                if (conceptMapping[concept.uri]) {
+                    // concept exists in mapping - add weighted pageRank
+                    conceptMapping[concept.uri].pageRank   += concept.pageRank;
+                    conceptMapping[concept.uri].cosine     += concept.cosine;
+                    conceptMapping[concept.uri].supportLen += concept.supportLen;
+
+                } else {
+                    //  add concept to the mapping
+                    conceptMapping[concept.uri] = concept;
+                }
+            }
+        }
+        // return the wikipedia concepts
+        return Object.values(conceptMapping);
+    }
+
+    /**
+     * Gets the dominant language found in the wikipedia concepts
+     * @param {Object[]} concepts - The array of wikipedia concepts.
+     * @returns {String} The dominant language within the wikipedia concepts.
+     * @private
+     */
+    _getDominantLanguage(concepts) {
+        // get the dominant language of the material
+        let langs = { };
+        for (let concept of concepts) {
+            if (!langs[concept.lang]) {
+                langs[concept.lang] = 0;
+            }
+            langs[concept.lang] += 1;
+        }
+
+        // get the maximum language
+        return Object.keys(langs).reduce((a, b) => langs[a] > langs[b] ? a : b);
+    }
+
 }
 
 
 
 /**
- * Extracts wikipedia concepts out of the OER material.
+ * Extracts wikipedia concepts out of the document content.
  */
-class ExtractionWikipedia {
+class ExtractWikipedia extends BasicBolt {
 
     constructor() {
+        super();
         this._name = null;
         this._onEmit = null;
         this._context = null;
@@ -282,14 +313,14 @@ class ExtractionWikipedia {
         this._onEmit = config.onEmit;
         this._prefix = `[Wikification ${this._name}]`;
         // wikifier request object
-        this._wikifier = new Wikification(config.wikifier.userKey, config.wikifier.wikifierUrl);
+        this._wikifier = new Wikifier(config.wikifier.userKey, config.wikifier.wikifierUrl);
 
         // determine the text to use for wikipedia extraction
-        this._textPath = config.text_path;
+        this._documentTextPath = config.document_text_path;
         // determine the location to store the concepts
-        this._conceptPath = config.concept_path;
+        this._wikipediaConceptPath = config.wikipedia_concept_path;
         // the path to where to store the error
-        this._documentErrorPath = config.error_path || 'error';
+        this._documentErrorPath = config.document_error_path || 'error';
         // use other fields from config to control your execution
         callback();
     }
@@ -303,45 +334,11 @@ class ExtractionWikipedia {
         callback();
     }
 
-    /**
-     * @description Extracts the data from the object.
-     * @param {Object} object - The object from which we wish to extract information.
-     * @param {String} path - The path of the value to be extracted.
-     */
-    get(object, path) {
-        let schema = object;
-        let pathList = path.split('.');
-        for (let val of pathList) {
-            schema = schema[val];
-        }
-        return schema;
-    }
-
-    /**
-     * @description Sets the value from the object.
-     * @param {Object} object - The object from which we wish to set value.
-     * @param {String} path - The path of the value to be assigned.
-     * @param {Object} value - The value to be assigned.
-     */
-    set(object, path, value) {
-        let schema = object;
-        let pathList = path.split('.');
-        let pathLength = pathList.length;
-        for (let i = 0; i < pathLength - 1; i++) {
-            var el = pathList[i];
-            if (!schema[el]) {
-                schema[el] = {};
-            }
-            schema = schema[el];
-        }
-        schema[pathList[pathLength - 1]] = value;
-    }
-
     receive(material, stream_id, callback) {
         let self = this;
 
        // get the raw text from the material
-        let text = self.get(material, this._textPath);
+        let text = self.get(material, this._documentTextPath);
 
         if (!text) {
             //send it to the next component in the pipeline
@@ -353,16 +350,16 @@ class ExtractionWikipedia {
         self._wikifier.processText(text).then(response => {
 
             // retrieve wikifier results
-            const { wikipediaConcepts } = response;
+            const { wikipedia } = response;
 
-            if (!wikipediaConcepts.length) {
+            if (!wikipedia.length) {
                 // no wikipedia concepts extracted - send it to partial material table
                 material[self._documentErrorPath] = `${this._prefix} No wikipedia concepts found`;
                 return this._onEmit(material, 'stream_error', callback);
             }
 
             // store merged concepts within the material object
-            self.set(material, this._conceptPath, wikipediaConcepts);
+            self.set(material, this._wikipediaConceptPath, wikipedia);
             return this._onEmit(material, stream_id, callback);
 
         }).catch(error => {
@@ -375,5 +372,5 @@ class ExtractionWikipedia {
 }
 
 exports.create = function (context) {
-    return new ExtractionWikipedia(context);
+    return new ExtractWikipedia(context);
 };

@@ -4,7 +4,7 @@
   "description": "Extracts document metadata, raw text, and annotates it with Wikipedia concepts",
   "main": "index.js",
   "scripts": {
-    "postinstall": "link-module-alias && git checkout -- src/library/textract && npm run install:textract",
+    "postinstall": "git checkout -- src/library/textract && npm run install:textract",
     "install:textract": "cd src/library/textract && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/ErikNovak/document-enrichment-tool#readme",
   "dependencies": {
-    "async": "^3.0.1",
+    "async": "^3.1.0",
     "dotenv": "^8.0.0",
     "file-type": "^12.0.0",
     "jsonschema": "^1.2.4",
@@ -39,10 +39,10 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
-    "link-module-alias": "^1.2.0"
+    "module-alias": "^2.2.1"
   },
   "_moduleAliases": {
-    "alias:config": "src/config",
-    "alias:lib": "src/library"
+    "@config": "src/config",
+    "@library": "src/library"
   }
 }

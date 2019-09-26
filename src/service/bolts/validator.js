@@ -6,7 +6,7 @@
  */
 
 
-class MaterialValidator {
+class Validator {
 
     constructor() {
         this._name = null;
@@ -18,10 +18,10 @@ class MaterialValidator {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[MaterialValidator ${this._name}]`;
+        this._prefix = `[Validator ${this._name}]`;
 
         // initialize validator with
-        this._validator = require('alias:library/schema-validator')();
+        this._validator = require('@library/validator')();
         // the validation schema
         this._schema = config.schema;
 
@@ -49,5 +49,5 @@ class MaterialValidator {
 }
 
 exports.create = function (context) {
-    return new MaterialValidator(context);
+    return new Validator(context);
 };
