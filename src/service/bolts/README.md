@@ -124,7 +124,6 @@ The schema for this bolt in the ontology is:
         "source": "source-spout-or-bolt-name",
     }],
     "init": {
-        // wikifier related configurations
         "wikifier": {
             "userKey": "wikifier-user-key",
             "wikifierUrl": "http://wikifier.org",
