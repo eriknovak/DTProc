@@ -6,7 +6,7 @@
 
 const async = require('async');
 
-class PostgresqlStorage {
+class StorePostgreSQL {
 
     constructor() {
         this._name = null;
@@ -18,7 +18,7 @@ class PostgresqlStorage {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[PostgresqlStorage ${this._name}]`;
+        this._prefix = `[StorePostgreSQL ${this._name}]`;
 
         // create the postgres connection
         this._pg = require('@library/postgresql')(config.pg);
@@ -74,5 +74,5 @@ class PostgresqlStorage {
 }
 
 exports.create = function (context) {
-    return new PostgresqlStorage(context);
+    return new StorePostgreSQL(context);
 };

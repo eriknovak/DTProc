@@ -25,6 +25,8 @@ class Validator {
         // the validation schema
         this._schema = config.schema;
 
+        // the path to where to store the error
+        this._documentErrorPath = config.document_error_path || 'error';
         // use other fields from config to control your execution
         callback();
     }
@@ -40,9 +42,11 @@ class Validator {
 
     receive(message, stream_id, callback) {
         // validate the provided material
-        const validation = this._validator.validateSchema(message, this._schema);
-        const stream_direction = validation.matching ? stream_id : 'stream_error';
-
+        const { valid, errors } = this._validator.validateSchema(message, this._schema);
+        const stream_direction = valid ? stream_id : 'stream_error';
+        // add errors it present
+        if (!valid) { message[this._documentErrorPath] = errors; }
+        // continue to the next bolt
         return this._onEmit(message, stream_direction, callback);
     }
 

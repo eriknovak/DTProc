@@ -34,6 +34,8 @@ class BasicBolt {
         let pathList = path.split('.');
         for (let val of pathList) {
             schema = schema[val];
+            // if there is nothing return null
+            if (!schema) { return null; }
         }
         return schema;
     }

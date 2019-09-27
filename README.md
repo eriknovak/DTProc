@@ -29,8 +29,6 @@ npm install
 
 ### Textract Dependencies
 
-### Textract
-
 The pipeline uses a nodejs module called [textract](./lib/textract) which allows
 text extraction of most of text files. For some file types additional libraries need to be installed:
 

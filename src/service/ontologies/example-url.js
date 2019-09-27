@@ -42,11 +42,6 @@ module.exports = {
             }],
             "init": {
                 // textract specific configurations
-                "textract_config": {
-                    "preserveLineBreaks": true,
-                    "preserveOnlyMultipleLineBreaks": true,
-                    "includeAltText": true
-                },
                 "document_url_path": "url",
                 "document_type_path": "type",
                 "document_text_path": "metadata.text",
@@ -65,6 +60,7 @@ module.exports = {
                 "wikifier": {
                     "userKey": config.wikifier.userKey,
                     "wikifierUrl": config.wikifier.wikifierUrl,
+                    "maxLength": 10000
                 },
                 "document_text_path": "metadata.text",
                 "wikipedia_concept_path": "metadata.wiki"

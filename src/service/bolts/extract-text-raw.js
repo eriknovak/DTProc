@@ -12,9 +12,6 @@ const BasicBolt = require('./basic-bolt');
 // external libraries
 const textract = require('@library/textract');
 
-/**
- * Formats Material into a common schema.
- */
 class ExtractTextRaw extends BasicBolt {
 
     constructor() {
@@ -37,10 +34,10 @@ class ExtractTextRaw extends BasicBolt {
         ];
 
         // configuration for textract
-        this._textractConfig = config.textract_config;
-        // text extraction fields
+        this._textractConfig = config.textract_config || {};
+        // the path to where to get the url
         this._documentUrlPath = config.document_url_path;
-        // text extraction result fields
+        // the path to where to get the type
         this._documentTypePath = config.document_type_path;
         // the path to where to store the text
         this._documentTextPath = config.document_text_path;
