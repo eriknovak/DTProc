@@ -41,7 +41,11 @@ module.exports = {
                 "source": "document-type-extraction",
             }],
             "init": {
-                // textract specific configurations
+                "textract_config": {
+                    "preserve_line_breaks": false,
+                    "preserve_only_multiple_line_breaks": false,
+                    "include_alt_text": false
+                },
                 "document_url_path": "url",
                 "document_type_path": "type",
                 "document_text_path": "metadata.text",
@@ -58,9 +62,9 @@ module.exports = {
             "init": {
                 // wikifier related configurations
                 "wikifier": {
-                    "userKey": config.wikifier.userKey,
-                    "wikifierUrl": config.wikifier.wikifierUrl,
-                    "maxLength": 10000
+                    "user_key": config.wikifier.userKey,
+                    "wikifier_url": config.wikifier.wikifierUrl,
+                    "max_length": 10000
                 },
                 "document_text_path": "metadata.text",
                 "wikipedia_concept_path": "metadata.wiki"

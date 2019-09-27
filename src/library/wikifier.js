@@ -7,19 +7,20 @@ class Wikifier {
 
     /**
      * @description The construction of the wikification object.
-     * @param {String} userKey - The user key from wikifier.
-     * @param {String} wikifierUrl - The wikifier url/domain to where we send requests.
-     * @param {Number} maxLength - The maximum length of the text we allow sending to wikifier.
+     * @param {Object} config - The wikifier configuration.
+     * @param {String} config.user_key - The user key from wikifier.
+     * @param {String} [config.wikifier_url='http://www.wikifier.org'] - The wikifier url/domain to where we send requests.
+     * @param {Number} [config.max_length=10000] - The maximum length of the text we allow sending to wikifier.
      */
-    constructor({ userKey, wikifierUrl, maxLength }) {
-        this._userKey = userKey;
-        this._wikifierUrl = wikifierUrl || 'http://www.wikifier.org';
+    constructor({ user_key, wikifier_url, max_length }) {
+        this._userKey = user_key;
+        this._wikifierUrl = wikifier_url || 'http://www.wikifier.org';
 
-        if (maxLength && maxLength > 20000) {
-            console.log('Wikifier: MaxLength is greater than 20000. Setting it to the upper bound: 20000');
-            maxLength = 20000;
+        if (max_length && max_length > 20000) {
+            console.log('Wikifier: MaxLength is greater than 20000. Setting it to the upper bound= 20000');
+            max_length = 20000;
         }
-        this._maxLength = maxLength || 10000;
+        this._maxLength = max_length || 10000;
     }
 
     /**

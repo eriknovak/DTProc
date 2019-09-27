@@ -1,8 +1,7 @@
 # Ontologies
 
-This folder contains the different ontologies that represent how
-a document processing pipeline should be constructed. The elements
-of an ontology are of two types:
+This folder contains the different ontologies that represent how a document processing pipeline
+should be constructed. The elements of an ontology are of two types:
 
 **Spouts.** TODO
 

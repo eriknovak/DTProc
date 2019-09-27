@@ -1,7 +1,7 @@
 # QTopology Bolts
 
 This folder contains custom bolts used for extracting different attributes of the
-document.
+document. The standard qtopology bolts can be found [here](https://qminer.github.io/qtopology/std-nodes.html).
 
 
 ## Basic Bolt
@@ -71,7 +71,7 @@ In addition, if the object doesn't already have an existing attribute object, th
 
 ## Extract Type
 The [extract type](./extract-type.js) bolt is able to extract the type of the document based URL address of the document.
-There are two parameters that need to be set in this bolt.
+It requires the following parameters.
 
 | Parameter           | Description                                                                                        |
 | ------------------- | ---------------------------------------------------------------------------------------------------|
@@ -108,9 +108,9 @@ the document text with Wikipedia concepts. It requires the following parameters.
 | wikipedia_concept_path | the path to the document Wikipedia concept                                                         |
 | document_error_path    | (optional) the path to store the error message (default: `error`)                                  |
 | wikifier               | the wikifier configuration object                                                                  |
-| wikifier.userKey       | the wikifier user key (can be acquired [here](http://wikifier.org/register.html))                  |
-| wikifier.wikifierUrl   | (optional) the wikifier URL endpoint (default: `'http://www.wikifier.org'`)                        |
-| wikifier.maxLength     | (optional) for longer text, the bolt will slice the text into chunks and aggregate the wikifier output into a single object. This parameter will setup the maxLength of the text chunks. **Note:** it cannot be greater than 20000, due to Wikifier restrictions (default: `10000`) |
+| wikifier.user_key      | the wikifier user key (can be acquired [here](http://wikifier.org/register.html))                  |
+| wikifier.wikifier_url  | (optional) the wikifier URL endpoint (default: `'http://www.wikifier.org'`)                        |
+| wikifier.max_length    | (optional) for longer text, the bolt will slice the text into chunks and aggregate the wikifier output into a single object. This parameter will setup the `max_length` of the text chunks. **Note:** it cannot be greater than 20000, due to Wikifier restrictions (default: `10000`) |
 
 The schema for this bolt in the ontology is:
 
@@ -125,9 +125,9 @@ The schema for this bolt in the ontology is:
     }],
     "init": {
         "wikifier": {
-            "userKey": "wikifier-user-key",
-            "wikifierUrl": "http://wikifier.org",
-            "maxLength": 10000
+            "user_key": "wikifier-user-key",
+            "wikifier_url": "http://wikifier.org",
+            "max_length": 10000
         },
         "document_text_path": "text-path",
         "wikipedia_concept_path": "wikipedia-concept-path",
@@ -142,16 +142,16 @@ The [extract text raw](./extract-text-raw.js) bolt is able to extract the docume
 extracted through the document URL address using the [textract](https://www.npmjs.com/package/textract) library and requires
 the following parameters.
 
-| Parameter                                      | Description                                                                                        |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------|
-| document_url_path                              | the path to the document URL address                                                               |
-| document_type_path                             | the path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
-| document_text_path                             | the path to the document content text                                                              |
-| document_error_path                            | (optional) the path to store the error message (default: `error`)                                  |
-| textract_config                                | (optional) the textract configuration files (default: `{}`)                                        |
-| textract_config.preserveLineBreaks             | (optional) pass this in as `true` and textract will not strip any line breaks (default: `false`)   |
-| textract_config.preserveOnlyMultipleLineBreaks | (optional) some extractors, like PDF, insert line breaks at the end of every line, even if the middle of a sentence. If this option is set to `true`, then any instances of a single line break are removed but multiple line breaks are preserved. Check your output with this option, though, this doesn't preserve paragraphs unless there are multiple breaks (default: `false`) |
-| textract_config.includeAltText                 | (optional) if `true`, when extracting HTML whether or not to include alt text with the extracted text. (default: `false`) |
+| Parameter                                          | Description                                                                                        |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
+| document_url_path                                  | the path to the document URL address                                                               |
+| document_type_path                                 | the path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
+| document_text_path                                 | the path to the document content text                                                              |
+| document_error_path                                | (optional) the path to store the error message (default: `error`)                                  |
+| textract_config                                    | (optional) the textract configuration files (default: `{}`)                                        |
+| textract_config.preserve_line_breaks               | (optional) pass this in as `true` and textract will not strip any line breaks (default: `false`)   |
+| textract_config.preserve_only_multiple_line_breaks | (optional) some extractors, like PDF, insert line breaks at the end of every line, even if the middle of a sentence. If this option is set to `true`, then any instances of a single line break are removed but multiple line breaks are preserved. Check your output with this option, though, this doesn't preserve paragraphs unless there are multiple breaks (default: `false`) |
+| textract_config.include_alt_text                   | (optional) if `true`, when extracting HTML whether or not to include alt text with the extracted text. (default: `false`) |
 
 The schema for this bolt in the ontology is:
 
@@ -166,9 +166,9 @@ The schema for this bolt in the ontology is:
     }],
     "init": {
         "textract_config": {
-            "preserveLineBreaks": false,
-            "preserveOnlyMultipleLineBreaks": false,
-            "includeAltText": false
+            "preserve_line_breaks": false,
+            "preserve_only_multiple_line_breaks": false,
+            "include_alt_text": false
         },
         "document_url_path": "url-path",
         "document_type_path": "type-path",
@@ -177,9 +177,6 @@ The schema for this bolt in the ontology is:
     }
 }
 ```
-
-## Store PostgresQL
-TODO
 
 ## Object Validator
 The [object validator](./validator.js) bolt validates the if the message object has the structure and values
@@ -208,3 +205,6 @@ The schema for this bolt in the ontology is:
     }
 }
 ```
+
+## Store PostgresQL
+TODO

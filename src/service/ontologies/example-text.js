@@ -29,8 +29,8 @@ module.exports = {
             }],
             "init": {
                 "wikifier": {
-                    "userKey": config.wikifier.userKey,
-                    "wikifierUrl": config.wikifier.wikifierUrl,
+                    "user_key": config.wikifier.userKey,
+                    "wikifier_url": config.wikifier.wikifierUrl,
                 },
                 "document_text_path": "text",
                 "wikipedia_concept_path": "wiki"

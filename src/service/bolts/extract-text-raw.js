@@ -29,12 +29,10 @@ class ExtractTextRaw extends BasicBolt {
 
         // set invalid types
         this._invalidTypes = config.invalid_types || [
-            'zip',  // zip files
-            'gz'    // zip files
+            'zip', // zip files
+            'gz'   // zip files
         ];
 
-        // configuration for textract
-        this._textractConfig = config.textract_config || {};
         // the path to where to get the url
         this._documentUrlPath = config.document_url_path;
         // the path to where to get the type
@@ -43,6 +41,19 @@ class ExtractTextRaw extends BasicBolt {
         this._documentTextPath = config.document_text_path;
         // the path to where to store the error
         this._documentErrorPath = config.document_error_path || 'error';
+
+        // configuration for textract
+        this._textractConfig = {};
+        if (Object.keys(config.textract_config).includes('preserve_line_breaks')) {
+            this._textractConfig.preserveLineBreaks = config.textract_config.preserve_line_breaks;
+        }
+        if (Object.keys(config.textract_config).includes('preserve_only_multiple_line_breaks')) {
+            this._textractConfig.preserveOnlyMultipleLineBreaks = config.textract_config.preserve_only_multiple_line_breaks;
+        }
+        if (Object.keys(config.textract_config).includes('include_alt_text')) {
+            this._textractConfig.includeAltText = config.textract_config.include_alt_text;
+        }
+
         // use other fields from config to control your execution
         callback();
     }

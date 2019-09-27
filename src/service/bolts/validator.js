@@ -23,7 +23,7 @@ class Validator {
         // initialize validator with
         this._validator = require('@library/validator')();
         // the validation schema
-        this._schema = config.schema;
+        this._JSONSchema = config.json_schema;
 
         // the path to where to store the error
         this._documentErrorPath = config.document_error_path || 'error';
@@ -42,7 +42,7 @@ class Validator {
 
     receive(message, stream_id, callback) {
         // validate the provided material
-        const { valid, errors } = this._validator.validateSchema(message, this._schema);
+        const { valid, errors } = this._validator.validateSchema(message, this._JSONSchema);
         const stream_direction = valid ? stream_id : 'stream_error';
         // add errors it present
         if (!valid) { message[this._documentErrorPath] = errors; }

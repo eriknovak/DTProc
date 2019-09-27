@@ -13,9 +13,14 @@ module.exports = {
             "working_dir": "./spouts",
             "cmd": "kafka-spout.js",
             "init": {
-                "kafka_host": config.kafka.host,
-                "topic": "DOCUMENT.TEXT",
-                "group_id": `${config.kafka.groupId}`
+                "kafka": {
+                    "host": config.kafka.host,
+                    "topic": "DOCUMENT.TEXT",
+                    "groupId": `${config.kafka.groupId}`,
+                    "high_water": 100,
+                    "low_water": 10
+                }
+
             }
         },
     ],

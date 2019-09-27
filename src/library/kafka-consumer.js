@@ -1,15 +1,5 @@
-/************************************************
- * Kafka Consumer Module
- * This module creates a kafka consumer which
- * can be used to listen on a particular kafka
- * topic and receive its messages.
- */
-
 // external modules
 const k = require('kafka-node');
-
-const HIGH_WATER = 100;
-const LOW_WATER = 10;
 
 /**
  * @class KafkaConsumer
@@ -23,15 +13,18 @@ class KafkaConsumer {
      * @param {String} host - The host address of the kafka service.
      * @param {String} topic - The topic kafka consumer is listening to.
      */
-    constructor(host, topic, groupId) {
+    constructor({ host, topic, group_id, high_water=100, low_water=10 }) {
         // the message container
         this._data = [];
+        // set the data limits
+        this.HIGH_WATER = high_water || 100;
+        this.LOW_WATER = low_water || 10;
 
         // setup the consumer options
         const options = {
             kafkaHost: host,
             ssl: true,
-            groupId,
+            groupId: group_id,
             sessionTimeout: 15000,
             protocol: ['roundrobin'],
             fromOffset: 'latest',
@@ -54,7 +47,7 @@ class KafkaConsumer {
             this._data.push(JSON.parse(message.value));
 
             // handle large amount of data
-            if (this._data.length >= HIGH_WATER) {
+            if (this._data.length >= this.HIGH_WATER) {
                 this._highWaterClearing = true;
                 this.consumerGroup.pause();
             }
@@ -86,7 +79,6 @@ class KafkaConsumer {
         }
     }
 
-
     /**
      * @description Get the next message.
      * @returns {Null|Object} The message object if present. Otherwise, returns null.
@@ -98,7 +90,7 @@ class KafkaConsumer {
         if (this._data.length > 0) {
             let msg = this._data[0];
             this._data = this._data.slice(1);
-            if (this._data.length <= LOW_WATER) {
+            if (this._data.length <= this.LOW_WATER) {
                 this._highWaterClearing = false;
                 this.consumerGroup.resume();
             }
