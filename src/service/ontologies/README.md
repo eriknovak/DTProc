@@ -12,11 +12,11 @@ should be constructed. The elements of an ontology are of two types:
 
 Here, we present some examples of how to construct an ontology.
 
-
-### Example: Extract Document Content
+### Example: Extract Document Content, Local
 TODO
 
+### Example: Extract Document Content, URL
+TODO
 
 ### Example: Extract Wikipedia Concepts
 TODO
-

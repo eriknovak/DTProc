@@ -27,21 +27,25 @@ class ExtractTextRaw extends BasicBolt {
         this._onEmit = config.onEmit;
         this._prefix = `[ExtractionText ${this._name}]`;
 
-        // set invalid types
-        this._invalidTypes = config.invalid_types || [
-            'zip', // zip files
-            'gz'   // zip files
-        ];
-
         // the path to where to get the url
-        this._documentUrlPath = config.document_url_path;
-        // the path to where to get the type
-        this._documentTypePath = config.document_type_path;
+        this._documentLocationPath = config.document_location_path;
         // the path to where to store the text
         this._documentTextPath = config.document_text_path;
         // the path to where to store the error
         this._documentErrorPath = config.document_error_path || 'error';
-
+        // the method type is used to extract the content
+        this._methodType = null;
+        switch (config.document_location_type) {
+            case 'local':
+                this._methodType = 'fromFileWithPath';
+                break;
+            case 'remote':
+                this._methodType = 'fromUrl';
+                break;
+            default:
+                this._methodType = 'fromUrl';
+                break;
+        }
         // configuration for textract
         this._textractConfig = {};
         if (Object.keys(config.textract_config).includes('preserve_line_breaks')) {
@@ -70,25 +74,18 @@ class ExtractTextRaw extends BasicBolt {
     receive(message, stream_id, callback) {
         const self = this;
 
-        const materialUrl = self.get(message, this._documentUrlPath);
-        const materialType = self.get(message, this._documentTypePath);
+        const materialUrl = self.get(message, this._documentLocationPath);
 
-        if (materialType && !this._invalidTypes.includes(materialType.ext)) {
-            // extract raw text from materialURL
-            textract.fromUrl(materialUrl, self._textractConfig, (error, text) => {
-                if (error) {
-                    message[this._documentErrorPath] = `${this._prefix} Not able to extract text.`;
-                    return this._onEmit(message, 'stream_error', callback)
-                }
-                // save the raw text within the metadata
-                this.set(message, this._documentTextPath, text);
-                return this._onEmit(message, stream_id, callback);
-            });
-        } else {
-            // send the material to the partial table
-            message[this._documentErrorPath] = `${this._prefix} Material does not have type provided.`;
-            return this._onEmit(message, 'stream_error', callback)
-        }
+        // extract raw text using the assigned method type
+        textract[this._methodType](materialUrl, self._textractConfig, (error, text) => {
+            if (error) {
+                message[this._documentErrorPath] = `${this._prefix} Not able to extract text: ${error.message}`;
+                return this._onEmit(message, 'stream_error', callback)
+            }
+            // save the raw text within the metadata
+            this.set(message, this._documentTextPath, text);
+            return this._onEmit(message, stream_id, callback);
+        });
     }
 
 }

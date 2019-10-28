@@ -144,8 +144,8 @@ the following parameters.
 
 | Parameter                                          | Description                                                                                        |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
-| document_url_path                                  | the path to the document URL address                                                               |
-| document_type_path                                 | the path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
+| document_location_path                             | the path to the document location                                                                  |
+| document_location_type                             | the type of the document location. Options: `local` - for local documents, `remote` - for documents provided by an URL. (default: `remote`)                                                                                                                             |
 | document_text_path                                 | the path to the document content text                                                              |
 | document_error_path                                | (optional) the path to store the error message (default: `error`)                                  |
 | textract_config                                    | (optional) the textract configuration files (default: `{}`)                                        |

@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.0.2] - 2019-27-10
+### Features
+- Removed type validation from the `extract-text-raw` bolt and added support for extracting from local files
+
+### Added
+- Example for processing local files
+
 ## [0.0.1] - 2019-07-09
 ### Added
 - The CHANGELOG for storing changes of the project
