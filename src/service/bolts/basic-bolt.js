@@ -3,7 +3,6 @@
  */
 
 class BasicBolt {
-
     constructor() {
         this._name = null;
         this._onEmit = null;
@@ -31,7 +30,7 @@ class BasicBolt {
      */
     get(object, path) {
         let schema = object;
-        let pathList = path.split('.');
+        let pathList = path.split(".");
         for (let val of pathList) {
             schema = schema[val];
             // if there is nothing return null
@@ -48,10 +47,10 @@ class BasicBolt {
      */
     set(object, path, value) {
         let schema = object;
-        let pathList = path.split('.');
+        let pathList = path.split(".");
         let pathLength = pathList.length;
         for (let i = 0; i < pathLength - 1; i++) {
-            var el = pathList[i];
+            let el = pathList[i];
             if (!schema[el]) {
                 schema[el] = {};
             }
@@ -65,7 +64,6 @@ class BasicBolt {
         // do something
         callback();
     }
-
 }
 // export the basic bolt
 module.exports = BasicBolt;

@@ -1,12 +1,12 @@
 // internal modules
-const KafkaConsumer = require("@library/kafka-consumer");
+const PostgresRecords = require("@library/postgresql-records");
 
 /**
- * @class KafkaSpout
- * @description Retrieves the messages provided by a Kafka topic and forwards it
- * to the next component of the topology.
+ * @class PostgresqlSpout
+ * @description Periodically retrieves the records from the postgreql table
+ * and sends it to the
  */
-class KafkaSpout {
+class PostgresqlSpout {
     constructor() {
         this._name = null;
         this._context = null;
@@ -17,8 +17,12 @@ class KafkaSpout {
     init(name, config, context, callback) {
         this._name = name;
         this._context = context;
-        this._prefix = `[KafkaSpout ${this._name}]`;
-        this._generator = new KafkaConsumer(config.kafka);
+        this._prefix = `[PostgresqlSpout ${this._name}]`;
+        this._generator = new PostgresRecords(
+            config.pg,
+            config.sql_statement,
+            config.time_interval_millis
+        );
         callback();
     }
 
@@ -43,5 +47,5 @@ class KafkaSpout {
 }
 
 exports.create = function () {
-    return new KafkaSpout();
+    return new PostgresqlSpout();
 };

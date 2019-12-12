@@ -1,18 +1,10 @@
-/************************************************
- * JSON Validator Module
- * This module stores different JSON schemas
- * provided by the user and validates the
- * JSON objects.
- */
-
 // external modules
-const JsonValidator = require('jsonschema').Validator;
+const JsonValidator = require("jsonschema").Validator;
 
 /**
  * The JSON validator class.
  */
 class Validator {
-
     /**
      * @description Initializes the JSON validator.
      * @param {Object} params - The constructor parameter.

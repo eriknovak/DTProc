@@ -1,18 +1,11 @@
-/************************************************
- * Kafka Producer Module
- * This module creates a kafka producer which
- * can create new messages and send them to 
- * the assigned kafka topic.
- */
-
 // external modules
-const k = require('kafka-node');
+const k = require("kafka-node");
 
-/**
- * Kafka producer class.
- */
+// //////////////////////////////////////////////
+// Class definition
+// //////////////////////////////////////////////
+
 class KafkaProducer {
-
     /**
      * Initializes a kafka producer.
      * @param {String} host - The kafka host in the form of ip:port (Example: 127.0.0.1:9092).
@@ -31,8 +24,7 @@ class KafkaProducer {
         self._producer = new k.HighLevelProducer(client);
 
         // make the producer ready
-        self._producer.on('ready', function () {
-
+        self._producer.on("ready", () => {
             self._ready = true;
             // check if there are any messages not sent
             if (self._messages.length) {
@@ -49,14 +41,13 @@ class KafkaProducer {
                 }
             }
         });
-
     }
 
     /**
      * Sends the message to the appropriate topic.
      * @param {String} topic - The topic where the message is sent.
      * @param {Object} msg - The message.
-     * @param {Function} [cb] - The callback triggered after 
+     * @param {Function} [cb] - The callback triggered after
      * the message was sent to the kafka topic.
      */
     send(topic, msg, cb) {
@@ -64,8 +55,8 @@ class KafkaProducer {
 
 
         // get set callback value
-        let callback = cb && typeof(cb) === 'function' ?
-            cb : function (error) { if (error) console.log(error); };
+        let callback = cb && typeof (cb) === "function"
+            ? cb : function (error) { if (error) console.log(error); };
 
 
         // prepare the message in string
@@ -83,7 +74,6 @@ class KafkaProducer {
             return callback(null);
         }
     }
-
 }
 
 module.exports = KafkaProducer;

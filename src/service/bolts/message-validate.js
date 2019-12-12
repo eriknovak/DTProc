@@ -1,4 +1,4 @@
-/********************************************************************
+/** ******************************************************************
  * Material: Validation
  * This component validates the material object - checks if all of
  * the required attributes are present and sends them to the
@@ -7,7 +7,6 @@
 
 
 class Validator {
-
     constructor() {
         this._name = null;
         this._onEmit = null;
@@ -21,12 +20,12 @@ class Validator {
         this._prefix = `[Validator ${this._name}]`;
 
         // initialize validator with
-        this._validator = require('@library/validator')();
+        this._validator = require("@library/validator")();
         // the validation schema
         this._JSONSchema = config.json_schema;
 
         // the path to where to store the error
-        this._documentErrorPath = config.document_error_path || 'error';
+        this._documentErrorPath = config.document_error_path || "error";
         // use other fields from config to control your execution
         callback();
     }
@@ -43,13 +42,12 @@ class Validator {
     receive(message, stream_id, callback) {
         // validate the provided material
         const { valid, errors } = this._validator.validateSchema(message, this._JSONSchema);
-        const stream_direction = valid ? stream_id : 'stream_error';
+        const stream_direction = valid ? stream_id : "stream_error";
         // add errors it present
         if (!valid) { message[this._documentErrorPath] = errors; }
         // continue to the next bolt
         return this._onEmit(message, stream_direction, callback);
     }
-
 }
 
 exports.create = function (context) {

@@ -69,8 +69,8 @@ In addition, if the object doesn't already have an existing attribute object, th
 ```
 
 
-## Extract Type
-The [extract type](./extract-type.js) bolt is able to extract the type of the document based URL address of the document.
+## Extract Document Type
+The [extract document type](./extract-document-type.js) bolt is able to extract the type of the document based URL address of the document.
 It requires the following parameters.
 
 | Parameter           | Description                                                                                        |
@@ -86,7 +86,7 @@ The schema for this bolt in the ontology is:
     "name": "document-type-extraction-name",
     "type": "inproc",
     "working_dir": "./bolts",
-    "cmd": "extract-type.js",
+    "cmd": "extract-document-type.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -178,8 +178,8 @@ The schema for this bolt in the ontology is:
 }
 ```
 
-## Object Validator
-The [object validator](./validator.js) bolt validates the if the message object has the structure and values
+## Message Validate
+The [message validate](./message-validate.js) bolt validates the if the message object has the structure and values
 specified in the given json schema. The bolt adopts the [json schema](https://json-schema.org) format and accepts
 the following parameters.
 
@@ -195,7 +195,7 @@ The schema for this bolt in the ontology is:
     "name": "validator-name",
     "type": "inproc",
     "working_dir": "./bolts",
-    "cmd": "validator.js",
+    "cmd": "message-validate.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],

@@ -1,4 +1,4 @@
-/********************************************************************
+/** ******************************************************************
  * Extract: Text Raw
  * This component extracts raw content text from the file provided.
  * To do this we use textract <https://github.com/dbashford/textract>
@@ -7,13 +7,12 @@
  */
 
 // basic bolt template
-const BasicBolt = require('./basic-bolt');
+const BasicBolt = require("./basic-bolt");
 
 // external libraries
-const textract = require('@library/textract');
+const textract = require("@library/textract");
 
 class ExtractTextRaw extends BasicBolt {
-
     constructor() {
         super();
         this._name = null;
@@ -32,29 +31,29 @@ class ExtractTextRaw extends BasicBolt {
         // the path to where to store the text
         this._documentTextPath = config.document_text_path;
         // the path to where to store the error
-        this._documentErrorPath = config.document_error_path || 'error';
+        this._documentErrorPath = config.document_error_path || "error";
         // the method type is used to extract the content
         this._methodType = null;
         switch (config.document_location_type) {
-            case 'local':
-                this._methodType = 'fromFileWithPath';
-                break;
-            case 'remote':
-                this._methodType = 'fromUrl';
-                break;
-            default:
-                this._methodType = 'fromUrl';
-                break;
+        case "local":
+            this._methodType = "fromFileWithPath";
+            break;
+        case "remote":
+            this._methodType = "fromUrl";
+            break;
+        default:
+            this._methodType = "fromUrl";
+            break;
         }
         // configuration for textract
         this._textractConfig = {};
-        if (Object.keys(config.textract_config).includes('preserve_line_breaks')) {
+        if (Object.keys(config.textract_config).includes("preserve_line_breaks")) {
             this._textractConfig.preserveLineBreaks = config.textract_config.preserve_line_breaks;
         }
-        if (Object.keys(config.textract_config).includes('preserve_only_multiple_line_breaks')) {
+        if (Object.keys(config.textract_config).includes("preserve_only_multiple_line_breaks")) {
             this._textractConfig.preserveOnlyMultipleLineBreaks = config.textract_config.preserve_only_multiple_line_breaks;
         }
-        if (Object.keys(config.textract_config).includes('include_alt_text')) {
+        if (Object.keys(config.textract_config).includes("include_alt_text")) {
             this._textractConfig.includeAltText = config.textract_config.include_alt_text;
         }
 
@@ -80,14 +79,13 @@ class ExtractTextRaw extends BasicBolt {
         textract[this._methodType](materialUrl, self._textractConfig, (error, text) => {
             if (error) {
                 message[this._documentErrorPath] = `${this._prefix} Not able to extract text: ${error.message}`;
-                return this._onEmit(message, 'stream_error', callback)
+                return this._onEmit(message, "stream_error", callback);
             }
             // save the raw text within the metadata
             this.set(message, this._documentTextPath, text);
             return this._onEmit(message, stream_id, callback);
         });
     }
-
 }
 
 exports.create = function (context) {

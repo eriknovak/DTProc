@@ -1,10 +1,9 @@
 // external modules
-const async = require('async');
-const rp = require('request-promise-native');
+const async = require("async");
+const rp = require("request-promise-native");
 
 
 class Wikifier {
-
     /**
      * @description The construction of the wikification object.
      * @param {Object} config - The wikifier configuration.
@@ -14,10 +13,10 @@ class Wikifier {
      */
     constructor({ user_key, wikifier_url, max_length }) {
         this._userKey = user_key;
-        this._wikifierUrl = wikifier_url || 'http://www.wikifier.org';
+        this._wikifierUrl = wikifier_url || "http://www.wikifier.org";
 
         if (max_length && max_length > 20000) {
-            console.log('Wikifier: MaxLength is greater than 20000. Setting it to the upper bound= 20000');
+            console.log("Wikifier: MaxLength is greater than 20000. Setting it to the upper bound= 20000");
             max_length = 20000;
         }
         this._maxLength = max_length || 10000;
@@ -36,7 +35,7 @@ class Wikifier {
 
         if (tasks.length === 0) {
             // there is nothing to extract - return empty objects
-            return Promise.reject(new Error('No tasks produced for text'));
+            return Promise.reject(new Error("No tasks produced for text"));
         }
 
         // create the parallel processing promise
@@ -47,7 +46,7 @@ class Wikifier {
 
                 if (concepts.length === 0) {
                     // there were no concepts extracted
-                    return reject(new Error('No concepts were extracted'));
+                    return reject(new Error("No concepts were extracted"));
                 }
 
                 // merge the returned wikipedia concepts
@@ -62,9 +61,9 @@ class Wikifier {
         return await promise;
     }
 
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
     // Helper methods
-    /////////////////////////////////////////////
+    // ///////////////////////////////////////////
 
     /**
      * @description Get the wikipedia concepts out of a given text.
@@ -77,11 +76,11 @@ class Wikifier {
 
         // create a wikifier request promise object
         return await rp({
-            method: 'POST',
+            method: "POST",
             url: `${self._wikifierUrl}/annotate-article`,
             body: {
-                text: text,
-                lang: 'auto',
+                text,
+                lang: "auto",
                 support: true,
                 ranges: false,
                 includeCosines: true,
@@ -91,7 +90,6 @@ class Wikifier {
             },
             json: true
         });
-
     }
 
 
@@ -113,27 +111,26 @@ class Wikifier {
             let annotations = data.annotations;
             if (!annotations || !annotations.length) {
                 // return the concept list
-                throw new Error('No annotations found for text');
+                throw new Error("No annotations found for text");
             }
 
             // sort annotations by pageRank
             annotations.sort((concept1, concept2) =>
-                concept2.pageRank - concept1.pageRank
-            );
+                concept2.pageRank - concept1.pageRank);
 
-            /******************************
+            /** ****************************
              * get top wikipedia concepts
-             *****************************/
+             **************************** */
 
             // calculate total pageRank from all concepts
             let total = annotations.reduce((sum, concept) =>
-                sum + Math.pow(concept.pageRank, 2), 0);
+                sum + concept.pageRank ** 2, 0);
 
             // get top 80% concepts - noise reduction
             let partial = 0;
             for (let i = 0; i < annotations.length; i++) {
                 let annotation = annotations[i];
-                partial += Math.pow(annotation.pageRank, 2);
+                partial += annotation.pageRank ** 2;
                 // if partials is over 80%
                 if (partial / total > 0.8) {
                     annotations = annotations.slice(0, i + 1);
@@ -141,14 +138,14 @@ class Wikifier {
                 }
             }
 
-            /******************************
+            /** ****************************
              * prepare concepts
-             *****************************/
+             **************************** */
 
             // create concept list
-            let concepts = annotations.map(concept => {
+            let concepts = annotations.map((concept) =>
                 // prepare wiki concept object
-                return {
+                ({
                     uri: concept.url.toString(),
                     name: concept.title.toString(),
                     secUri: concept.secUrl || null,
@@ -159,13 +156,11 @@ class Wikifier {
                     pageRank: concept.pageRank * weight,
                     dbPediaIri: concept.dbPediaIri,
                     supportLen: concept.supportLen
-                };
-            });
+                }));
 
 
             // return the concept list
             return concepts;
-
         } catch (error) {
             console.log(error.message);
             return error;
@@ -191,10 +186,10 @@ class Wikifier {
          * @returns {Function} The enriching task.
          */
         function _createWikifierTask(chunk, weight) {
-            return callback =>
+            return (callback) =>
                 // get the enriched materials
                 self._getWikipediaConcepts(chunk, weight)
-                    .then(concepts => callback(null, concepts));
+                    .then((concepts) => callback(null, concepts));
         }
 
         // set placeholders
@@ -217,7 +212,7 @@ class Wikifier {
                     cutoff = chunk.lastIndexOf(lastCharacter[lastCharacter.length - 1]);
                 }
                 // if there is not end character detected
-                if (!cutoff) { cutoff = chunk.lastIndexOf(' '); }
+                if (!cutoff) { cutoff = chunk.lastIndexOf(" "); }
                 // if there is not space detected - cut of the whole chunk
                 if (!cutoff) { cutoff = chunk.length; }
 
@@ -253,10 +248,9 @@ class Wikifier {
             for (let concept of conceptsBundle) {
                 if (conceptMapping[concept.uri]) {
                     // concept exists in mapping - add weighted pageRank
-                    conceptMapping[concept.uri].pageRank   += concept.pageRank;
-                    conceptMapping[concept.uri].cosine     += concept.cosine;
+                    conceptMapping[concept.uri].pageRank += concept.pageRank;
+                    conceptMapping[concept.uri].cosine += concept.cosine;
                     conceptMapping[concept.uri].supportLen += concept.supportLen;
-
                 } else {
                     //  add concept to the mapping
                     conceptMapping[concept.uri] = concept;
@@ -284,7 +278,7 @@ class Wikifier {
         }
 
         // get the maximum language
-        return Object.keys(langs).reduce((a, b) => langs[a] > langs[b] ? a : b);
+        return Object.keys(langs).reduce((a, b) => (langs[a] > langs[b] ? a : b));
     }
 }
 

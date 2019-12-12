@@ -1,13 +1,12 @@
-/********************************************************************
+/** ******************************************************************
  * PostgresQL storage process for materials
  * This component receives the verified OER material object and
  * stores it into postgresQL database.
  */
 
-const async = require('async');
+const async = require("async");
 
 class StorePostgreSQL {
-
     constructor() {
         this._name = null;
         this._onEmit = null;
@@ -21,7 +20,7 @@ class StorePostgreSQL {
         this._prefix = `[StorePostgreSQL ${this._name}]`;
 
         // create the postgres connection
-        this._pg = require('@library/postgresql')(config.pg);
+        this._pg = require("@library/postgresql")(config.pg);
 
         callback();
     }
@@ -48,29 +47,27 @@ class StorePostgreSQL {
         // tasks container
         const tasks = [];
 
-        ///////////////////////////////////////////
+        // /////////////////////////////////////////
         // STORE THE ACTIONS IN THE TASKS
-        ///////////////////////////////////////////
+        // /////////////////////////////////////////
 
         // add the task of adding the
-        tasks.push(function (xcallback) {
+        tasks.push((xcallback) => {
             self._pg.insert(/* object, table_name, */ function (e, res) {
                 if (e) { return xcallback(e); }
                 return xcallback(null, 1);
             });
         });
 
-        ///////////////////////////////////////////
+        // /////////////////////////////////////////
         // RUN THE TASKS
-        ///////////////////////////////////////////
+        // /////////////////////////////////////////
 
-        async.series(tasks, function (e) {
+        async.series(tasks, (e) => {
             if (e) { return callback(e); }
             return callback();
         });
-
     }
-
 }
 
 exports.create = function (context) {
