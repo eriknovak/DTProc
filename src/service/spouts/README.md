@@ -72,7 +72,7 @@ to the `.env` file in the [config](../../config) folder):
             "host": "127.0.0.1",
             "port": "5432",
             "sql_statement": "SELECT * FROM test LIMIT 10;",
-            "time_interval_millis": 60 * 1000, // every minute
+            "time_interval_millis": 60000
         }
     }
 }
