@@ -147,7 +147,6 @@ class ExtractVideoTTP extends BasicBolt {
 
         const documentLanguage = this.get(this._documentLanguagePath);
         if (Object.keys(self._TTPLanguages).includes(documentLanguage)) {
-
             // external_id generation - for using in TTP
             const external_id = Math.random().toString(36).substring(2, 15)
                                 + Math.random().toString(36).substring(2, 15)
