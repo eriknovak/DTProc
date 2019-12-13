@@ -17,6 +17,10 @@ const common = {
     wikifier: {
         wikifierUrl: process.env.WIKIFIER_URL,
         userKey: process.env.WIKIFIER_USERKEY
+    },
+    ttp: {
+        user: process.env.TTP_USER,
+        token: process.env.TTP_TOKEN,
     }
 };
 

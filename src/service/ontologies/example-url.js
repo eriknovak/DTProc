@@ -23,7 +23,7 @@ module.exports = {
             name: "document-type-extraction",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "extract-type.js",
+            cmd: "extract-document-type.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -46,7 +46,7 @@ module.exports = {
                     preserve_only_multiple_line_breaks: false,
                     include_alt_text: false
                 },
-                document_url_path: "url",
+                document_location_path: "url",
                 document_type_path: "type",
                 document_text_path: "metadata.text",
             }
@@ -67,7 +67,8 @@ module.exports = {
                     max_length: 10000
                 },
                 document_text_path: "metadata.text",
-                wikipedia_concept_path: "metadata.wiki"
+                wikipedia_concept_path: "metadata.wiki",
+                document_error_path: "error"
             }
         },
         {

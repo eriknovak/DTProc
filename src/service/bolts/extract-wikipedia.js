@@ -47,37 +47,33 @@ class ExtractWikipedia extends BasicBolt {
         callback();
     }
 
-    receive(material, stream_id, callback) {
+    async receive(material, stream_id, callback) {
         let self = this;
 
-        // get the raw text from the material
-        let text = self.get(material, this._documentTextPath);
+        try {
+            // get the raw text from the material
+            let text = self.get(material, this._documentTextPath);
 
-        if (!text) {
-            // send it to the next component in the pipeline
-            material[self._documentErrorPath] = `${this._prefix} No text provided.`;
-            return this._onEmit(material, "stream_error", callback);
-        }
-
-        // process material text and extract wikipedia concepts
-        self._wikifier.processText(text).then((response) => {
+            if (!text) {
+                // send it to the next component in the pipeline
+                // there was an error - send the material to partial table
+                throw new Error(`${this._prefix} No text provided.`);
+            }
+            // process material text and extract wikipedia concepts
+            const { wikipedia } = await self._wikifier.processText(text);
             // retrieve wikifier results
-            const { wikipedia } = response;
-
             if (!wikipedia.length) {
-                // no wikipedia concepts extracted - send it to partial material table
-                material[self._documentErrorPath] = `${this._prefix} No wikipedia concepts found`;
-                return this._onEmit(material, "stream_error", callback);
+                throw new Error(`${this._prefix} No wikipedia concepts found`);
             }
 
             // store merged concepts within the material object
             self.set(material, this._wikipediaConceptPath, wikipedia);
             return this._onEmit(material, stream_id, callback);
-        }).catch((error) => {
+        } catch (error) {
             // there was an error - send the material to partial table
-            material.message = `${this._prefix} ${error.message}`;
-            return this._onEmit(material, stream_id, callback);
-        });
+            this.set(material, this._documentErrorPath, `${this._prefix} ${error.message}`);
+            return this._onEmit(material, "stream_error", callback);
+        }
     }
 }
 

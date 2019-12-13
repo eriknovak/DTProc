@@ -13,49 +13,50 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_local.json",
+                file_name: "../example/file_text.json",
                 file_format: "json"
             }
         }
     ],
     bolts: [
         {
-            name: "document-content-extraction",
+            name: "extract-text-ttp",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "extract-text-raw.js",
+            cmd: "extract-text-ttp.js",
             inputs: [{
                 source: "text-input-reader",
             }],
             init: {
-                textract_config: {
-                    preserve_line_breaks: false,
-                    preserve_only_multiple_line_breaks: false,
-                    include_alt_text: false
+                ttp: {
+                    user: config.ttp.user,
+                    token: config.ttp.token,
                 },
-                document_location_path: "path",
-                document_location_type: "local",
-                document_text_path: "metadata.text",
+                tmp_folder: "../tmp",
+                document_title_path: "title",
+                document_language_path: "language",
+                document_text_path: "text",
+                document_transcriptions_path: "transcriptions",
+                document_error_path: "error",
+                ttp_id_path: "ttp_id"
             }
         },
         {
-            name: "wikipedia-concept-extraction",
+            name: "extract-wikipedia",
             type: "inproc",
             working_dir: "./bolts",
             cmd: "extract-wikipedia.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "extract-text-ttp",
             }],
             init: {
-                // wikifier related configurations
                 wikifier: {
                     user_key: config.wikifier.userKey,
                     wikifier_url: config.wikifier.wikifierUrl,
-                    max_length: 10000
                 },
-                document_text_path: "metadata.text",
+                document_text_path: "text",
                 document_error_path: "error",
-                wikipedia_concept_path: "metadata.wiki",
+                wikipedia_concept_path: "wiki"
             }
         },
         {
@@ -64,10 +65,10 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "wikipedia-concept-extraction" }
+                { source: "extract-wikipedia" }
             ],
             init: {
-                file_name_template: "../example/example_local_output.json"
+                file_name_template: "../example/example_text_ttp_output.json"
             }
         },
         {
@@ -77,20 +78,17 @@ module.exports = {
             cmd: "console",
             inputs: [
                 {
-                    source: "document-type-extraction",
+                    source: "extract-text-ttp",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "document-content-extraction",
-                    stream_id: "stream_error"
-                },
-                {
-                    source: "wikipedia-concept-extraction",
+                    source: "extract-wikipedia",
                     stream_id: "stream_error"
                 }
             ],
             init: {}
         }
+
 
     ],
     variables: {}

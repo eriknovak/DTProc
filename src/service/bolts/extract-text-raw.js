@@ -78,7 +78,7 @@ class ExtractTextRaw extends BasicBolt {
         // extract raw text using the assigned method type
         textract[this._methodType](materialUrl, self._textractConfig, (error, text) => {
             if (error) {
-                message[this._documentErrorPath] = `${this._prefix} Not able to extract text: ${error.message}`;
+                this.set(message, this._documentErrorPath, `${this._prefix} Not able to extract text: ${error.message}`);
                 return this._onEmit(message, "stream_error", callback);
             }
             // save the raw text within the metadata

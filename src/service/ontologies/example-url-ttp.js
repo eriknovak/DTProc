@@ -13,19 +13,32 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_local.json",
+                file_name: "../example/file_urls.json",
                 file_format: "json"
             }
         }
     ],
     bolts: [
         {
+            name: "document-type-extraction",
+            type: "inproc",
+            working_dir: "./bolts",
+            cmd: "extract-document-type.js",
+            inputs: [{
+                source: "text-input-reader",
+            }],
+            init: {
+                document_url_path: "url",
+                document_type_path: "type"
+            }
+        },
+        {
             name: "document-content-extraction",
             type: "inproc",
             working_dir: "./bolts",
             cmd: "extract-text-raw.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "document-type-extraction",
             }],
             init: {
                 textract_config: {
@@ -33,9 +46,31 @@ module.exports = {
                     preserve_only_multiple_line_breaks: false,
                     include_alt_text: false
                 },
-                document_location_path: "path",
-                document_location_type: "local",
+                document_location_path: "url",
+                document_type_path: "type",
                 document_text_path: "metadata.text",
+            }
+        },
+        {
+            name: "extract-text-ttp",
+            type: "inproc",
+            working_dir: "./bolts",
+            cmd: "extract-text-ttp.js",
+            inputs: [{
+                source: "document-content-extraction",
+            }],
+            init: {
+                ttp: {
+                    user: config.ttp.user,
+                    token: config.ttp.token,
+                },
+                tmp_folder: "../tmp",
+                document_title_path: "title",
+                document_language_path: "language",
+                document_text_path: "metadata.text",
+                document_transcriptions_path: "metadata.transcriptions",
+                document_error_path: "error",
+                ttp_id_path: "ttp_id"
             }
         },
         {
@@ -44,7 +79,7 @@ module.exports = {
             working_dir: "./bolts",
             cmd: "extract-wikipedia.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "extract-text-ttp",
             }],
             init: {
                 // wikifier related configurations
@@ -54,8 +89,8 @@ module.exports = {
                     max_length: 10000
                 },
                 document_text_path: "metadata.text",
-                document_error_path: "error",
                 wikipedia_concept_path: "metadata.wiki",
+                document_error_path: "error"
             }
         },
         {
@@ -67,7 +102,7 @@ module.exports = {
                 { source: "wikipedia-concept-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_local_output.json"
+                file_name_template: "../example/example_url_ttp_output.json"
             }
         },
         {

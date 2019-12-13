@@ -63,7 +63,7 @@ class ExtractType extends BasicBolt {
 
         if (!materialUrl) {
             // unable to get the url of the material
-            message[this._documentErrorPath] = `${this._prefix} No material url provided`;
+            this.set(message, this._documentErrorPath, `${this._prefix} No material url provided`);
             return this._onEmit(message, "stream_error", callback);
         }
 
@@ -77,7 +77,7 @@ class ExtractType extends BasicBolt {
 
         if (mime) {
             // assign the extension and mimetype to the message
-            message[this._documentTypePath] = { ext, mime };
+            this.set(message, this._documentTypePath, { ext, mime });
             return this._onEmit(message, stream_id, callback);
         }
 
@@ -87,7 +87,7 @@ class ExtractType extends BasicBolt {
 
         if (!protocol) {
             // cannot detect the protocol for getting materials
-            message[this._documentErrorPath] = `${this._profix} Cannot detect protocol for getting materials`;
+            this.set(message, this._documentErrorPath, `${this._profix} Cannot detect protocol for getting materials`);
             return this._onEmit(message, "stream_error", callback);
         }
         // make an request and handle appropriately handle the objects
@@ -114,7 +114,7 @@ class ExtractType extends BasicBolt {
             this._handleHTTPResponse(response, message, stream_id, callback);
         }).on("error", (error) => {
             // send formated material to the next component
-            message[this._documentErrorPath] = `${self._prefix} Error when making an http(s) request= ${error.message}`;
+            this.set(message, this._documentErrorPath, `${self._prefix} Error when making an http(s) request= ${error.message}`);
             return this._onEmit(message, "stream_error", callback);
         });
     }
@@ -133,7 +133,7 @@ class ExtractType extends BasicBolt {
 
         if (statusCode !== 200) {
             // assign the error message and stop the process
-            message[this._documentErrorPath] = `${this._prefix} Error when making a request, invalid status code= ${statusCode}`;
+            this.set(message, this._documentErrorPath, `${this._prefix} Error when making a request, invalid status code= ${statusCode}`);
             return this._onEmit(message, "stream_error", callback);
         }
 
@@ -146,7 +146,7 @@ class ExtractType extends BasicBolt {
 
             if (!chunk) {
                 // assign the error message and stop the process
-                message[this._documentErrorPath] = `${this._prefix} Error when making request, response object empty`;
+                this.set(message, this._documentErrorPath, `${this._prefix} Error when making request, response object empty`);
                 return this._onEmit(message, "stream_error", callback);
             }
 

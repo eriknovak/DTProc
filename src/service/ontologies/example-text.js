@@ -33,6 +33,7 @@ module.exports = {
                     wikifier_url: config.wikifier.wikifierUrl,
                 },
                 document_text_path: "text",
+                document_error_path: "error",
                 wikipedia_concept_path: "wiki"
             }
         },

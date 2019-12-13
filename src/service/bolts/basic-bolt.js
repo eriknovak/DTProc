@@ -42,10 +42,11 @@ class BasicBolt {
     /**
      * @description Sets the value from the object.
      * @param {Object} object - The object from which we wish to set value.
-     * @param {String} path - The path of the value to be assigned.
+     * @param {String} [path] - The path of the value to be assigned.
      * @param {Object} value - The value to be assigned.
      */
     set(object, path, value) {
+        if (!path) { return; }
         let schema = object;
         let pathList = path.split(".");
         let pathLength = pathList.length;

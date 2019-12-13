@@ -44,7 +44,9 @@ class Validator {
         const { valid, errors } = this._validator.validateSchema(message, this._JSONSchema);
         const stream_direction = valid ? stream_id : "stream_error";
         // add errors it present
-        if (!valid) { message[this._documentErrorPath] = errors; }
+        if (!valid) {
+            this.set(message, this._documentErrorPath, errors);
+        }
         // continue to the next bolt
         return this._onEmit(message, stream_direction, callback);
     }
