@@ -98,6 +98,7 @@ The schema for this bolt in the ontology is:
 }
 ```
 
+
 ## Extract Wikipedia
 The [extract wikipedia](./extract-wikipedia.js) bolt leverages the [Wikifier](http://wikifier.org/) service for annotating
 the document text with Wikipedia concepts. It requires the following parameters.
@@ -170,13 +171,26 @@ The schema for this bolt in the ontology is:
             "preserve_only_multiple_line_breaks": false,
             "include_alt_text": false
         },
-        "document_url_path": "url-path",
-        "document_type_path": "type-path",
+        "document_location_path": "url-path",
+        "document_location_type": "remote",
         "document_text_path": "text-path",
         "document_error_path": "error"
     }
 }
 ```
+
+
+## Extract Text TTP
+// TODO
+
+
+## Extract Video TTP
+// TODO
+
+
+## Message Forward
+// TODO
+
 
 ## Message Validate
 The [message validate](./message-validate.js) bolt validates the if the message object has the structure and values

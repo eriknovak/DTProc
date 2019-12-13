@@ -45,17 +45,19 @@ class ExtractTextRaw extends BasicBolt {
             this._methodType = "fromUrl";
             break;
         }
+
+        const {
+            preserve_line_breaks,
+            preserve_only_multiple_line_breaks,
+            include_alt_text
+        } = config.textract_config;
+
         // configuration for textract
-        this._textractConfig = {};
-        if (Object.keys(config.textract_config).includes("preserve_line_breaks")) {
-            this._textractConfig.preserveLineBreaks = config.textract_config.preserve_line_breaks;
-        }
-        if (Object.keys(config.textract_config).includes("preserve_only_multiple_line_breaks")) {
-            this._textractConfig.preserveOnlyMultipleLineBreaks = config.textract_config.preserve_only_multiple_line_breaks;
-        }
-        if (Object.keys(config.textract_config).includes("include_alt_text")) {
-            this._textractConfig.includeAltText = config.textract_config.include_alt_text;
-        }
+        this._textractConfig = {
+            ...preserve_line_breaks && { preserveLineBreaks: preserve_line_breaks },
+            ...preserve_only_multiple_line_breaks && { preserveOnlyMultipleLineBreaks: preserve_only_multiple_line_breaks },
+            ...include_alt_text && { includeAltText: include_alt_text },
+        };
 
         // use other fields from config to control your execution
         callback();
