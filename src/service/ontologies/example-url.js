@@ -47,7 +47,6 @@ module.exports = {
                     include_alt_text: false
                 },
                 document_location_path: "url",
-                document_type_path: "type",
                 document_text_path: "metadata.text",
             }
         },
