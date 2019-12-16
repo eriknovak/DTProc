@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2019-16-12
+### Fixes
+- Improved documentation of components
+
+### Added
+- New bolts
+    - `log-message-postgresql`: used for logging the status of the process into PostgreSQL
+
+- New ontology for exampling the logging to postgresql component
+
 ## [0.1.0] - 2019-13-12
 ### Added
 - New bolts
