@@ -23,7 +23,7 @@ module.exports = {
             name: "log-message-retrieval",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "log-postgresql-status.js",
+            cmd: "log-message-postgresql.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -62,7 +62,7 @@ module.exports = {
             name: "log-type-extraction",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "log-postgresql-status.js",
+            cmd: "log-message-postgresql.js",
             inputs: [{
                 source: "document-type-extraction",
             }],
@@ -100,7 +100,7 @@ module.exports = {
             name: "log-content-extraction",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "log-postgresql-status.js",
+            cmd: "log-message-postgresql.js",
             inputs: [{
                 source: "document-content-extraction",
             }],
@@ -139,7 +139,7 @@ module.exports = {
             name: "log-wikipedia-extraction",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "log-postgresql-status.js",
+            cmd: "log-message-postgresql.js",
             inputs: [{
                 source: "wikipedia-concept-extraction",
             }],
@@ -170,7 +170,7 @@ module.exports = {
             name: "log-finished-processing",
             type: "inproc",
             working_dir: "./bolts",
-            cmd: "log-postgresql-status.js",
+            cmd: "log-message-postgresql.js",
             inputs: [
                 {
                     source: "document-type-extraction",
@@ -190,8 +190,8 @@ module.exports = {
                 postgres_table: "processing_queue",
                 postgres_primary_id: "material_id",
                 message_primary_id: "id",
-                postgres_literal_attrs: {
-                    status: "Document processing unsuccessful"
+                postgres_message_attrs: {
+                    status: "error"
                 },
                 final_bolt: true
             }
