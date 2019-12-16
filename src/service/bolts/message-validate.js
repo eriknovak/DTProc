@@ -1,12 +1,11 @@
 /** ******************************************************************
- * Material: Validation
- * This component validates the material object - checks if all of
- * the required attributes are present and sends them to the
- * appropriate stream.
+ * Validate Message
+ * This component validates the material object using the
+ * JSON Schema validator component.
  */
 
 
-class Validator {
+class MessageValidate {
     constructor() {
         this._name = null;
         this._onEmit = null;
@@ -17,7 +16,7 @@ class Validator {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[Validator ${this._name}]`;
+        this._prefix = `[MessageValidate ${this._name}]`;
 
         // initialize validator with
         this._validator = require("@library/validator")();
@@ -53,5 +52,5 @@ class Validator {
 }
 
 exports.create = function (context) {
-    return new Validator(context);
+    return new MessageValidate(context);
 };

@@ -1,8 +1,7 @@
 /** ******************************************************************
- * Extract: Wikipedia
- * This component wikifies the OER material using the raw text extracted in the
- * previous steps of the pre-processing pipeline. The wikipedia concepts are then
- * stored within the material object and sent to the next component.
+ * Extract Wikipedia
+ * This component extracts the Wikipedia Concepts from an
+ * attribute given and the retrieved message.
  */
 
 // basic bolt template

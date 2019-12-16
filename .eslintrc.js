@@ -72,6 +72,7 @@ module.exports = {
     'quote-props': [2, "consistent-as-needed"],
     'newline-per-chained-call': 0,
     'no-else-return': 0,
-    'no-return-await': 0
+    'no-return-await': 0,
+    'no-await-in-loop': 0
   },
 };

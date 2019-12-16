@@ -46,11 +46,12 @@ class PostgresRecords {
         }
     }
 
-    stop(callback) {
+    async stop(callback) {
         // disable interval
         this.disable();
         // close pg connection
-        this._pg.close(callback);
+        await this._pg.close();
+        callback();
     }
 
 

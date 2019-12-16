@@ -1,5 +1,5 @@
 /** ******************************************************************
- * Extract: Text Raw
+ * Extract Text Content in Raw Format
  * This component extracts raw content text from the file provided.
  * To do this we use textract <https://github.com/dbashford/textract>
  * which is a text extraction library. It returns the content in raw

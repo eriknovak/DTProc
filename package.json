@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "git checkout -- src/library/textract && npm run install:textract",
     "install:textract": "cd src/library/textract && npm install",
+    "postgres:tables": "cd src/load && node -e 'require(`./create-postgres-tables`).startDBCreate();'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

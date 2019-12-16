@@ -1,5 +1,5 @@
 /** ******************************************************************
- * Extraction: TTP
+ * Extract Video Transcriptions and Translations via TTP
  * This component makes a request to the UPV's Transcription and
  * Translation Platform (TTP) <https://ttp.mllp.upv.es/index.php>
  * and retrieves the video content as raw text and dfxp.]

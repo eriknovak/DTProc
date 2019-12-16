@@ -1,7 +1,7 @@
 /** ******************************************************************
- * PostgresQL storage process
- * This component receives the verified OER material object and
- * stores it into postgresQL database.
+ * Forward Message to Kafka Topic
+ * This component forwards the provided message to the
+ * appropriate kafka topic and service.
  */
 
 // internal modules

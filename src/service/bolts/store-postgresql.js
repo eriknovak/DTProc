@@ -1,5 +1,5 @@
 /** ******************************************************************
- * PostgresQL storage process for materials
+ * Storing Messages to PostgresQL
  * This component receives the verified OER material object and
  * stores it into postgresQL database.
  */
@@ -36,7 +36,7 @@ class StorePostgreSQL {
         callback();
     }
 
-    receive(message, stream_id, callback) {
+    async receive(message, stream_id, callback) {
         let self = this;
 
         // get sent values
