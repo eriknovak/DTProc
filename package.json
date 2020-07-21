@@ -4,10 +4,10 @@
   "description": "Extracts document metadata, raw text, and annotates it with Wikipedia concepts",
   "main": "index.js",
   "scripts": {
-    "postinstall": "git checkout -- src/library/textract && npm run install:textract",
+    "postinstall": "git checkout -- ./pkgs/textract && npm run install:textract",
     "build": "./node_modules/typescript/bin/tsc --project .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install:textract": "cd src/library/textract && npm install",
+    "install:textract": "cd ./pkgs/textract && npm install",
     "postgres:tables": "cd src/load && node -e 'require(`./create-postgres-tables`).startDBCreate();'",
     "lint": "./node_modules/.bin/tslint --project .",
     "lint:fix": "./node_modules/.bin/tslint --fix --project ."
