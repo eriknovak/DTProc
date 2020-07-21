@@ -1,5 +1,7 @@
 # Document Enrichment Tool
 
+[![GitHub tag](https://img.shields.io/github/tag/ErikNovak/document-enrichment-tool.svg)](https://github.com/ErikNovak/document-enrichment-tool/tag/)
+
 The tool is intended to enrich text/documents - extracting the content and provide
 various annotations and labels to it.
 
