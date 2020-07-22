@@ -225,6 +225,28 @@ export interface IExtractDocumentTypeConfig {
 }
 
 ///////////////////////////////////////
+// Extract Pdf Raw
+///////////////////////////////////////
+
+export enum IExtractPdfMetadata {
+    PAGES = "pages",
+    INFO = "info",
+    METADATA = "metadata",
+    TEXT = "text"
+}
+
+
+export interface IExtractPdfRawConfig {
+    onEmit?: qtolopology.BoltEmitCallbackAsync;
+    document_location_path: string;
+    document_pdf_path: string;
+    document_error_path?: string;
+    document_location_type?: string;
+    extract_metadata?: IExtractPdfMetadata[];
+}
+
+
+///////////////////////////////////////
 // Extract Text Raw
 ///////////////////////////////////////
 
