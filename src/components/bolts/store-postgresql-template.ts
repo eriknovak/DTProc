@@ -15,6 +15,7 @@ import PostgreSQL from "../../library/postgresql";
 class StorePostgreSQL extends BasicBolt {
 
     private _pg: PostgreSQL;
+    private _documentErrorPath: string;
 
     constructor() {
         super();
@@ -23,7 +24,7 @@ class StorePostgreSQL extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: Interfaces.IStoreConfig, context: any) {
+    async init(name: string, config: Interfaces.IStorePostgreSQLConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
@@ -31,6 +32,8 @@ class StorePostgreSQL extends BasicBolt {
 
         // create the postgres connection
         this._pg = new PostgreSQL(config.pg);
+        // the path to where to store the error
+        this._documentErrorPath = config.document_error_path || "error";
     }
 
     heartbeat() {
@@ -48,15 +51,14 @@ class StorePostgreSQL extends BasicBolt {
             // TODO: extract fields of the message
         } = message;
 
-        // /////////////////////////////////////////
-        // STORE THE ACTIONS IN THE TASKS
-        // /////////////////////////////////////////
-
-
         try {
+            // TODO: store the objects in the database
             // await this._pg.upsert(/* object, id, table_name */ );
         } catch (error) {
             // error handling
+            const errorMessage = `${this._prefix} Not able to store the message attributes: ${error.message}`;
+            this.set(message, this._documentErrorPath, errorMessage);
+            // TODO: finalize the error scenario
         }
     }
 }

@@ -368,7 +368,7 @@ export interface IExtractWikipediaConfig {
 
 export type IFormatMessage = (message: IProcessMaterial) => IGenericJSON;
 
-export interface IMessageForwardKafka {
+export interface IIForwardKafka {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     kafka: {
         host: string;
@@ -435,7 +435,7 @@ export interface IMessageValidateConfig {
 // Store XXXXXXXXXXX
 ///////////////////////////////////////
 
-export interface IStoreConfig {
+export interface IStorePostgreSQLConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     pg: {
         host: string;
@@ -449,4 +449,5 @@ export interface IStoreConfig {
         version: string;
     },
     final_bolt?: boolean;
+    document_error_path?: string;
 }
