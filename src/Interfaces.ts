@@ -368,7 +368,7 @@ export interface IExtractWikipediaConfig {
 
 export type IFormatMessage = (message: IProcessMaterial) => IGenericJSON;
 
-export interface IIForwardKafka {
+export interface IForwardKafka {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     kafka: {
         host: string;
