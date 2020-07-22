@@ -17,12 +17,11 @@
     "url": "git+https://github.com/ErikNovak/document-enrichment-tool.git"
   },
   "keywords": [
+    "documents",
+    "content-extraction",
     "enrichment",
-    "Wikipedia",
-    "concepts",
-    "text",
-    "mining",
-    "pre-processing"
+    "annotations",
+    "Wikipedia"
   ],
   "author": "Erik Novak",
   "license": "SEE LICENSE IN LICENSE",

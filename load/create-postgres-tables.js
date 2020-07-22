@@ -3,17 +3,15 @@
  * the postgresql related components.
  */
 
-require("module-alias/register");
-
 // ///////////////////////////////////////////////
 // Modules and configurations
 // ///////////////////////////////////////////////
 
 // configuration data
-const config = require("@config/config");
+const config = require("../dist/config/config");
 
 // postgresql connection to the database
-const pg = require("@library/postgresql")(config.pg);
+const pg = require("../dist/library/postgresql")(config.pg);
 
 // ///////////////////////////////////////////////
 // Script parameters
@@ -33,7 +31,6 @@ const schemaExistsString = `
 
 // Statement for creating the provided schema
 const createSchemaString = `CREATE schema ${schema};`;
-
 
 // Statement for checking if the tables exist
 const tablesExistString = `
@@ -66,7 +63,6 @@ const dbCreates = {
 // Helper functions
 // ///////////////////////////////////////////////
 
-
 /**
  * @description Initializes the schema creation process.
  * @returns {Promise} A promise that will create the requested schema.
@@ -78,7 +74,6 @@ async function prepareSchema() {
     console.log(`Creating new schema=${schema.toUpperCase()}`);
     await pg.execute(createSchemaString, []);
 }
-
 
 /**
  * @describe Checks and creates non-existing database tables.
@@ -100,8 +95,7 @@ async function prepareTables() {
         const sqlStatement = dbCreates[tableName];
         await pg.execute(sqlStatement, []);
     }
-} // prepareTables()
-
+}
 
 /**
  * Updates DB to version specified in config.json
@@ -114,7 +108,6 @@ async function prepareTables() {
  * @returns Version DB was updated to
  */
 
-
 /**
  * @description Executes the whole database creation and update process.
  * @param {Function} [callback] - The function executed at the end of the process.
@@ -124,7 +117,6 @@ async function startDBCreate() {
     await prepareTables();
     await pg.close();
 }
-
 
 // ///////////////////////////////////////////////
 // Script export

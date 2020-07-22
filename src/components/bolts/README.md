@@ -98,46 +98,6 @@ The schema for this bolt in the ontology is:
 }
 ```
 
-
-## Extract Wikipedia
-The [extract wikipedia](./extract-wikipedia.js) bolt leverages the [Wikifier](http://wikifier.org/) service for annotating
-the document text with Wikipedia concepts. It requires the following parameters.
-
-| Parameter              | Description                                                                                        |
-| ---------------------- | ---------------------------------------------------------------------------------------------------|
-| document_text_path     | the path to the document content text                                                              |
-| wikipedia_concept_path | the path to the document Wikipedia concept                                                         |
-| document_error_path    | (optional) the path to store the error message (default: `error`)                                  |
-| wikifier               | the wikifier configuration object                                                                  |
-| wikifier.user_key      | the wikifier user key (can be acquired [here](http://wikifier.org/register.html))                  |
-| wikifier.wikifier_url  | (optional) the wikifier URL endpoint (default: `'http://www.wikifier.org'`)                        |
-| wikifier.max_length    | (optional) for longer text, the bolt will slice the text into chunks and aggregate the wikifier output into a single object. This parameter will setup the `max_length` of the text chunks. **Note:** it cannot be greater than 20000, due to Wikifier restrictions (default: `10000`) |
-
-The schema for this bolt in the ontology is:
-
-```json
-{
-    "name": "wikipedia-concept-extraction-name",
-    "type": "inproc",
-    "working_dir": "./bolts",
-    "cmd": "extract-wikipedia.js",
-    "inputs": [{
-        "source": "source-spout-or-bolt-name",
-    }],
-    "init": {
-        "wikifier": {
-            "user_key": "wikifier-user-key",
-            "wikifier_url": "http://wikifier.org",
-            "max_length": 10000
-        },
-        "document_text_path": "text-path",
-        "wikipedia_concept_path": "wikipedia-concept-path",
-        "document_error_path": "error"
-    }
-}
-```
-
-
 ## Extract Text Raw
 The [extract text raw](./extract-text-raw.js) bolt is able to extract the document content in text format. The content is
 extracted through the document URL address using the [textract](https://www.npmjs.com/package/textract) library and requires
@@ -188,7 +148,46 @@ The schema for this bolt in the ontology is:
 // TODO
 
 
-## Message Forward
+## Extract Wikipedia
+The [extract wikipedia](./extract-wikipedia.js) bolt leverages the [Wikifier](http://wikifier.org/) service for annotating
+the document text with Wikipedia concepts. It requires the following parameters.
+
+| Parameter              | Description                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------|
+| document_text_path     | the path to the document content text                                                              |
+| wikipedia_concept_path | the path to the document Wikipedia concept                                                         |
+| document_error_path    | (optional) the path to store the error message (default: `error`)                                  |
+| wikifier               | the wikifier configuration object                                                                  |
+| wikifier.user_key      | the wikifier user key (can be acquired [here](http://wikifier.org/register.html))                  |
+| wikifier.wikifier_url  | (optional) the wikifier URL endpoint (default: `'http://www.wikifier.org'`)                        |
+| wikifier.max_length    | (optional) for longer text, the bolt will slice the text into chunks and aggregate the wikifier output into a single object. This parameter will setup the `max_length` of the text chunks. **Note:** it cannot be greater than 20000, due to Wikifier restrictions (default: `10000`) |
+
+The schema for this bolt in the ontology is:
+
+```json
+{
+    "name": "wikipedia-concept-extraction-name",
+    "type": "inproc",
+    "working_dir": "./bolts",
+    "cmd": "extract-wikipedia.js",
+    "inputs": [{
+        "source": "source-spout-or-bolt-name",
+    }],
+    "init": {
+        "wikifier": {
+            "user_key": "wikifier-user-key",
+            "wikifier_url": "http://wikifier.org",
+            "max_length": 10000
+        },
+        "document_text_path": "text-path",
+        "wikipedia_concept_path": "wikipedia-concept-path",
+        "document_error_path": "error"
+    }
+}
+```
+
+
+## Forward Kafka
 // TODO
 
 
@@ -220,5 +219,5 @@ The schema for this bolt in the ontology is:
 }
 ```
 
-## Store PostgresQL
+## Store PostgresQL template
 TODO
