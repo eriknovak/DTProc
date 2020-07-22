@@ -28,6 +28,16 @@ To install the project run
 npm install
 ```
 
+### Textract Dependencies
+
+The pipeline uses a nodejs module called [textract](./lib/textract) which allows
+text extraction of most of text files. For some file types additional libraries need to be installed:
+
+- **PDF** extraction requires `pdftotext` be installed, [link](http://www.xpdfreader.com/download.html).
+- **DOC** extraction requires `antiword` be installed, [link](http://www.winfield.demon.nl/), unless on OSX
+    in which case textutil (installed by default) is used.
+
+
 ## Build
 
 To build the project and use the developed components run
@@ -40,16 +50,6 @@ npm run build
 - [Bolts.](./src/components/bolts) The bolts used to process the documents and text.
 - [Spouts.](./src/components/spouts) The spouts used to retrieve the metadata and send them to the bolts.
 - [Ontologies.](./ontologies) The ontologies definition and examples.
-
-
-### Textract Dependencies
-
-The pipeline uses a nodejs module called [textract](./lib/textract) which allows
-text extraction of most of text files. For some file types additional libraries need to be installed:
-
-- **PDF** extraction requires `pdftotext` be installed, [link](http://www.xpdfreader.com/download.html).
-- **DOC** extraction requires `antiword` be installed, [link](http://www.winfield.demon.nl/), unless on OSX
-    in which case textutil (installed by default) is used.
 
 
 # Acknowledgments
