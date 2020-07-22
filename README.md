@@ -1,12 +1,11 @@
-# Document Enrichment Tool
+# DTProc: Document and Text Processing Framework
 
 [![GitHub tag](https://img.shields.io/github/tag/ErikNovak/document-enrichment-tool.svg)](https://github.com/ErikNovak/document-enrichment-tool/tag/)
 
-The tool is intended to enrich text/documents - extracting the content and provide
-various annotations and labels to it.
+The framework is enables to process documents and text by extracting the documents content,
+annotating and translating the text, and validating the output.
 
-The usage of the tool is presented in the [service](./src/service) folder and
-includes some examples of its use.
+The framework is developed in TypeScript, but can be easily used on NodeJS.
 
 The service is based on the [qtopology](https://github.com/qminer/qtopology) module,
 which is a distributed stream processing layer and is able to construct components
@@ -28,6 +27,29 @@ To install the project run
 ```bash
 npm install
 ```
+
+## Build
+
+To build the project and use the developed components run
+```bash
+npm run build
+```
+
+### Processing via URL
+
+This example shows how to process text that are not present in the object but there is
+an URL field available to the object sent to the pipeline. This ontology identifies the
+document type found at the URL, extract the content as text, wikify the content and
+store it. The ontology is found in `ontologies/example-url.json`.
+
+To run the ontology run
+
+```bash
+node ./dist/pipeline -tn uuid.topology.url -tp ./ontologies/example-url
+```
+
+The output should be available in the [example](../example) folder in the `example_url_output.json` file.
+
 
 ### Textract Dependencies
 
