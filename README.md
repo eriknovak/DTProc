@@ -13,7 +13,7 @@ for adding them to the tool.
 
 ## Prerequisites
 
-- Create `.env` file in the `src/config` folder. See instructions described in this [readme](./src/config/README.md).
+- Create `.env` file in the `env` folder. See instructions described in this [readme](./env/README.md).
 
 - node.js v6.0 and npm 5.3 or higher
 
@@ -30,7 +30,7 @@ npm install
 
 ### Textract Dependencies
 
-The pipeline uses a nodejs module called [textract](./lib/textract) which allows
+The pipeline uses a nodejs module called [textract](./pkgs/textract) which allows
 text extraction of most of text files. For some file types additional libraries need to be installed:
 
 - **PDF** extraction requires `pdftotext` be installed, [link](http://www.xpdfreader.com/download.html).
