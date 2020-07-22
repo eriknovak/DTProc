@@ -35,20 +35,11 @@ To build the project and use the developed components run
 npm run build
 ```
 
-### Processing via URL
+## Table of Contents
 
-This example shows how to process text that are not present in the object but there is
-an URL field available to the object sent to the pipeline. This ontology identifies the
-document type found at the URL, extract the content as text, wikify the content and
-store it. The ontology is found in `ontologies/example-url.json`.
-
-To run the ontology run
-
-```bash
-node ./dist/pipeline -tn uuid.topology.url -tp ./ontologies/example-url
-```
-
-The output should be available in the [example](../example) folder in the `example_url_output.json` file.
+- [Bolts.](./src/components/bolts) The bolts used to process the documents and text.
+- [Spouts.](./src/components/spouts) The spouts used to retrieve the metadata and send them to the bolts.
+- [Ontologies.](./ontologies) The ontologies definition and examples.
 
 
 ### Textract Dependencies
