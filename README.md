@@ -1,6 +1,6 @@
 # DTProc: Document and Text Processing Framework
 
-[![](https://badgen.net/github/release/ErikNovak/DTProc)](https://github.com/ErikNovak/DTProc/release/)
+[![](https://badgen.net/github/tag/ErikNovak/DTProc)](https://github.com/ErikNovak/DTProc/tag/)
 
 The framework is enables to process documents and text by extracting the documents content,
 annotating and translating the text, and validating the output.
