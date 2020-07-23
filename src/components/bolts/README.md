@@ -142,8 +142,8 @@ The schema for this bolt in the ontology is:
 
 ## Extract Text TTP
 The [extract text ttp](./extract-text-ttp.js) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
-transcription and translation platform, and gets the translations of the provided text. To send the request, the following
-parameters need to be provided:
+transcription and translation platform, and gets the translations of the provided text. The service is payable but also provide
+an [experimental account](https://ttp.mllp.upv.es/index.php?page=register). To send the request, the following parameters need to be provided:
 
 | Parameter                                          | Description                                                                                        |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
@@ -207,7 +207,8 @@ The schema for this bolt in the ontology is:
 
 ## Extract Video TTP
 The [extract video ttp](./extract-video-ttp.js) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
-transcription and translation platform, and gets the transcriptions and translations of the provided video. To send the request,
+transcription and translation platform, and gets the transcriptions and translations of the provided video. The service is
+payable but also provide an [experimental account](https://ttp.mllp.upv.es/index.php?page=register) To send the request,
 the following parameters need to be provided:
 
 | Parameter                                          | Description                                                                                        |
