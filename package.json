@@ -47,8 +47,7 @@
     "pg-cursor": "^2.0.0",
     "qtopology": "^2.2.0",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0",
-    "xml2js": "^0.4.23"
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
     "@types/async": "^3.2.3",
