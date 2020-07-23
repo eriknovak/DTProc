@@ -36,7 +36,7 @@ module.exports = {
             name: "extract-pdf-metadata",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-pdf-raw.js",
+            cmd: "extract-pdf-meta.js",
             inputs: [{
                 source: "document-type-extraction",
             }],

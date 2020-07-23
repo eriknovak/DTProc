@@ -225,7 +225,21 @@ export interface IExtractDocumentTypeConfig {
 }
 
 ///////////////////////////////////////
-// Extract Pdf Raw
+// Extract OCR Meta
+///////////////////////////////////////
+
+export interface IExtractOCRMetaConfig {
+    onEmit?: qtolopology.BoltEmitCallbackAsync;
+    document_location_path: string;
+    document_location_type?: string;
+    document_language_path: string;
+    document_ocr_path: string;
+    document_error_path?: string;
+    temporary_folder: string;
+}
+
+///////////////////////////////////////
+// Extract PDF Meta
 ///////////////////////////////////////
 
 export enum IExtractPdfMetadata {
@@ -235,8 +249,7 @@ export enum IExtractPdfMetadata {
     TEXT = "text"
 }
 
-
-export interface IExtractPdfRawConfig {
+export interface IExtractPdfMetaConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     document_location_path: string;
     document_pdf_path: string;
@@ -245,7 +258,6 @@ export interface IExtractPdfRawConfig {
     extract_metadata?: IExtractPdfMetadata[];
     convert_to_pdf?: boolean;
 }
-
 
 ///////////////////////////////////////
 // Extract Text Raw

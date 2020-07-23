@@ -16,12 +16,12 @@ import got from "got";
 // used for converting text documents into pdfs
 import libre = require("libreoffice-convert");
 
-class ExtractPdfRaw extends BasicBolt {
+class ExtractPdfMeta extends BasicBolt {
 
     private _documentLocationPath: string;
+    private _documentLocationType: string;
     private _documentPdfPath: string;
     private _documentErrorPath: string;
-    private _documentLocationType: string;
     private _extractMetadata: Interfaces.IExtractPdfMetadata[];
     private _convertToPDF: boolean;
 
@@ -33,11 +33,11 @@ class ExtractPdfRaw extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IExtractPdfRawConfig, context: any) {
+    async init(name: string, config: Interfaces.IExtractPdfMetaConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractPdfRaw ${this._name}]`;
+        this._prefix = `[ExtractPdfMeta ${this._name}]`;
 
         // the path to where to get the url
         this._documentLocationPath = config.document_location_path;
@@ -130,6 +130,6 @@ class ExtractPdfRaw extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractPdfRaw();
+const create = () => new ExtractPdfMeta();
 
 export { create };
