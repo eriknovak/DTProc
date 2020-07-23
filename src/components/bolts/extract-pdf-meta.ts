@@ -92,16 +92,16 @@ class ExtractPdfMeta extends BasicBolt {
             const metadata = {};
             for (const type of this._extractMetadata) {
                 switch (type) {
-                case "pages":
+                case Interfaces.IExtractPdfMetadata.PAGES:
                     metadata[type] = pdfMeta.numpages;
                     break;
-                case "info":
+                case Interfaces.IExtractPdfMetadata.INFO:
                     metadata[type] = pdfMeta.info;
                     break;
-                case "metadata":
+                case Interfaces.IExtractPdfMetadata.METADATA:
                     metadata[type] = pdfMeta.metadata;
                     break;
-                case "text":
+                case Interfaces.IExtractPdfMetadata.TEXT:
                     metadata[type] = pdfMeta.text;
                     break;
                 default:

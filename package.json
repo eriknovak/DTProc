@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/ErikNovak/DTProc#readme",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.8.0",
     "archiver": "^3.1.1",
     "async": "^3.2.0",
     "bent": "^7.3.7",

@@ -17,6 +17,9 @@ import got from "got";
 import { PDFImage } from "pdf-image";
 import * as Tesseract from "tesseract.js";
 
+// TODO: create mapping between ISO language standards
+import Languages from "../../library/languages";
+
 class ExtractOCRMeta extends BasicBolt {
 
     private _documentLocationPath: string;
@@ -25,6 +28,7 @@ class ExtractOCRMeta extends BasicBolt {
     private _documentOCRPath: string;
     private _documentErrorPath: string;
     private _temporaryFolder: string;
+    private _languages: Languages;
 
     constructor() {
         super();
@@ -52,6 +56,8 @@ class ExtractOCRMeta extends BasicBolt {
         this._documentErrorPath = config.document_error_path || "error";
         // the location of the temporary folder
         this._temporaryFolder = config.temporary_folder;
+        // the languages mappings
+        this._languages = new Languages();
     }
 
     heartbeat() {
@@ -68,6 +74,8 @@ class ExtractOCRMeta extends BasicBolt {
         try {
             const documentURL: string = this.get(message, this._documentLocationPath);
             const documentLang: string = this.get(message, this._documentLanguagePath);
+            // get the alpha3 language code
+            const alpha3Language = this._languages.getIsoCode(documentLang, Interfaces.ILanguageTypes.ALPHA3);
             // get the material data as a buffer
             let dataBuffer: Buffer;
             switch(this._documentLocationType) {
@@ -86,7 +94,7 @@ class ExtractOCRMeta extends BasicBolt {
             // extract the text from the images
             const ocrTexts = [];
             for (const imagePath of imagePaths) {
-                const text = await this.recognizeText(imagePath, documentLang);
+                const text = await this.recognizeText(imagePath, alpha3Language);
                 ocrTexts.push(text);
             }
             // join the OCR extracted texts
