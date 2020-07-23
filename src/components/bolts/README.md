@@ -73,11 +73,11 @@ In addition, if the object doesn't already have an existing attribute object, th
 The [extract document type](./extract-document-type.js) bolt is able to extract the type of the document based URL address of the document.
 It requires the following parameters:
 
-| Parameter           | Description                                                                                        |
-| ------------------- | ---------------------------------------------------------------------------------------------------|
-| document_url_path   | The path to the document URL address                                                               |
-| document_type_path  | The path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
-| document_error_path | (optional) The path to store the error message (Default: `error`)                                  |
+| Parameter              | Description                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------|
+| document_location_path | The path to the document location                                                                  |
+| document_type_path     | The path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
+| document_error_path    | (optional) The path to store the error message (Default: `error`)                                  |
 
 The schema for this bolt in the ontology is:
 
@@ -91,7 +91,7 @@ The schema for this bolt in the ontology is:
         "source": "source-spout-or-bolt-name",
     }],
     "init": {
-        "document_url_path": "url-path",
+        "document_location_path": "location-path",
         "document_type_path": "type-path",
         "document_error_path": "error"
     }
@@ -99,8 +99,49 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract PDF Raw
-The [extract pdf raw](./extract-pdf-raw.js) bolt extracts the requested PDF metadata and content. In addition, it is able to convert a
+## Extract OCR meta
+The [extract ocr meta](./extract-ocr-meta.js) bolt uses [tesseract.js](https://github.com/naptha/tesseract.js) to identify the text in the PDF
+spans. (**NOTE:** requires [pdf-image](https://github.com/mooz/node-pdf-image) conditions for converting the PDF into images, which are then
+processed by [tesseract](https://github.com/tesseract-ocr/tesseract) to extract the content). It requires the following parameters:
+
+| Parameter                                          | Description                                                                                        |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
+| document_location_path                             | The path to the document location                                                                  |
+| document_location_type                             | The type of the document location. Options: `local` - for local documents, `remote` - for documents provided by an URL. (default: `remote`) |
+| document_language_path                             | The path to the document language                                                                  |
+| document_ocr_path                                  | The path where the OCR content is stored                                                           |
+| ocr_data_folder                                    | (optional) The path to where the OCR datasets are cached (default: `../data/ocr-data`)             |
+| ocr_verbose                                        | (optional) The boolean telling if the OCR component should log out the progress (default: `boolean`) |
+| document_error_path                                | (optional) The path to store the error message (default: `error`)                                  |
+| temporary_folder                                   | (optional) The folder path containing the temporary files generated when extracting the content via OCR (default: `../tmp`)      |
+
+The schema for this bolt in the ontology is:
+
+```json
+{
+    "name": "extract-pdf-raw-component-name",
+    "type": "inproc",
+    "working_dir": "./components/bolts",
+    "cmd": "extract-pdf-raw.js",
+    "inputs": [{
+        "source": "source-spout-or-bolt-name",
+    }],
+    "init": {
+        "document_location_path": "location-path",
+        "document_location_type": "remote",
+        "document_language_path": "language-path",
+        "document_ocr_path": "ocr-path",
+        "ocr_data_folder": "../data/ocr-data",
+        "ocr_verbose": false,
+        "document_error_path": "error",
+        "temporary_folder": "../tmp"
+    }
+}
+```
+
+
+## Extract PDF meta
+The [extract pdf meta](./extract-pdf-meta.js) bolt extracts the requested PDF metadata and content. In addition, it is able to convert a
 microsoft office file into PDF before extracting the PDF metadata and content (**NOTE:** requires [libreoffice](https://www.libreoffice.org/)
 to use the conversion feature). It requires the following parameters:
 
@@ -125,7 +166,7 @@ The schema for this bolt in the ontology is:
         "source": "source-spout-or-bolt-name",
     }],
     "init": {
-        "document_location_path": "url-path",
+        "document_location_path": "location-path",
         "document_location_type": "remote",
         "document_pdf_path": "text-path",
         "document_error_path": "error",
@@ -169,7 +210,7 @@ The schema for this bolt in the ontology is:
             "preserve_only_multiple_line_breaks": false,
             "include_alt_text": false
         },
-        "document_location_path": "url-path",
+        "document_location_path": "location-path",
         "document_location_type": "remote",
         "document_text_path": "text-path",
         "document_error_path": "error"

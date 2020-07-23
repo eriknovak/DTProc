@@ -231,7 +231,7 @@ import * as qtolopology from "qtopology";
 
 export interface IExtractDocumentTypeConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
-    document_url_path: string;
+    document_location_path: string;
     document_type_path: string;
     document_error_path?: string;
 }

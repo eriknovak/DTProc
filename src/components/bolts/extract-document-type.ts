@@ -21,7 +21,7 @@ import * as FileType from "file-type";
  */
 class ExtractDocumentType extends BasicBolt {
 
-    private _documentUrlPath: string;
+    private _documentLocationPath: string;
     private _documentTypePath: string;
     private _documentErrorPath: string;
 
@@ -38,7 +38,7 @@ class ExtractDocumentType extends BasicBolt {
         this._onEmit = config.onEmit;
         this._prefix = `[ExtractType ${this._name}]`;
         // which field to use to check the material type
-        this._documentUrlPath = config.document_url_path;
+        this._documentLocationPath = config.document_location_path;
         // where to store the document type
         this._documentTypePath = config.document_type_path;
         // where to store the errors if any
@@ -56,7 +56,7 @@ class ExtractDocumentType extends BasicBolt {
 
     async receive(message: any, stream_id: string) {
         // get the material url and type
-        const materialURL: string = this.get(message, this._documentUrlPath);
+        const materialURL: string = this.get(message, this._documentLocationPath);
         const materialType: { "ext": string, "mime": string } = this.get(message, this._documentTypePath);
 
         if (materialURL && materialType && materialType.ext && materialType.mime) {

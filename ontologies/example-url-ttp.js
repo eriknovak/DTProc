@@ -28,7 +28,7 @@ module.exports = {
                 source: "text-input-reader",
             }],
             init: {
-                document_url_path: "url",
+                document_location_path: "url",
                 document_type_path: "type"
             }
         },
