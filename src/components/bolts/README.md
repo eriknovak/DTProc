@@ -13,8 +13,8 @@ parameters:
 
 | Parameter | Description                                                                                                      |
 | --------- | ---------------------------------------------------------------------------------------------------------------- |
-| object    | the JSON object from which we want to retrieve an attribute                                                      |
-| path      | the path to the attribute of the `path.to.attribute` format, where the dots signify the level of the JSON object |
+| object    | The JSON object from which we want to retrieve an attribute                                                      |
+| path      | The path to the attribute of the `path.to.attribute` format, where the dots signify the level of the JSON object |
 
 For example, we have an `object`:
 
@@ -38,9 +38,9 @@ parameters:
 
 | Parameter | Description                                                                                                      |
 | --------- | ---------------------------------------------------------------------------------------------------------------- |
-| object    | the JSON object from which we want to retrieve an attribute                                                      |
-| path      | the path to the attribute of the `path.to.attribute` format, where the dots signify the level of the JSON object |
-| value     | the value we wish to set                                                                                         |
+| object    | The JSON object from which we want to retrieve an attribute                                                      |
+| path      | The path to the attribute of the `path.to.attribute` format, where the dots signify the level of the JSON object |
+| value     | The value we wish to set                                                                                         |
 
 If we take the previous `object` example, to set a new title we invoke `this.set(object, 'title', 'new document name')` and to
 create a new attribute inside the `metadata` attribute, we can use `this.set(object, 'metadata.new_attribute', 0)`.
@@ -75,9 +75,9 @@ It requires the following parameters:
 
 | Parameter           | Description                                                                                        |
 | ------------------- | ---------------------------------------------------------------------------------------------------|
-| document_url_path   | the path to the document URL address                                                               |
-| document_type_path  | the path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
-| document_error_path | (optional) the path to store the error message (Default: `error`)                                  |
+| document_url_path   | The path to the document URL address                                                               |
+| document_type_path  | The path to the type object containing the extension (`ext`) and mimetype (`mime`) of the document |
+| document_error_path | (optional) The path to store the error message (Default: `error`)                                  |
 
 The schema for this bolt in the ontology is:
 
@@ -98,6 +98,44 @@ The schema for this bolt in the ontology is:
 }
 ```
 
+
+## Extract PDF Raw
+The [extract pdf raw](./extract-pdf-raw.js) bolt extracts the requested PDF metadata and content. In addition, it is able to convert a
+microsoft office file into PDF before extracting the PDF metadata and content (**NOTE:** requires [libreoffice](https://www.libreoffice.org/)
+to use the conversion feature). It requires the following parameters:
+
+| Parameter                                          | Description                                                                                        |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
+| document_location_path                             | The path to the document location                                                                  |
+| document_location_type                             | The type of the document location. Options: `local` - for local documents, `remote` - for documents provided by an URL. (default: `remote`) |
+| document_pdf_path                                  | The path where the pdf metadata and content is stored                                              |
+| document_error_path                                | (optional) The path to store the error message (default: `error`)                                  |
+| pdf_extract_metadata                               | (optional) The PDF values to be extracted (default: `["pages", "info", "metadata", "text"]`)       |
+| convert_to_pdf                                     | (optional) The boolean value if the files should be converted to PDF; requires installed `libreoffice` (default: `false`)   |
+
+The schema for this bolt in the ontology is:
+
+```json
+{
+    "name": "extract-pdf-raw-component-name",
+    "type": "inproc",
+    "working_dir": "./components/bolts",
+    "cmd": "extract-pdf-raw.js",
+    "inputs": [{
+        "source": "source-spout-or-bolt-name",
+    }],
+    "init": {
+        "document_location_path": "url-path",
+        "document_location_type": "remote",
+        "document_pdf_path": "text-path",
+        "document_error_path": "error",
+        "pdf_extract_metadata": ["pages", "info", "metadata", "text"],
+        "convert_to_pdf": false
+    }
+}
+```
+
+
 ## Extract Text Raw
 The [extract text raw](./extract-text-raw.js) bolt is able to extract the document content in text format. The content is
 extracted through the document URL address using the [textract](https://www.npmjs.com/package/textract) library and requires
@@ -105,14 +143,14 @@ the following parameters:
 
 | Parameter                                          | Description                                                                                        |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
-| document_location_path                             | the path to the document location                                                                  |
-| document_location_type                             | the type of the document location. Options: `local` - for local documents, `remote` - for documents provided by an URL. (default: `remote`)                                                                                                                             |
-| document_text_path                                 | the path to the document content text                                                              |
-| document_error_path                                | (optional) the path to store the error message (default: `error`)                                  |
-| textract_config                                    | (optional) the textract configuration files (default: `{}`)                                        |
-| textract_config.preserve_line_breaks               | (optional) pass this in as `true` and textract will not strip any line breaks (default: `false`)   |
-| textract_config.preserve_only_multiple_line_breaks | (optional) some extractors, like PDF, insert line breaks at the end of every line, even if the middle of a sentence. If this option is set to `true`, then any instances of a single line break are removed but multiple line breaks are preserved. Check your output with this option, though, this doesn't preserve paragraphs unless there are multiple breaks (default: `false`) |
-| textract_config.include_alt_text                   | (optional) if `true`, when extracting HTML whether or not to include alt text with the extracted text. (default: `false`) |
+| document_location_path                             | The path to the document location                                                                  |
+| document_location_type                             | The type of the document location. Options: `local` - for local documents, `remote` - for documents provided by an URL. (default: `remote`)                                                                                                                             |
+| document_text_path                                 | The path where the document content text is stored                                                 |
+| document_error_path                                | (optional) The path to store the error message (default: `error`)                                  |
+| textract_config                                    | (optional) The textract configuration files (default: `{}`)                                        |
+| textract_config.preserve_line_breaks               | (optional) Pass this in as `true` and textract will not strip any line breaks (default: `false`)   |
+| textract_config.preserve_only_multiple_line_breaks | (optional) Some extractors, like PDF, insert line breaks at the end of every line, even if the middle of a sentence. If this option is set to `true`, then any instances of a single line break are removed but multiple line breaks are preserved. Check your output with this option, though, this doesn't preserve paragraphs unless there are multiple breaks (default: `false`) |
+| textract_config.include_alt_text                   | (optional) If `true`, when extracting HTML whether or not to include alt text with the extracted text. (default: `false`) |
 
 The schema for this bolt in the ontology is:
 
@@ -142,8 +180,8 @@ The schema for this bolt in the ontology is:
 
 ## Extract Text TTP
 The [extract text ttp](./extract-text-ttp.js) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
-transcription and translation platform, and gets the translations of the provided text. To send the request, the following
-parameters need to be provided:
+transcription and translation platform, and gets the translations of the provided text. The service is payable but also provide
+an [experimental account](https://ttp.mllp.upv.es/index.php?page=register). To send the request, the following parameters need to be provided:
 
 | Parameter                                          | Description                                                                                        |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------|
@@ -153,7 +191,7 @@ parameters need to be provided:
 | document_transcriptions_path                       | The path to where the transcriptions are saved                                                     |
 | ttp_id_path                                        | The path to where the MLLP (TTP) id used for retrieving the metadata from MLLP is saved            |
 | temporary_folder                                   | The folder path containing the temporary files generated when requesting the translations          |
-| document_error_path                                | (optional) the path to store the error message (default: `error`)                                  |
+| document_error_path                                | (optional) The path to store the error message (default: `error`)                                  |
 | ttp                                                | The TTP configuration files                                                                        |
 | ttp.user                                           | The TTP user name                                                                                  |
 | ttp.token                                          | The TTP token used for sending requests                                                            |
@@ -207,7 +245,8 @@ The schema for this bolt in the ontology is:
 
 ## Extract Video TTP
 The [extract video ttp](./extract-video-ttp.js) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
-transcription and translation platform, and gets the transcriptions and translations of the provided video. To send the request,
+transcription and translation platform, and gets the transcriptions and translations of the provided video. The service is
+payable but also provide an [experimental account](https://ttp.mllp.upv.es/index.php?page=register) To send the request,
 the following parameters need to be provided:
 
 | Parameter                                          | Description                                                                                        |
@@ -220,7 +259,7 @@ the following parameters need to be provided:
 | document_transcriptions_path                       | The path to where the transcriptions are saved                                                     |
 | ttp_id_path                                        | The path to where the MLLP (TTP) id used for retrieving the metadata from MLLP is saved            |
 | temporary_folder                                   | The folder path containing the temporary files generated when requesting the translations          |
-| document_error_path                                | (optional) the path to store the error message (default: `error`)                                  |
+| document_error_path                                | (optional) The path to store the error message (default: `error`)                                  |
 | ttp                                                | The TTP configuration files                                                                        |
 | ttp.user                                           | The TTP user name                                                                                  |
 | ttp.token                                          | The TTP token used for sending requests                                                            |
@@ -281,13 +320,13 @@ the document text with Wikipedia concepts. It requires the following parameters:
 
 | Parameter              | Description                                                                                        |
 | ---------------------- | ---------------------------------------------------------------------------------------------------|
-| document_text_path     | the path to the document content text                                                              |
-| wikipedia_concept_path | the path to the document Wikipedia concept                                                         |
-| document_error_path    | (optional) the path to store the error message (default: `error`)                                  |
-| wikifier               | the wikifier configuration object                                                                  |
-| wikifier.user_key      | the wikifier user key (can be acquired [here](http://wikifier.org/register.html))                  |
-| wikifier.wikifier_url  | (optional) the wikifier URL endpoint (default: `'http://www.wikifier.org'`)                        |
-| wikifier.max_length    | (optional) for longer text, the bolt will slice the text into chunks and aggregate the wikifier output into a single object. This parameter will setup the `max_length` of the text chunks. **Note:** it cannot be greater than `20000`, due to Wikifier restrictions (default: `10000`) |
+| document_text_path     | The path to the document content text                                                              |
+| wikipedia_concept_path | The path to the document Wikipedia concept                                                         |
+| document_error_path    | (optional) The path to store the error message (default: `error`)                                  |
+| wikifier               | The wikifier configuration object                                                                  |
+| wikifier.user_key      | The wikifier user key (can be acquired [here](http://wikifier.org/register.html))                  |
+| wikifier.wikifier_url  | (optional) The wikifier URL endpoint (default: `'http://www.wikifier.org'`)                        |
+| wikifier.max_length    | (optional) For longer text, the bolt will slice the text into chunks and aggregate the wikifier output into a single object. This parameter will setup the `max_length` of the text chunks. **Note:** it cannot be greater than `20000`, due to Wikifier restrictions (default: `10000`) |
 
 The schema for this bolt in the ontology is:
 
@@ -371,7 +410,7 @@ messages and literal attributes. It requires the following parameters:
 | postgres_literal_attrs | The dictionary telling which postgresql table column should be updated with which literal/static value. Used for updating the table with literal values.  |
 | postgres_time_attrs    | The dictionary telling which postgresql table column should be updated with the current time.      |
 | final_bolt             | (optional) Tells if the component is the final bolt or not (default: `false`)                      |
-| document_error_path    | (optional) the path to store the error message (default: `error`)                                  |
+| document_error_path    | (optional) The path to store the error message (default: `error`)                                  |
 
 
 The schema for this bolt in the ontology is:
@@ -429,8 +468,8 @@ the following parameters:
 
 | Parameter           | Description                                                                                                          |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------|
-| json_schema         | the JSON schema used to validate the message structure. Must be of the [json schema](https://json-schema.org) format |
-| document_error_path | (optional) the path to store the error message (default: `error`)                                                    |
+| json_schema         | The JSON schema used to validate the message structure. Must be of the [json schema](https://json-schema.org) format |
+| document_error_path | (optional) The path to store the error message (default: `error`)                                                    |
 
 The schema for this bolt in the ontology is:
 
@@ -469,7 +508,7 @@ The minimum parameters that need to be present are:
 | pg.idleTimeoutMillis   | (optional) The timeout milliseconds must pass before the connection becomes idle                   |
 | pg.schema              | (optional) The schema name of the database tables to access the database                           |
 | pg.version             | (optional) The version of the database to which we want to connect                                 |
-| document_error_path    | (optional) the path to store the error message (default: `error`)                                  |
+| document_error_path    | (optional) The path to store the error message (default: `error`)                                  |
 
 
 The schema for this bolt in the ontology is:

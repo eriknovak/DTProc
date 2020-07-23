@@ -13,41 +13,25 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_urls.jl",
+                file_name: "../example/file_local.jl",
                 file_format: "json"
             }
         }
     ],
     bolts: [
         {
-            name: "document-type-extraction",
+            name: "extract-pdf-metadata",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-document-type.js",
+            cmd: "extract-pdf-raw.js",
             inputs: [{
                 source: "text-input-reader",
             }],
             init: {
-                document_url_path: "url",
-                document_type_path: "type"
-            }
-        },
-        {
-            name: "document-content-extraction",
-            type: "inproc",
-            working_dir: "./components/bolts",
-            cmd: "extract-text-raw.js",
-            inputs: [{
-                source: "document-type-extraction",
-            }],
-            init: {
-                textract_config: {
-                    preserve_line_breaks: false,
-                    preserve_only_multiple_line_breaks: false,
-                    include_alt_text: false
-                },
-                document_location_path: "url",
-                document_text_path: "metadata.text",
+                document_location_path: "path",
+                document_location_type: "local",
+                document_pdf_path: "metadata.pdf",
+                extract_metadata: ["pages", "info", "metadata", "text"]
             }
         },
         {
@@ -56,7 +40,7 @@ module.exports = {
             working_dir: "./components/bolts",
             cmd: "extract-wikipedia.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "extract-pdf-metadata",
             }],
             init: {
                 // wikifier related configurations
@@ -65,9 +49,9 @@ module.exports = {
                     wikifier_url: config.wikifier.wikifierURL,
                     max_length: 10000
                 },
-                document_text_path: "metadata.text",
+                document_text_path: "metadata.pdf.text",
+                document_error_path: "error",
                 wikipedia_concept_path: "metadata.wiki",
-                document_error_path: "error"
             }
         },
         {
@@ -79,7 +63,7 @@ module.exports = {
                 { source: "wikipedia-concept-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_url_output.jl"
+                file_name_template: "../example/example_pdf_local_output.jl"
             }
         },
         {

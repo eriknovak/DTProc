@@ -13,7 +13,7 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_urls.json",
+                file_name: "../example/file_urls.jl",
                 file_format: "json"
             }
         }
@@ -102,7 +102,7 @@ module.exports = {
                 { source: "wikipedia-concept-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_url_ttp_output.json"
+                file_name_template: "../example/example_url_ttp_output.jl"
             }
         },
         {

@@ -33,21 +33,19 @@ module.exports = {
             }
         },
         {
-            name: "document-content-extraction",
+            name: "extract-pdf-metadata",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-text-raw.js",
+            cmd: "extract-pdf-raw.js",
             inputs: [{
                 source: "document-type-extraction",
             }],
             init: {
-                textract_config: {
-                    preserve_line_breaks: false,
-                    preserve_only_multiple_line_breaks: false,
-                    include_alt_text: false
-                },
                 document_location_path: "url",
-                document_text_path: "metadata.text",
+                document_location_type: "remote",
+                document_pdf_path: "metadata.pdf",
+                extract_metadata: ["pages", "info", "metadata", "text"],
+                convert_to_pdf: true
             }
         },
         {
@@ -56,7 +54,7 @@ module.exports = {
             working_dir: "./components/bolts",
             cmd: "extract-wikipedia.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "extract-pdf-metadata",
             }],
             init: {
                 // wikifier related configurations
@@ -65,7 +63,7 @@ module.exports = {
                     wikifier_url: config.wikifier.wikifierURL,
                     max_length: 10000
                 },
-                document_text_path: "metadata.text",
+                document_text_path: "metadata.pdf.text",
                 wikipedia_concept_path: "metadata.wiki",
                 document_error_path: "error"
             }
@@ -79,7 +77,7 @@ module.exports = {
                 { source: "wikipedia-concept-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_url_output.jl"
+                file_name_template: "../example/example_pdf_url_output.jl"
             }
         },
         {
@@ -93,7 +91,7 @@ module.exports = {
                     stream_id: "stream_error"
                 },
                 {
-                    source: "document-content-extraction",
+                    source: "extract-pdf-metadata",
                     stream_id: "stream_error"
                 },
                 {

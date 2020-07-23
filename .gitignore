@@ -61,6 +61,7 @@ typings/
 .next
 
 
+**/example/*_output.jl
 **/example/*_output.json
 
 **/data/
@@ -70,3 +71,5 @@ typings/
 **/tmp/
 
 dist
+
+dev
