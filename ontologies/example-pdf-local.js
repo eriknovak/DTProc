@@ -13,7 +13,7 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_local.json",
+                file_name: "../example/file_local.jl",
                 file_format: "json"
             }
         }
@@ -63,7 +63,7 @@ module.exports = {
                 { source: "wikipedia-concept-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_pdf_local_output.json"
+                file_name_template: "../example/example_pdf_local_output.jl"
             }
         },
         {

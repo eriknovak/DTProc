@@ -13,7 +13,7 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_urls.json",
+                file_name: "../example/file_urls.jl",
                 file_format: "json"
             }
         }
@@ -163,7 +163,7 @@ module.exports = {
                 { source: "log-wikipedia-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_url_logging_output.json"
+                file_name_template: "../example/example_url_logging_output.jl"
             }
         },
         {

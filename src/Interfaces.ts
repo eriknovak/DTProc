@@ -243,6 +243,7 @@ export interface IExtractPdfRawConfig {
     document_error_path?: string;
     document_location_type?: string;
     extract_metadata?: IExtractPdfMetadata[];
+    convert_to_pdf?: boolean;
 }
 
 

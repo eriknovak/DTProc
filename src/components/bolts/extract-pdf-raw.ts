@@ -12,7 +12,9 @@ import * as Interfaces from "../../Interfaces";
 import BasicBolt from "./basic-bolt";
 import * as fs from "fs";
 import * as pdf from "pdf-parse";
-import { default as got } from "got";
+import got from "got";
+// used for converting text documents into pdfs
+import libre = require("libreoffice-convert");
 
 class ExtractPdfRaw extends BasicBolt {
 
@@ -21,6 +23,7 @@ class ExtractPdfRaw extends BasicBolt {
     private _documentErrorPath: string;
     private _documentLocationType: string;
     private _extractMetadata: Interfaces.IExtractPdfMetadata[];
+    private _convertToPDF: boolean;
 
     constructor() {
         super();
@@ -44,13 +47,15 @@ class ExtractPdfRaw extends BasicBolt {
         this._documentPdfPath = config.document_pdf_path;
         // the path to where to store the error
         this._documentErrorPath = config.document_error_path || "error";
-        // the extraction type
+        // the extraction types
         this._extractMetadata = config.extract_metadata || [
             Interfaces.IExtractPdfMetadata.PAGES,
             Interfaces.IExtractPdfMetadata.INFO,
             Interfaces.IExtractPdfMetadata.METADATA,
             Interfaces.IExtractPdfMetadata.TEXT
         ];
+        // the convert to PDF flag, requires libreoffice
+        this._convertToPDF = config.convert_to_pdf || false;
     }
 
     heartbeat() {
@@ -61,21 +66,25 @@ class ExtractPdfRaw extends BasicBolt {
         // prepare for graceful shutdown, e.g. save state
     }
 
-    // receive the message and extract the text content
+    // receive the message and extract the pdf content
     async receive(message: any, stream_id: string) {
 
         try {
             const documentURL: string = this.get(message, this._documentLocationPath);
             // get the material data as a buffer
-            let dataBuffer: any // Buffer | gotResponse<string>;
+            let dataBuffer: Buffer;
             switch(this._documentLocationType) {
             case "local":
                 dataBuffer = fs.readFileSync(documentURL);
                 break;
             case "remote":
             default:
-                dataBuffer = await got(documentURL);
+                dataBuffer = (await got(documentURL)).rawBody;
                 break;
+            }
+            // convert the document if requested
+            if (this._convertToPDF) {
+                dataBuffer = await this.convertFile(dataBuffer, "pdf");
             }
             // get the pdf metadata
             const pdfMeta = await pdf(dataBuffer);
@@ -107,6 +116,16 @@ class ExtractPdfRaw extends BasicBolt {
             this.set(message, this._documentErrorPath, errorMessage);
             return await this._onEmit(message, "stream_error");
         }
+    }
+
+    // converts the file to the designated extension
+    convertFile(fileBuffer: Buffer, extension: string) {
+        return new Promise<Buffer>((resolve, reject) => {
+            libre.convert(fileBuffer, extension, undefined, (error: Error, convBuffer: Buffer) => {
+                if (error) { return reject(error); }
+                return resolve(convBuffer);
+            });
+        });
     }
 }
 
