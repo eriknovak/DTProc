@@ -1,7 +1,7 @@
 {
-  "name": "document-enrichment-tool",
+  "name": "dtproc",
   "version": "1.0.0",
-  "description": "Extracts document metadata, raw text, and annotates it with Wikipedia concepts",
+  "description": "The framework for extracting documents metadata, content, annotations, etc.",
   "main": "index.js",
   "scripts": {
     "postinstall": "git checkout -- ./pkgs/textract && npm run install:textract",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ErikNovak/document-enrichment-tool.git"
+    "url": "git+https://github.com/ErikNovak/DTProc.git"
   },
   "keywords": [
     "documents",
@@ -26,11 +26,10 @@
   "author": "Erik Novak",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/ErikNovak/document-enrichment-tool/issues"
+    "url": "https://github.com/ErikNovak/DTProc/issues"
   },
-  "homepage": "https://github.com/ErikNovak/document-enrichment-tool#readme",
+  "homepage": "https://github.com/ErikNovak/DTProc#readme",
   "dependencies": {
-    "@elastic/elasticsearch": "^7.8.0",
     "archiver": "^3.1.1",
     "async": "^3.2.0",
     "bent": "^7.3.7",
@@ -47,8 +46,7 @@
     "pg-cursor": "^2.0.0",
     "qtopology": "^2.2.0",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0",
-    "xml2js": "^0.4.23"
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
     "@types/async": "^3.2.3",
