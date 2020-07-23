@@ -1,17 +1,5 @@
 // the language mappings
-const langs = [
-    { fullname: "Catalan",    alpha2: "ca", alpha3: "cat" },
-    { fullname: "Croatian",   alpha2: "hr", alpha3: "hrv" },
-    { fullname: "English",    alpha2: "en", alpha3: "eng" },
-    { fullname: "French",     alpha2: "fr", alpha3: "fra" },
-    { fullname: "German",     alpha2: "de", alpha3: "deu" },
-    { fullname: "Portuguese", alpha2: "pt", alpha3: "por" },
-    { fullname: "Serbian",    alpha2: "sr", alpha3: "srp" },
-    { fullname: "Slovene",    alpha2: "sl", alpha3: "slv" },
-    { fullname: "Spanish",    alpha2: "es", alpha3: "spa" },
-    { fullname: "Swahili",    alpha2: "sw", alpha3: "swa" },
-    { fullname: "Swedish",    alpha2: "sv", alpha3: "swe" }
-]
+import * as languages from "../config/languages.json";
 
 // interfaces
 import * as Interfaces from "../Interfaces";
@@ -26,8 +14,8 @@ export default class Languages {
         this._idx_alpha2 = {};
         this._idx_alpha3 = {};
         this._idx_fullname = {};
-        for (let i = 0; i < langs.length; i++) {
-            const language = langs[i];
+        for (let i = 0; i < languages.length; i++) {
+            const language = languages[i];
             this._idx_alpha2[language.alpha2] = i;
             this._idx_alpha3[language.alpha3] = i;
             this._idx_fullname[language.fullname] = i;
@@ -68,6 +56,6 @@ export default class Languages {
         const sourceMapping = this.getCodeMapping(sourceType);
         // get the source index and use it to get the target type value
         const idx = sourceMapping[source];
-        return langs[idx][targetType];
+        return languages[idx][targetType];
     }
 }

@@ -246,6 +246,8 @@ export interface IExtractOCRMetaConfig {
     document_location_type?: string;
     document_language_path: string;
     document_ocr_path: string;
+    ocr_data_folder?: string;
+    ocr_verbose?: boolean;
     document_error_path?: string;
     temporary_folder: string;
 }

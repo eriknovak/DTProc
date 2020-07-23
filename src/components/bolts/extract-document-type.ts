@@ -56,15 +56,15 @@ class ExtractDocumentType extends BasicBolt {
 
     async receive(message: any, stream_id: string) {
         // get the material url and type
-        const materialUrl: string = this.get(message, this._documentUrlPath);
+        const materialURL: string = this.get(message, this._documentUrlPath);
         const materialType: { "ext": string, "mime": string } = this.get(message, this._documentTypePath);
 
-        if (materialUrl && materialType && materialType.ext && materialType.mime) {
+        if (materialURL && materialType && materialType.ext && materialType.mime) {
             // all values are present - continue to the next step
             return this._onEmit(message, stream_id);
         }
 
-        if (!materialUrl) {
+        if (!materialURL) {
             // unable to get the url of the material
             this.set(message, this._documentErrorPath, `${this._prefix} No material URL provided`);
             return this._onEmit(message, "stream_error");
@@ -72,8 +72,7 @@ class ExtractDocumentType extends BasicBolt {
 
 
         // get the extension of the material
-        const splitUrl = materialUrl.split(".");
-        const ext = splitUrl[splitUrl.length - 1].toLowerCase();
+        const ext = materialURL.split(".").pop().toLowerCase();
 
         // get the mimetype from the extension
         const mime = MimeType.lookup(ext);
@@ -85,7 +84,7 @@ class ExtractDocumentType extends BasicBolt {
         }
 
         try {
-            const stream = got.stream(materialUrl);
+            const stream = got.stream(materialURL);
             const documentType = await FileType.stream(stream);
             // update the message with the data
             this.set(message, this._documentTypePath, documentType);

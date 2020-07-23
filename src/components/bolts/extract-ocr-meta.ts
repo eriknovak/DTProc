@@ -1,10 +1,3 @@
-/**
- * This component extracts raw content text from the file provided.
- * To do this we use textract <https://github.com/dbashford/textract>
- * which is a text extraction library. It returns the content in raw
- * text.
- */
-
 // interfaces
 import * as Interfaces from "../../Interfaces";
 
@@ -17,8 +10,8 @@ import got from "got";
 import { PDFImage } from "pdf-image";
 import * as Tesseract from "tesseract.js";
 
-// TODO: create mapping between ISO language standards
 import Languages from "../../library/languages";
+import * as fileManager from "../../library/file-manager";
 
 class ExtractOCRMeta extends BasicBolt {
 
@@ -26,7 +19,9 @@ class ExtractOCRMeta extends BasicBolt {
     private _documentLocationType: string;
     private _documentLanguagePath: string;
     private _documentOCRPath: string;
+    private _OCRVerbose: boolean;
     private _documentErrorPath: string;
+    private _OCRDataFolder: string;
     private _temporaryFolder: string;
     private _languages: Languages;
 
@@ -52,10 +47,16 @@ class ExtractOCRMeta extends BasicBolt {
         this._documentLanguagePath = config.document_language_path;
         // the path to where to store the pdf output
         this._documentOCRPath = config.document_ocr_path;
+        // the path to the OCR data folder
+        this._OCRDataFolder = config.ocr_data_folder || "../data/ocr-data";
+        fileManager.createDirectoryPath(this._OCRDataFolder);
+        // setting if the component outputs OCR logs
+        this._OCRVerbose = config.ocr_verbose || false;
         // the path to where to store the error
         this._documentErrorPath = config.document_error_path || "error";
         // the location of the temporary folder
         this._temporaryFolder = config.temporary_folder;
+        fileManager.createDirectoryPath(this._temporaryFolder);
         // the languages mappings
         this._languages = new Languages();
     }
@@ -91,12 +92,18 @@ class ExtractOCRMeta extends BasicBolt {
             const filePath = await this.saveTempFile(dataBuffer);
             // generate the images out of the given PDF
             const imagePaths = await this.convertToImage(filePath);
+            // create the base name for the images
+            const tIB = filePath.split("."); tIB.pop();
+            const imageBase = tIB.join(".");
             // extract the text from the images
             const ocrTexts = [];
-            for (const imagePath of imagePaths) {
+            for (let i = 0; i < imagePaths.length; i++) {
+                const imagePath = `${imageBase}-${i}.png`;
                 const text = await this.recognizeText(imagePath, alpha3Language);
                 ocrTexts.push(text);
             }
+            // cleanup the temporary files
+            this.cleanupFiles([filePath].concat(imagePaths));
             // join the OCR extracted texts
             const ocr = ocrTexts.join(" ");
             // save the ocr metadata in the message
@@ -132,8 +139,21 @@ class ExtractOCRMeta extends BasicBolt {
 
     // use tesseract to recognize the text from the images
     async recognizeText(imagePath: string, lang: string): Promise<string> {
-        const { data: { text } } = await Tesseract.recognize(imagePath, lang);
+        const tOptions = {
+            ...this._OCRVerbose && { logger: (m: any) => console.log(m) },
+            cachePath: this._OCRDataFolder
+        };
+        const { data: { text } } = await Tesseract.recognize(imagePath, lang, tOptions);
         return text;
+    }
+
+    // cleanup the temporary files
+    cleanupFiles(filePaths: string[]) {
+        for (const filePath of filePaths) {
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
     }
 
 }
