@@ -16,7 +16,7 @@ import * as querystring from "querystring";
 import BasicBolt from "./basic_bolt";
 
 
-class ExtractVideoTTP extends BasicBolt {
+class VideoTTPBolt extends BasicBolt {
 
     private _ttpOptions: { user: string, auth_token: string };
     private _ttpURL: string;
@@ -43,11 +43,11 @@ class ExtractVideoTTP extends BasicBolt {
         this._onEmit = null;
     }
 
-    async init(name: string, config: Interfaces.IExtractVideoTTPConfig, context: any) {
+    async init(name: string, config: Interfaces.IVideoTTPBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractVideoTTP ${this._name}]`;
+        this._prefix = `[VideoTTPBolt ${this._name}]`;
 
         // the user and authentication token used for the requests
         this._ttpOptions = {
@@ -364,6 +364,6 @@ class ExtractVideoTTP extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractVideoTTP();
+const create = () => new VideoTTPBolt();
 
 export { create };

@@ -4,30 +4,6 @@ export interface IGenericJSON { [key: string]: any; }
 export type IGenericExecFunc = (value?: any) => any;
 export type IGenericCallbackFunc = (error: Error, value?: any) => any;
 
-export interface IProcessMaterial {
-    title: string;
-    description?: string;
-    provider_uri: string;
-    material_url: string;
-    author?: string;
-    language: string;
-    creation_date?: string;
-    retrieved_date: string;
-    type: string;
-    mimetype: string;
-    material_metadata?: {
-        wikipedia_concepts?: any;
-        transcriptions?: any;
-        raw_text?: string;
-        metadata?: any;
-        ttp_id: string;
-    },
-    provider: {
-        token: string;
-    },
-    license: string;
-}
-
 /////////////////////////////////////////////////////////////////////
 // Configuration Interfaces
 /////////////////////////////////////////////////////////////////////
@@ -109,7 +85,6 @@ export interface IKafkaConsumerParams {
     low_water: number;
 }
 
-
 /////////////////////////////////////////////////////////////////////
 // Languages Interfaces
 /////////////////////////////////////////////////////////////////////
@@ -119,7 +94,6 @@ export enum ILanguageTypes {
     ALPHA2 = "alpha2",
     ALPHA3 = "alpha3"
 }
-
 
 /////////////////////////////////////////////////////////////////////
 // PostgreSQL Interfaces
@@ -224,12 +198,11 @@ export interface IWikifierConceptMapping {
 
 import * as qtolopology from "qtopology";
 
-
 ///////////////////////////////////////
-// Extract Document Type
+// Doc Type Bolt
 ///////////////////////////////////////
 
-export interface IExtractDocumentTypeConfig {
+export interface IDocTypeBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     document_location_path: string;
     document_type_path: string;
@@ -237,10 +210,10 @@ export interface IExtractDocumentTypeConfig {
 }
 
 ///////////////////////////////////////
-// Extract OCR Meta
+// OCR Bolt
 ///////////////////////////////////////
 
-export interface IExtractOCRMetaConfig {
+export interface IOcrBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     document_location_path: string;
     document_location_type?: string;
@@ -253,28 +226,28 @@ export interface IExtractOCRMetaConfig {
 }
 
 ///////////////////////////////////////
-// Extract PDF Meta
+// PDF Bolt
 ///////////////////////////////////////
 
-export enum IExtractPdfMetadata {
+export enum IPdfMetadata {
     PAGES = "pages",
     INFO = "info",
     METADATA = "metadata",
     TEXT = "text"
 }
 
-export interface IExtractPdfMetaConfig {
+export interface IPdfBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     document_location_path: string;
     document_pdf_path: string;
     document_error_path?: string;
     document_location_type?: string;
-    extract_metadata?: IExtractPdfMetadata[];
+    extract_metadata?: IPdfMetadata[];
     convert_to_pdf?: boolean;
 }
 
 ///////////////////////////////////////
-// Extract Text Raw
+// Text Bolt
 ///////////////////////////////////////
 
 export interface ITextractConfiguration {
@@ -283,7 +256,7 @@ export interface ITextractConfiguration {
     includeAltText?: boolean;
 }
 
-export interface IExtractTextRawConfig {
+export interface ITextBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     document_location_path: string;
     document_text_path: string;
@@ -297,7 +270,7 @@ export interface IExtractTextRawConfig {
 }
 
 ///////////////////////////////////////
-// Extract Text TTP
+// TTP
 ///////////////////////////////////////
 
 export interface ITTPLanguageText {
@@ -319,7 +292,11 @@ export interface ITTPIngestNewResponse {
     id: string;
 }
 
-export interface IExtractTextTTPConfig {
+///////////////////////////////////////
+// Text TTP Bolt
+///////////////////////////////////////
+
+export interface ITextTTPBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     ttp: {
         user: string;
@@ -340,7 +317,11 @@ export interface IExtractTextTTPConfig {
     ttp_id_path: string;
 }
 
-export interface IExtractVideoTTPConfig {
+///////////////////////////////////////
+// Video TTP Bolt
+///////////////////////////////////////
+
+export interface IVideoTTPBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     ttp: {
         user: string;
@@ -375,31 +356,10 @@ export interface IExtractTTPStatus {
 }
 
 ///////////////////////////////////////
-// Get Material Contents
+// Wikipedia Bolt
 ///////////////////////////////////////
 
-export interface IGetMaterialContentConfig {
-    onEmit?: qtolopology.BoltEmitCallbackAsync;
-    document_text_path: string;
-    document_error_path: string;
-    pg: {
-        host: string;
-        port: number;
-        database: string;
-        max: number;
-        idleTimeoutMillis: number;
-        user: string;
-        password: string;
-        schema: string;
-        version: string;
-    }
-}
-
-///////////////////////////////////////
-// Extract Wikipedia
-///////////////////////////////////////
-
-export interface IExtractWikipediaConfig {
+export interface IWikipediaBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     wikifier: {
         user_key: string;
@@ -412,12 +372,12 @@ export interface IExtractWikipediaConfig {
 }
 
 ///////////////////////////////////////
-// Message Forward Kafka
+// Kafka Bolt
 ///////////////////////////////////////
 
-export type IFormatMessage = (message: IProcessMaterial) => IGenericJSON;
+export type IFormatMessage = (message: IGenericJSON) => IGenericJSON;
 
-export interface IForwardKafka {
+export interface IKafkaBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     kafka: {
         host: string;
@@ -427,26 +387,10 @@ export interface IForwardKafka {
 }
 
 ///////////////////////////////////////
-// Message Logging
+// Log PostgreSQL Bolt
 ///////////////////////////////////////
 
-export interface IMessageLoggingConfig {
-    onEmit?: qtolopology.BoltEmitCallbackAsync;
-    logging: {
-        file_name: string;
-        level: string;
-        sub_folder: string;
-        archive: boolean;
-        message_type: string;
-    },
-    final_bolt?: boolean;
-}
-
-///////////////////////////////////////
-// Message PostgreSQL
-///////////////////////////////////////
-
-export interface IMessagePostgreSQLConfig {
+export interface ILogPostgreSQLBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     pg: {
         host: string;
@@ -471,10 +415,10 @@ export interface IMessagePostgreSQLConfig {
 }
 
 ///////////////////////////////////////
-// Message Validate
+// Validate Bolt
 ///////////////////////////////////////
 
-export interface IMessageValidateConfig {
+export interface IValidateBoltConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     json_schema: jsonschema.Schema;
     document_error_path?: string;
@@ -484,7 +428,7 @@ export interface IMessageValidateConfig {
 // Store XXXXXXXXXXX
 ///////////////////////////////////////
 
-export interface IStorePostgreSQLConfig {
+export interface IStorePostgreSQLTemplateConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     pg: {
         host: string;

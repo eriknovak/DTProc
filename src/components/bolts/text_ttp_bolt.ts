@@ -22,7 +22,7 @@ import * as querystring from "querystring";
 import BasicBolt from "./basic_bolt";
 
 
-class ExtractTextTTP extends BasicBolt {
+class TextTTPBolt extends BasicBolt {
 
     private _ttpOptions: { user: string, auth_token: string };
     private _ttpURL: string;
@@ -47,11 +47,11 @@ class ExtractTextTTP extends BasicBolt {
         this._onEmit = null;
     }
 
-    async init(name: string, config: Interfaces.IExtractTextTTPConfig, context: any) {
+    async init(name: string, config: Interfaces.ITextTTPBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractTextTTP ${this._name}]`;
+        this._prefix = `[TextTTPBolt ${this._name}]`;
 
         // the user and authentication token used for the requests
         this._ttpOptions = {
@@ -370,6 +370,6 @@ class ExtractTextTTP extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractTextTTP();
+const create = () => new TextTTPBolt();
 
 export { create };

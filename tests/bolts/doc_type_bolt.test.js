@@ -1,8 +1,7 @@
-
 const assert = require("assert");
-const { create } = require("../../dist/components/bolts/document_type_bolt");
+const { create } = require("../../dist/components/bolts/doc_type_bolt");
 
-describe("DocumentTypeBolt", function () {
+describe("DocTypeBolt", function () {
     it("constructable", function () {
         const target = create();
     });
@@ -96,7 +95,7 @@ describe("DocumentTypeBolt", function () {
         assert.deepEqual(emited[0].data.type, { ext: "pdf", mime: "application/pdf" });
         assert.equal(emited[0].stream_id, null);
     });
-    it.skip("recieve - get material type - remote - error", async function () {
+    it("recieve - get material type - remote - error", async function () {
         const emited = [];
         const name = "some_name";
         const xdata = {

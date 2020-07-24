@@ -12,7 +12,7 @@ import * as Interfaces from "../../Interfaces";
 import BasicBolt from "./basic_bolt";
 import * as textract from "../../../pkgs/textract/lib";
 
-class ExtractTextRaw extends BasicBolt {
+class TextBolt extends BasicBolt {
 
     private _documentLocationPath: string;
     private _documentTextPath: string;
@@ -28,11 +28,11 @@ class ExtractTextRaw extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IExtractTextRawConfig, context: any) {
+    async init(name: string, config: Interfaces.ITextBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractTextRaw ${this._name}]`;
+        this._prefix = `[TextBolt ${this._name}]`;
 
         // the path to where to get the url
         this._documentLocationPath = config.document_location_path;
@@ -101,6 +101,6 @@ class ExtractTextRaw extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractTextRaw();
+const create = () => new TextBolt();
 
 export { create };

@@ -70,7 +70,7 @@ In addition, if the object doesn't already have an existing attribute object, th
 
 
 ## Document Type Bolt
-The [document type](./document_type_bolt.ts) bolt is able to extract the type of the document based URL address of the document.
+The [doc type](./doc_type_bolt.ts) bolt is able to extract the type of the document based URL address of the document.
 It requires the following parameters:
 
 | Parameter              | Description                                                                                        |
@@ -86,7 +86,7 @@ The schema for this bolt in the ontology is:
     "name": "document-type-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "document_type_bolt.js",
+    "cmd": "doc_type_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],

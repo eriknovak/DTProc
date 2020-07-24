@@ -14,7 +14,7 @@ import BasicBolt from "./basic_bolt";
  * @class KafkaSender
  * @description Sends the messages to the corresponding kafka topic.
  */
-class ForwardKafka extends BasicBolt {
+class KafkaBolt extends BasicBolt {
 
     private _kafkaProducer: KafkaProducer;
     private _kafkaTopic: string;
@@ -27,11 +27,11 @@ class ForwardKafka extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: Interfaces.IForwardKafka, context: any) {
+    async init(name: string, config: Interfaces.IKafkaBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ForwardKafka ${this._name}]`;
+        this._prefix = `[KafkaBolt ${this._name}]`;
 
         this._kafkaProducer = new KafkaProducer(config.kafka.host);
         this._kafkaTopic = config.kafka.topic;
@@ -66,6 +66,6 @@ class ForwardKafka extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ForwardKafka();
+const create = () => new KafkaBolt();
 
 export { create };
