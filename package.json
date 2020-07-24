@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "git checkout -- ./pkgs/textract && npm run install:textract",
     "build": "./node_modules/typescript/bin/tsc --project .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/mocha/bin/mocha tests/**",
     "install:textract": "cd ./pkgs/textract && npm install",
     "postgres:tables": "cd src/load && node -e 'require(`./create-postgres-tables`).startDBCreate();'",
     "lint": "./node_modules/.bin/tslint --project .",
