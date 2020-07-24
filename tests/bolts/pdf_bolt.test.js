@@ -22,6 +22,7 @@ describe("PdfBolt", function () {
         await target.init(name, config, null);
     });
     it("recieve - get pdf - local", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {
@@ -51,6 +52,7 @@ describe("PdfBolt", function () {
     });
 
     it("recieve - get pdf - remote", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {
@@ -79,6 +81,7 @@ describe("PdfBolt", function () {
         assert.equal(emited[0].stream_id, null);
     });
     it("recieve - get material type - remote - error", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {

@@ -20,6 +20,7 @@ describe("DocTypeBolt", function () {
         await target.init(name, config, null);
     });
     it("recieve - get material type - complete", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {
@@ -46,6 +47,7 @@ describe("DocTypeBolt", function () {
     });
 
     it("recieve - get material type - local", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {
@@ -71,6 +73,7 @@ describe("DocTypeBolt", function () {
         assert.equal(emited[0].stream_id, null);
     });
     it("recieve - get material type - remote", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {
@@ -96,6 +99,7 @@ describe("DocTypeBolt", function () {
         assert.equal(emited[0].stream_id, null);
     });
     it("recieve - get material type - remote - error", async function () {
+        this.timeout(3000);
         const emited = [];
         const name = "some_name";
         const xdata = {
