@@ -1,9 +1,8 @@
 // interfaces
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
 
 // modules
 import * as k from "kafka-node";
-
 
 export default class KafkaConsumer {
 
@@ -16,7 +15,7 @@ export default class KafkaConsumer {
     private _enabled: boolean;
 
     // Initialize the Kafka consumer instance
-    constructor(params: Interfaces.IKafkaConsumerParams) {
+    constructor(params: INT.IKafkaConsumerParams) {
 
         const {
             host,
@@ -111,7 +110,7 @@ export default class KafkaConsumer {
 
 
     // stop and closes the consumer group
-    stop(cb: Interfaces.IGenericCallbackFunc) {
+    stop(cb: INT.IGenericCallbackFunc) {
         this._consumerGroup.close(true, cb);
     }
 }

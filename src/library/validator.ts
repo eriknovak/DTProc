@@ -1,18 +1,17 @@
 // interfaces
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
 
 // modules
 import * as jsonschema from "jsonschema";
-
 
 export default class Validator {
 
     private _validator: jsonschema.Validator;
 
-    public schemas?: Interfaces.IValidatorSchemas;
+    public schemas?: INT.IValidatorSchemas;
 
     // initialize the JSON validator
-    constructor(schemas?: Interfaces.IValidatorSchemas) {
+    constructor(schemas?: INT.IValidatorSchemas) {
         // save the JSON validator
         this._validator = new jsonschema.Validator();
         // the json schemas used to validate

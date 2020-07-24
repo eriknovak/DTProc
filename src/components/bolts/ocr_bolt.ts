@@ -1,5 +1,5 @@
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import BasicBolt from "./basic_bolt";
@@ -33,7 +33,7 @@ class OcrBolt extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IOcrBoltConfig, context: any) {
+    async init(name: string, config: INT.IOcrBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
@@ -76,7 +76,7 @@ class OcrBolt extends BasicBolt {
             const documentURL: string = this.get(message, this._documentLocationPath);
             const documentLang: string = this.get(message, this._documentLanguagePath);
             // get the alpha3 language code
-            const alpha3Language = this._languages.getIsoCode(documentLang, Interfaces.ILanguageTypes.ALPHA3);
+            const alpha3Language = this._languages.getIsoCode(documentLang, INT.ILanguageTypes.ALPHA3);
             // get the material data as a buffer
             let dataBuffer: Buffer;
             switch(this._documentLocationType) {

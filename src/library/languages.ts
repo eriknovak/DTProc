@@ -1,14 +1,14 @@
-// the language mappings
-import * as languages from "../config/languages.json";
-
 // interfaces
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
+
+// config
+import * as languages from "../config/languages.json";
 
 export default class Languages {
 
-    private _idx_alpha2: Interfaces.IGenericJSON;
-    private _idx_alpha3: Interfaces.IGenericJSON;
-    private _idx_fullname: Interfaces.IGenericJSON;
+    private _idx_alpha2: INT.IGenericJSON;
+    private _idx_alpha3: INT.IGenericJSON;
+    private _idx_fullname: INT.IGenericJSON;
 
     constructor() {
         this._idx_alpha2 = {};
@@ -26,20 +26,20 @@ export default class Languages {
     getCodeType(value: string) {
         switch(value.length) {
         case 2:
-            return Interfaces.ILanguageTypes.ALPHA2;
+            return INT.ILanguageTypes.ALPHA2;
         case 3:
-            return Interfaces.ILanguageTypes.ALPHA3;
+            return INT.ILanguageTypes.ALPHA3;
         default:
-            return Interfaces.ILanguageTypes.FULLNAME;
+            return INT.ILanguageTypes.FULLNAME;
         }
     }
 
     // get the code mapping
-    getCodeMapping(type: Interfaces.ILanguageTypes) {
+    getCodeMapping(type: INT.ILanguageTypes) {
         switch(type) {
-        case Interfaces.ILanguageTypes.ALPHA2:
+        case INT.ILanguageTypes.ALPHA2:
             return this._idx_alpha2;
-        case Interfaces.ILanguageTypes.ALPHA3:
+        case INT.ILanguageTypes.ALPHA3:
             return this._idx_alpha3;
         default:
             return this._idx_fullname;
@@ -47,7 +47,7 @@ export default class Languages {
     }
 
     // get the iso code in the target type
-    getIsoCode(source: string, targetType: Interfaces.ILanguageTypes) {
+    getIsoCode(source: string, targetType: INT.ILanguageTypes) {
         // get the value type based on their length
         const sourceType = this.getCodeType(source);
         // checks if the value type is the same as the target type

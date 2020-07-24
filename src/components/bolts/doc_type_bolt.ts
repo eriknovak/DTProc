@@ -1,13 +1,5 @@
-/** ******************************************************************
- * This component extracts the material type using the material
- * origin url and assigns an object containing the extention and
- * mimetype of the material.
- */
-
-
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import BasicBolt from "./basic_bolt";
@@ -16,9 +8,6 @@ import got from "got";
 import * as MimeType from "mime-types";
 import FileType = require("file-type");
 
-/**
- * Formats Material into a common schema.
- */
 class DocTypeBolt extends BasicBolt {
 
     private _documentLocationPath: string;
@@ -32,7 +21,7 @@ class DocTypeBolt extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: any, context: Interfaces.IDocTypeBoltConfig) {
+    async init(name: string, config: any, context: INT.IDocTypeBoltConfig) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;

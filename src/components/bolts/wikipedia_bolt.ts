@@ -1,12 +1,8 @@
-/** ******************************************************************
- * This component extracts the Wikipedia Concepts from an
- * attribute given and the retrieved message.
- */
+import * as INT from "../../Interfaces";
 
 // libraries
 import BasicBolt from "./basic_bolt";
 import Wikifier from "../../library/wikifier";
-
 
 class WikipediaBolt extends BasicBolt {
 
@@ -22,7 +18,7 @@ class WikipediaBolt extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: any, context: any) {
+    async init(name: string, config: INT.IWikipediaBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;

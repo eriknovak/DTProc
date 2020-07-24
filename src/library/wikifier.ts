@@ -1,5 +1,5 @@
 // interfaces
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
 
 // modules
 import * as async from "async";
@@ -13,7 +13,7 @@ export default class Wikifier {
     private _postRequest: bent.RequestFunction<any>;
 
     // creates the wikifier instance
-    constructor(config: Interfaces.IWikifierParams) {
+    constructor(config: INT.IWikifierParams) {
         this._userKey = config.user_key;
         this._wikifierURL = config.wikifier_url || "http://www.wikifier.org";
         this._maxLength = config.max_length && config.max_length > 20000
@@ -34,7 +34,7 @@ export default class Wikifier {
         }
 
         // create the parallel processing promise
-        const getWikipediaConcepts: Promise<Interfaces.IWikifierExtract> = new Promise((resolve, reject) => {
+        const getWikipediaConcepts: Promise<INT.IWikifierExtract> = new Promise((resolve, reject) => {
             // get wikipedia concepts from text
             async.parallelLimit(tasks, 5, (error, concepts) => {
                 // reject the process if if doesn't go through
@@ -59,7 +59,6 @@ export default class Wikifier {
     // Helper methods
     // ///////////////////////////////////////////
 
-
     // annotate provided text with wikipedia concepts
     async _createRequest(text: string) {
         return await this._postRequest("/annotate-article", {
@@ -79,7 +78,7 @@ export default class Wikifier {
     async _getWikipediaConcepts(text: string, weight: number) {
         try {
             // make wikipedia concept request and handle concepts
-            const data: Interfaces.IWikifierResponse = await this._createRequest(text);
+            const data: INT.IWikifierResponse = await this._createRequest(text);
             // get annotations
             let { annotations } = data;
 
@@ -142,7 +141,7 @@ export default class Wikifier {
     _prepareWikifierTasks(text: string, maxLength: number) {
         // creates the material enriching task function
         const _createWikifierTask = (chunk: string, weight: number) => {
-            return (callback: Interfaces.IWikifierTaskFunc) =>
+            return (callback: INT.IWikifierTaskFunc) =>
                 // get the enriched materials
                 this._getWikipediaConcepts(chunk, weight)
                     .then((concepts) => callback(null, concepts))
@@ -151,7 +150,7 @@ export default class Wikifier {
         }
 
         // set placeholders
-        const tasks: Interfaces.IWikifierCreateTaskFunc[] = [];
+        const tasks: INT.IWikifierCreateTaskFunc[] = [];
         let textIndex = 0;
 
         while (text.length > textIndex) {
@@ -192,9 +191,9 @@ export default class Wikifier {
 
 
     // merges the wikipedia concepts extracted via the text chunks
-    _mergeWikipediaConcepts(wikipediaConcepts: Interfaces.IWikifierConcept[][]) {
+    _mergeWikipediaConcepts(wikipediaConcepts: INT.IWikifierConcept[][]) {
                 // wikipedia concepts storage
-        const conceptMapping: Interfaces.IWikifierConceptMapping = { };
+        const conceptMapping: INT.IWikifierConceptMapping = { };
         // merge concepts with matching uri
         for (const wikiBundle of wikipediaConcepts) {
             if (typeof wikiBundle[Symbol.iterator] !== "function") {
@@ -218,7 +217,7 @@ export default class Wikifier {
 
 
     // get the dominant language found in the wikipedia concepts
-    _getDominantLanguage(concepts: Interfaces.IWikifierConcept[]) {
+    _getDominantLanguage(concepts: INT.IWikifierConcept[]) {
         // get the dominant language of the material
         const languages: { [key: string]: number } = { };
         for (const concept of concepts) {

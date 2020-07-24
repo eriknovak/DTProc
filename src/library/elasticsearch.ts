@@ -1,26 +1,26 @@
 // modules
-import * as elasticsearch from "@elastic/elasticsearch";
+import * as es from "@elastic/elasticsearch";
 
 export default class Elasticsearch {
 
-    private params: elasticsearch.ClientOptions;
-    private client: elasticsearch.Client;
+    private params: es.ClientOptions;
+    private client: es.Client;
 
     // creates and initializes the elasticsearch connection object
-    constructor(params: elasticsearch.ClientOptions) {
+    constructor(params: es.ClientOptions) {
         this.params = params;
         this.initializeClient();
     }
 
     // initializes the client connection.
     initializeClient() {
-        this.client = new elasticsearch.Client({
+        this.client = new es.Client({
             node: this.params.node
         });
     }
 
     // creates a new index in elasticsearch
-    async createIndex(schema: elasticsearch.RequestParams.IndicesCreate) {
+    async createIndex(schema: es.RequestParams.IndicesCreate) {
         return await this.client.indices.create(schema);
     }
 

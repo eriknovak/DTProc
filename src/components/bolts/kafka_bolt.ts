@@ -1,24 +1,15 @@
-/** ******************************************************************
- * This component forwards the provided message to the
- * appropriate kafka topic and service.
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import KafkaProducer from "../../library/kafka-producer";
 import BasicBolt from "./basic_bolt";
 
-/**
- * @class KafkaSender
- * @description Sends the messages to the corresponding kafka topic.
- */
 class KafkaBolt extends BasicBolt {
 
     private _kafkaProducer: KafkaProducer;
     private _kafkaTopic: string;
-    private _formatMessage: Interfaces.IFormatMessage;
+    private _formatMessage: INT.IFormatMessage;
 
     constructor() {
         super();
@@ -27,7 +18,7 @@ class KafkaBolt extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: Interfaces.IKafkaBoltConfig, context: any) {
+    async init(name: string, config: INT.IKafkaBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;

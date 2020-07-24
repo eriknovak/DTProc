@@ -1,12 +1,5 @@
-/**
- * This component extracts raw content text from the file provided.
- * To do this we use textract <https://github.com/dbashford/textract>
- * which is a text extraction library. It returns the content in raw
- * text.
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import BasicBolt from "./basic_bolt";
@@ -18,7 +11,7 @@ class TextBolt extends BasicBolt {
     private _documentTextPath: string;
     private _documentErrorPath: string;
     private _methodType: string;
-    private _textractConfig: Interfaces.ITextractConfiguration;
+    private _textractConfig: INT.ITextractConfig;
 
     constructor() {
         super();
@@ -28,7 +21,7 @@ class TextBolt extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.ITextBoltConfig, context: any) {
+    async init(name: string, config: INT.ITextBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;

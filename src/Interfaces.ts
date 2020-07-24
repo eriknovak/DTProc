@@ -125,7 +125,7 @@ export interface IValidatorSchemas {
 
 export interface IWikifierParams {
     user_key: string;
-    wikifier_url: string;
+    wikifier_url?: string;
     max_length?: number;
 }
 
@@ -250,7 +250,7 @@ export interface IPdfBoltConfig {
 // Text Bolt
 ///////////////////////////////////////
 
-export interface ITextractConfiguration {
+export interface ITextractConfig {
     preserveLineBreaks?: boolean;
     preserveOnlyMultipleLineBreaks?: boolean;
     includeAltText?: boolean;
@@ -442,5 +442,17 @@ export interface IStorePostgreSQLTemplateConfig {
         version: string;
     },
     final_bolt?: boolean;
+    document_error_path?: string;
+}
+
+///////////////////////////////////////
+// Wikipedia Bolt
+///////////////////////////////////////
+
+export interface IWikipediaBoltConfig {
+    onEmit?: qtolopology.BoltEmitCallbackAsync;
+    wikifier: IWikifierParams;
+    document_text_path: string;
+    wikipedia_concept_path: string;
     document_error_path?: string;
 }

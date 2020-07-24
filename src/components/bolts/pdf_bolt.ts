@@ -1,5 +1,5 @@
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import BasicBolt from "./basic_bolt";
@@ -15,7 +15,7 @@ class PdfBolt extends BasicBolt {
     private _documentLocationType: string;
     private _documentPdfPath: string;
     private _documentErrorPath: string;
-    private _extractMetadata: Interfaces.IPdfMetadata[];
+    private _extractMetadata: INT.IPdfMetadata[];
     private _convertToPDF: boolean;
 
     constructor() {
@@ -26,7 +26,7 @@ class PdfBolt extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IPdfBoltConfig, context: any) {
+    async init(name: string, config: INT.IPdfBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
@@ -42,10 +42,10 @@ class PdfBolt extends BasicBolt {
         this._documentErrorPath = config.document_error_path || "error";
         // the extraction types
         this._extractMetadata = config.extract_metadata || [
-            Interfaces.IPdfMetadata.PAGES,
-            Interfaces.IPdfMetadata.INFO,
-            Interfaces.IPdfMetadata.METADATA,
-            Interfaces.IPdfMetadata.TEXT
+            INT.IPdfMetadata.PAGES,
+            INT.IPdfMetadata.INFO,
+            INT.IPdfMetadata.METADATA,
+            INT.IPdfMetadata.TEXT
         ];
         // the convert to PDF flag, requires libreoffice
         this._convertToPDF = config.convert_to_pdf || false;
@@ -85,16 +85,16 @@ class PdfBolt extends BasicBolt {
             const metadata = {};
             for (const type of this._extractMetadata) {
                 switch (type) {
-                case Interfaces.IPdfMetadata.PAGES:
+                case INT.IPdfMetadata.PAGES:
                     metadata[type] = pdfMeta.numpages;
                     break;
-                case Interfaces.IPdfMetadata.INFO:
+                case INT.IPdfMetadata.INFO:
                     metadata[type] = pdfMeta.info;
                     break;
-                case Interfaces.IPdfMetadata.METADATA:
+                case INT.IPdfMetadata.METADATA:
                     metadata[type] = pdfMeta.metadata;
                     break;
-                case Interfaces.IPdfMetadata.TEXT:
+                case INT.IPdfMetadata.TEXT:
                     metadata[type] = pdfMeta.text;
                     break;
                 default:

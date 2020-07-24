@@ -1,8 +1,9 @@
 // interfaces
-import * as qtopology from "qtopology";
-import * as Interfaces from "../Interfaces";
-import PostgreSQL from "./postgresql";
+import * as INT from "../Interfaces";
+import * as qt from "qtopology";
 
+// modules
+import PostgreSQL from "./postgresql";
 
 export default class PostgresRecords {
 
@@ -12,7 +13,7 @@ export default class PostgresRecords {
     private _timeInterval: number;
     private _interval: NodeJS.Timeout;
 
-    constructor(config: Interfaces.IPostgreSQLParams, sqlStatement: string, timeInterval: number) {
+    constructor(config: INT.IPostgreSQLParams, sqlStatement: string, timeInterval: number) {
         // the record container
         this._data = [];
         // esablish connection with database
@@ -53,7 +54,7 @@ export default class PostgresRecords {
         }
     }
 
-    stop(callback: qtopology.SimpleCallback) {
+    stop(callback: qt.SimpleCallback) {
         // disable interval
         this.disable();
         // close pg connection

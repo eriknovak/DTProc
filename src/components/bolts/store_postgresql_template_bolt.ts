@@ -1,16 +1,9 @@
-/** ******************************************************************
- * This component receives the verified OER material object and
- * stores it into postgresQL database.
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
-
+import * as INT from "../../Interfaces";
 
 // modules
 import BasicBolt from "./basic_bolt";
 import PostgreSQL from "../../library/postgresql";
-
 
 class StorePostgreSQLBolt extends BasicBolt {
 
@@ -24,7 +17,7 @@ class StorePostgreSQLBolt extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: Interfaces.IStorePostgreSQLTemplateConfig, context: any) {
+    async init(name: string, config: INT.IStorePostgreSQLTemplateConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
