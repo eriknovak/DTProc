@@ -1,14 +1,10 @@
-/** ******************************************************************
- * This component extracts the Wikipedia Concepts from an
- * attribute given and the retrieved message.
- */
+import * as INT from "../../Interfaces";
 
 // libraries
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import Wikifier from "../../library/wikifier";
 
-
-class ExtractWikipedia extends BasicBolt {
+class WikipediaBolt extends BasicBolt {
 
     private _wikifier: Wikifier;
     private _documentTextPath: string;
@@ -22,11 +18,11 @@ class ExtractWikipedia extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: any, context: any) {
+    async init(name: string, config: INT.IWikipediaBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractWikipedia ${this._name}]`;
+        this._prefix = `[WikipediaBolt ${this._name}]`;
         // wikifier request instance
         this._wikifier = new Wikifier(config.wikifier);
         // determine the text to use for wikipedia extraction
@@ -73,6 +69,6 @@ class ExtractWikipedia extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractWikipedia();
+const create = () => new WikipediaBolt();
 
 export { create };

@@ -1,21 +1,21 @@
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import * as fs from "fs";
 import * as pdf from "pdf-parse";
 import got from "got";
 // used for converting text documents into pdfs
 import libre = require("libreoffice-convert");
 
-class ExtractPdfMeta extends BasicBolt {
+class PdfBolt extends BasicBolt {
 
     private _documentLocationPath: string;
     private _documentLocationType: string;
     private _documentPdfPath: string;
     private _documentErrorPath: string;
-    private _extractMetadata: Interfaces.IExtractPdfMetadata[];
+    private _extractMetadata: INT.IPdfMetadata[];
     private _convertToPDF: boolean;
 
     constructor() {
@@ -26,11 +26,11 @@ class ExtractPdfMeta extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IExtractPdfMetaConfig, context: any) {
+    async init(name: string, config: INT.IPdfBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractPdfMeta ${this._name}]`;
+        this._prefix = `[PdfBolt ${this._name}]`;
 
         // the path to where to get the url
         this._documentLocationPath = config.document_location_path;
@@ -42,10 +42,10 @@ class ExtractPdfMeta extends BasicBolt {
         this._documentErrorPath = config.document_error_path || "error";
         // the extraction types
         this._extractMetadata = config.extract_metadata || [
-            Interfaces.IExtractPdfMetadata.PAGES,
-            Interfaces.IExtractPdfMetadata.INFO,
-            Interfaces.IExtractPdfMetadata.METADATA,
-            Interfaces.IExtractPdfMetadata.TEXT
+            INT.IPdfMetadata.PAGES,
+            INT.IPdfMetadata.INFO,
+            INT.IPdfMetadata.METADATA,
+            INT.IPdfMetadata.TEXT
         ];
         // the convert to PDF flag, requires libreoffice
         this._convertToPDF = config.convert_to_pdf || false;
@@ -85,16 +85,16 @@ class ExtractPdfMeta extends BasicBolt {
             const metadata = {};
             for (const type of this._extractMetadata) {
                 switch (type) {
-                case Interfaces.IExtractPdfMetadata.PAGES:
+                case INT.IPdfMetadata.PAGES:
                     metadata[type] = pdfMeta.numpages;
                     break;
-                case Interfaces.IExtractPdfMetadata.INFO:
+                case INT.IPdfMetadata.INFO:
                     metadata[type] = pdfMeta.info;
                     break;
-                case Interfaces.IExtractPdfMetadata.METADATA:
+                case INT.IPdfMetadata.METADATA:
                     metadata[type] = pdfMeta.metadata;
                     break;
-                case Interfaces.IExtractPdfMetadata.TEXT:
+                case INT.IPdfMetadata.TEXT:
                     metadata[type] = pdfMeta.text;
                     break;
                 default:
@@ -123,6 +123,6 @@ class ExtractPdfMeta extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractPdfMeta();
+const create = () => new PdfBolt();
 
 export { create };

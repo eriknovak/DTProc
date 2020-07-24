@@ -1,19 +1,18 @@
 // interfaces
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
 
 // modules
 import * as pg from "pg";
 import * as Cursor from "pg-cursor";
 import * as async from "async";
 
-
 export default class PostgreSQL {
 
-    private _config: Interfaces.IPostgreSQLParams;
+    private _config: INT.IPostgreSQLParams;
     private _pool: pg.Pool;
 
     // initialize postgresql connection instance
-    constructor(config: Interfaces.IPostgreSQLParams) {
+    constructor(config: INT.IPostgreSQLParams) {
         // save the configuration file
         this._config = config;
         // initilizes client pool
@@ -133,7 +132,7 @@ export default class PostgreSQL {
 
 
     // executes a large query given the values
-    async executeLarge(statement: string, params: any[], batchSize: number, batchCallback: Interfaces.IPostgreSQLBatchCallbackFunc, callback: Interfaces.IGenericCallbackFunc) {
+    async executeLarge(statement: string, params: any[], batchSize: number, batchCallback: INT.IPostgreSQLBatchCallbackFunc, callback: INT.IGenericCallbackFunc) {
         const client = await this._pool.connect();
         // create a cursor (with or without the parameters provided)
         const cursor = params.length
@@ -171,7 +170,7 @@ export default class PostgreSQL {
 
 
     // inserts the object in the database
-    async insert(record: Interfaces.IGenericJSON, table: string) {
+    async insert(record: INT.IGenericJSON, table: string) {
         // get the record keys and values
         const keys: string[] = [];
         const params: any[] = [];
@@ -208,7 +207,7 @@ export default class PostgreSQL {
 
 
     // fins the rows in the database (large version)
-    selectLarge(conditions: any | any[], table: string, batchSize: number, batchCallback: Interfaces.IPostgreSQLBatchCallbackFunc, callback: Interfaces.IGenericCallbackFunc) {
+    selectLarge(conditions: any | any[], table: string, batchSize: number, batchCallback: INT.IPostgreSQLBatchCallbackFunc, callback: INT.IGenericCallbackFunc) {
         // set the conditions and parameters
         const { condition, params } = this._constructCondition(conditions, 1);
         // prepare the query command
@@ -234,7 +233,7 @@ export default class PostgreSQL {
 
 
     // update the rows in the database
-    async update(values: Interfaces.IGenericJSON, conditions: any | any[], table: string) {
+    async update(values: INT.IGenericJSON, conditions: any | any[], table: string) {
         // get the values used to update the records
         const {
             condition: valueConditions,
@@ -271,7 +270,7 @@ export default class PostgreSQL {
 
 
     // upserts (updates or inserts) the row in the database
-    async upsert(record: Interfaces.IGenericJSON, conditions: any | any[], table: string) {
+    async upsert(record: INT.IGenericJSON, conditions: any | any[], table: string) {
         // get the record keys and values
         const recordKeys = Object.keys(record);
         const recordValIds = [...Array(recordKeys.length).keys()]

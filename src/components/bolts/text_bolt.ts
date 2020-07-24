@@ -1,24 +1,17 @@
-/**
- * This component extracts raw content text from the file provided.
- * To do this we use textract <https://github.com/dbashford/textract>
- * which is a text extraction library. It returns the content in raw
- * text.
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
-import * as textract from "../../../pkgs/textract";
+import BasicBolt from "./basic_bolt";
+import * as textract from "../../../pkgs/textract/lib";
 
-class ExtractTextRaw extends BasicBolt {
+class TextBolt extends BasicBolt {
 
     private _documentLocationPath: string;
     private _documentTextPath: string;
     private _documentErrorPath: string;
     private _methodType: string;
-    private _textractConfig: Interfaces.ITextractConfiguration;
+    private _textractConfig: INT.ITextractConfig;
 
     constructor() {
         super();
@@ -28,11 +21,11 @@ class ExtractTextRaw extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IExtractTextRawConfig, context: any) {
+    async init(name: string, config: INT.ITextBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractTextRaw ${this._name}]`;
+        this._prefix = `[TextBolt ${this._name}]`;
 
         // the path to where to get the url
         this._documentLocationPath = config.document_location_path;
@@ -101,6 +94,6 @@ class ExtractTextRaw extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractTextRaw();
+const create = () => new TextBolt();
 
 export { create };

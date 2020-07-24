@@ -1,7 +1,7 @@
 // internal modules
 import * as fs from "fs";
 import * as path from "path";
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
 
 // removes the file
 export function removeFile(fileName: string) {
@@ -110,7 +110,7 @@ export function createDirectoryPath(dirPath: string) {
 
 
 // find all files in a folder that follow a given rule and execute a method on them
-export function executeOnFiles (startPath: string, filter: RegExp, callback: Interfaces.IGenericExecFunc) {
+export function executeOnFiles (startPath: string, filter: RegExp, callback: INT.IGenericExecFunc) {
     // check if directory exists
     if (!fs.existsSync(startPath)) {
         throw new Error(`directory given by "startPath" does not exist: ${startPath}`);

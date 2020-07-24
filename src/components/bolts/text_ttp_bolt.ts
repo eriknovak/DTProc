@@ -1,11 +1,5 @@
-/**
- * This component makes a request to the UPV"s Transcription and
- * Translation Platform (TTP) <https://ttp.mllp.upv.es/index.php>
- * and retrieves the text translations.]
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import * as path from "path";
@@ -19,10 +13,9 @@ import * as fileManager from "../../library/file-manager";
 import { normalizeString } from "../../library/normalization";
 import * as querystring from "querystring";
 
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 
-
-class ExtractTextTTP extends BasicBolt {
+class TextTTPBolt extends BasicBolt {
 
     private _ttpOptions: { user: string, auth_token: string };
     private _ttpURL: string;
@@ -47,11 +40,11 @@ class ExtractTextTTP extends BasicBolt {
         this._onEmit = null;
     }
 
-    async init(name: string, config: Interfaces.IExtractTextTTPConfig, context: any) {
+    async init(name: string, config: INT.ITextTTPBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractTextTTP ${this._name}]`;
+        this._prefix = `[TextTTPBolt ${this._name}]`;
 
         // the user and authentication token used for the requests
         this._ttpOptions = {
@@ -114,7 +107,7 @@ class ExtractTextTTP extends BasicBolt {
 
     async receive(message: any, stream_id: string) {
         // iteratively check for the process status
-        const _checkTTPStatus: Interfaces.IExtractTTPStatusFunc = async (process_id: string) => {
+        const _checkTTPStatus: INT.IExtractTTPStatusFunc = async (process_id: string) => {
             this._delayObject = delay(this._ttpTimeoutMillis);
             // wait for a number of milliseconds
             await this._delayObject;
@@ -177,7 +170,7 @@ class ExtractTextTTP extends BasicBolt {
                             + Date.now();
 
         // create the requested langs object
-        const requested_langs: Interfaces.ITTPLanguageText = JSON.parse(JSON.stringify(this._ttpLanguages));
+        const requested_langs: INT.ITTPLanguageText = JSON.parse(JSON.stringify(this._ttpLanguages));
 
         // assign the correct TTP language translation path
         for (const language of Object.keys(this._ttpLanguages)) {
@@ -237,7 +230,7 @@ class ExtractTextTTP extends BasicBolt {
         // create a zip file containing the material and manifest
         const documentPackagePath = path.join(rootPath, "document-package.zip");
         const documentPackage = fs.createWriteStream(documentPackagePath);
-        const archive = archiver("zip", { zlip: { level: 0 } });
+        const archive = archiver("zip", { zlib: { level: 0 } });
 
         // good practice to catch warnings (ie stat failures and other non-blocking errors)
         archive.on("warning", (error: Error) => {
@@ -248,7 +241,7 @@ class ExtractTextTTP extends BasicBolt {
         archive.pipe(documentPackage);
         archive.file(txtPath, { name: "material.txt" });
 
-        let response: Interfaces.ITTPIngestNewResponse;
+        let response: INT.ITTPIngestNewResponse;
         try {
             await archive.finalize();
             response = await rp({
@@ -370,6 +363,6 @@ class ExtractTextTTP extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractTextTTP();
+const create = () => new TextTTPBolt();
 
 export { create };

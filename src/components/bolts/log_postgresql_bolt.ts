@@ -1,17 +1,11 @@
-/** ******************************************************************
- * Logging Message to PostgresQL
- * This component receives the message and logs the status into
- * the provided PostgreSQL table (with the provided attributes).
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import PostgreSQL from "../../library/postgresql";
 
-class MessagePostgreSQL extends BasicBolt {
+class LogPostgreSQLBolt extends BasicBolt {
 
     private _pg: PostgreSQL;
     private _postgresTable: string;
@@ -19,9 +13,9 @@ class MessagePostgreSQL extends BasicBolt {
     private _postgresPrimaryId: string;
     private _messagePrimaryId: string;
 
-    private _postgresMessageAttrs: Interfaces.IGenericJSON;
-    private _postgresTimeAttrs: Interfaces.IGenericJSON;
-    private _postgresLiteralAttrs: Interfaces.IGenericJSON;
+    private _postgresMessageAttrs: INT.IGenericJSON;
+    private _postgresTimeAttrs: INT.IGenericJSON;
+    private _postgresLiteralAttrs: INT.IGenericJSON;
 
     private _finalBolt: boolean;
 
@@ -35,11 +29,11 @@ class MessagePostgreSQL extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: Interfaces.IMessagePostgreSQLConfig, context: any) {
+    async init(name: string, config: INT.ILogPostgreSQLBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[StorePostgreSQL ${this._name}]`;
+        this._prefix = `[LogPostgreSQLBolt ${this._name}]`;
 
         // create the postgres connection
         this._pg = new PostgreSQL(config.pg);
@@ -126,6 +120,6 @@ class MessagePostgreSQL extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new MessagePostgreSQL();
+const create = () => new LogPostgreSQLBolt();
 
 export { create };

@@ -23,7 +23,7 @@ module.exports = {
             name: "extract-pdf-metadata",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-pdf-meta.js",
+            cmd: "pdf_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -38,7 +38,7 @@ module.exports = {
             name: "wikipedia-concept-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-wikipedia.js",
+            cmd: "wikipedia_bolt.js",
             inputs: [{
                 source: "extract-pdf-metadata",
             }],

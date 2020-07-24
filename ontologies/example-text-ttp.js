@@ -23,7 +23,7 @@ module.exports = {
             name: "extract-text-ttp",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-text-ttp.js",
+            cmd: "text_ttp_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -45,7 +45,7 @@ module.exports = {
             name: "extract-wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-wikipedia.js",
+            cmd: "wikipedia_bolt.js",
             inputs: [{
                 source: "extract-text-ttp",
             }],

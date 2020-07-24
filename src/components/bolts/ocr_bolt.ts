@@ -1,8 +1,8 @@
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import * as fs from "fs";
 import * as path from "path";
 import got from "got";
@@ -13,7 +13,7 @@ import * as Tesseract from "tesseract.js";
 import Languages from "../../library/languages";
 import * as fileManager from "../../library/file-manager";
 
-class ExtractOCRMeta extends BasicBolt {
+class OcrBolt extends BasicBolt {
 
     private _documentLocationPath: string;
     private _documentLocationType: string;
@@ -33,11 +33,11 @@ class ExtractOCRMeta extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IExtractOCRMetaConfig, context: any) {
+    async init(name: string, config: INT.IOcrBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractOCRMeta ${this._name}]`;
+        this._prefix = `[OcrBolt ${this._name}]`;
 
         // the path to where to get the url
         this._documentLocationPath = config.document_location_path;
@@ -76,7 +76,7 @@ class ExtractOCRMeta extends BasicBolt {
             const documentURL: string = this.get(message, this._documentLocationPath);
             const documentLang: string = this.get(message, this._documentLanguagePath);
             // get the alpha3 language code
-            const alpha3Language = this._languages.getIsoCode(documentLang, Interfaces.ILanguageTypes.ALPHA3);
+            const alpha3Language = this._languages.getIsoCode(documentLang, INT.ILanguageTypes.ALPHA3);
             // get the material data as a buffer
             let dataBuffer: Buffer;
             switch(this._documentLocationType) {
@@ -159,6 +159,6 @@ class ExtractOCRMeta extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractOCRMeta();
+const create = () => new OcrBolt();
 
 export { create };

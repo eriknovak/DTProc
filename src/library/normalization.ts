@@ -1,7 +1,7 @@
-import * as asciiConverstion from "../config/ascii.json";
+import * as ascii from "../config/ascii.json";
 
 // normalizes the string by replacing non-ascii characters with the closest asci character
 export function normalizeString (text: string) {
-    const regex = new RegExp(`[${Object.keys(asciiConverstion).join("")}]`, "g");
-    return text.replace(regex, (match) => asciiConverstion[match]);
+    const regex = new RegExp(`[${Object.keys(ascii).join("")}]`, "g");
+    return text.replace(regex, (match) => ascii[match]);
 }

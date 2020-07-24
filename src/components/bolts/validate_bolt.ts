@@ -1,18 +1,12 @@
-/** ******************************************************************
- * This component validates the material object using the
- * JSON Schema validator component.
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import * as jsonschema from "jsonschema";
 import Validator from "../../library/validator";
 
-
-class MessageValidate extends BasicBolt {
+class ValidateBolt extends BasicBolt {
 
     private _validator: Validator;
     private _JSONSchema: jsonschema.Schema;
@@ -25,11 +19,11 @@ class MessageValidate extends BasicBolt {
         this._context = null;
     }
 
-    async init(name: string, config: Interfaces.IMessageValidateConfig, context: any) {
+    async init(name: string, config: INT.IValidateBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[MessageValidate ${this._name}]`;
+        this._prefix = `[ValidateBolt ${this._name}]`;
 
         // initialize validator with
         this._validator = new Validator();
@@ -64,6 +58,6 @@ class MessageValidate extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new MessageValidate();
+const create = () => new ValidateBolt();
 
 export { create };

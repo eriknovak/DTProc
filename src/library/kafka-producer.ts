@@ -1,9 +1,8 @@
 // interfaces
-import * as Interfaces from "../Interfaces";
+import * as INT from "../Interfaces";
 
 // modules
 import * as k from "kafka-node";
-
 
 export default class KafkaProducer {
 
@@ -45,7 +44,7 @@ export default class KafkaProducer {
     }
 
     // sends the message to the appropirate topic
-    send(topic: string, msg: any, cb?: Interfaces.IGenericCallbackFunc) {
+    send(topic: string, msg: any, cb?: INT.IGenericCallbackFunc) {
         // get set callback value
         const callback = cb && typeof (cb) !== "function"
             ? (error: Error) => { if (error) { console.log(error); } }

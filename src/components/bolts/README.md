@@ -5,7 +5,7 @@ document. The standard qtopology bolts can be found [here](https://qminer.github
 
 
 ## Basic Bolt
-The [basic bolt](./basic-bolt.js) is the template class from which all other bolts are extended.
+The [basic bolt](./basic_bolt.ts) is the template class from which all other bolts are extended.
 It contains the `get` and `set` methods - used for getting and setting attributes of the message.
 
 **GET.** The `get` method enables retrieving attributes from the message object. It accepts two
@@ -69,8 +69,8 @@ In addition, if the object doesn't already have an existing attribute object, th
 ```
 
 
-## Extract Document Type
-The [extract document type](./extract-document-type.js) bolt is able to extract the type of the document based URL address of the document.
+## Document Type Bolt
+The [doc type](./doc_type_bolt.ts) bolt is able to extract the type of the document based URL address of the document.
 It requires the following parameters:
 
 | Parameter              | Description                                                                                        |
@@ -83,10 +83,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-document-type-component-name",
+    "name": "document-type-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-document-type.js",
+    "cmd": "doc_type_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -99,8 +99,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract OCR meta
-The [extract ocr meta](./extract-ocr-meta.js) bolt uses [tesseract.js](https://github.com/naptha/tesseract.js) to identify the text in the PDF
+## OCR Bolt
+The [ocr](./ocr_bolt.ts) bolt uses [tesseract.js](https://github.com/naptha/tesseract.js) to identify the text in the PDF
 spans. (**NOTE:** requires [pdf-image](https://github.com/mooz/node-pdf-image) conditions for converting the PDF into images, which are then
 processed by [tesseract](https://github.com/tesseract-ocr/tesseract) to extract the content). It requires the following parameters:
 
@@ -119,10 +119,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-pdf-raw-component-name",
+    "name": "ocr-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-pdf-raw.js",
+    "cmd": "ocr_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -140,8 +140,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract PDF meta
-The [extract pdf meta](./extract-pdf-meta.js) bolt extracts the requested PDF metadata and content. In addition, it is able to convert a
+## PDF Bolt
+The [pdf](./pdf_bolt.ts) bolt extracts the requested PDF metadata and content. In addition, it is able to convert a
 microsoft office file into PDF before extracting the PDF metadata and content (**NOTE:** requires [libreoffice](https://www.libreoffice.org/)
 to use the conversion feature). It requires the following parameters:
 
@@ -158,10 +158,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-pdf-raw-component-name",
+    "name": "pdf-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-pdf-raw.js",
+    "cmd": "pdf_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -177,8 +177,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract Text Raw
-The [extract text raw](./extract-text-raw.js) bolt is able to extract the document content in text format. The content is
+## Text Bolt
+The [text](./text_bolt.ts) bolt is able to extract the document content in text format. The content is
 extracted through the document URL address using the [textract](https://www.npmjs.com/package/textract) library and requires
 the following parameters:
 
@@ -197,10 +197,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-text-raw-component-name",
+    "name": "text-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-text-raw.js",
+    "cmd": "text_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -219,8 +219,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract Text TTP
-The [extract text ttp](./extract-text-ttp.js) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
+## Text TTP Bolt
+The [text ttp](./text_ttp_bolt.ts) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
 transcription and translation platform, and gets the translations of the provided text. The service is payable but also provide
 an [experimental account](https://ttp.mllp.upv.es/index.php?page=register). To send the request, the following parameters need to be provided:
 
@@ -245,10 +245,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-text-ttp-component-name",
+    "name": "text-ttp-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-text-ttp.js",
+    "cmd": "text_ttp_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -284,8 +284,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract Video TTP
-The [extract video ttp](./extract-video-ttp.js) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
+## Video TTP Bolt
+The [video ttp](./video_ttp_bolt.ts) bolt sends a request to [MLLP](https://ttp.mllp.upv.es/index.php), the media
 transcription and translation platform, and gets the transcriptions and translations of the provided video. The service is
 payable but also provide an [experimental account](https://ttp.mllp.upv.es/index.php?page=register) To send the request,
 the following parameters need to be provided:
@@ -313,10 +313,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-video-ttp-component-name",
+    "name": "video-ttp-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-video-ttp.js",
+    "cmd": "video_ttp_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -355,8 +355,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Extract Wikipedia
-The [extract wikipedia](./extract-wikipedia.js) bolt leverages the [Wikifier](http://wikifier.org/) service for annotating
+## Wikipedia Bolt
+The [wikipedia](./wikipedia_bolt.ts) bolt leverages the [Wikifier](http://wikifier.org/) service for annotating
 the document text with Wikipedia concepts. It requires the following parameters:
 
 | Parameter              | Description                                                                                        |
@@ -373,10 +373,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "extract-wikipedia-component-name",
+    "name": "wikipedia-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "extract-wikipedia.js",
+    "cmd": "wikipedia_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -394,8 +394,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Forward Kafka
-The [forward kafka](./forward-kafka.js) bolt sends the message to the given [Kafka](https://kafka.apache.org/) system, to a specific topic.
+## Kafka Bolt
+The [kafka](./kafka_bolt.ts) bolt sends the message to the given [Kafka](https://kafka.apache.org/) system, to a specific topic.
 It requires the following parameters:
 
 | Parameter              | Description                                                                                        |
@@ -409,10 +409,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "forward-kafka-component-name",
+    "name": "kafka-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "forward-kafka.js",
+    "cmd": "kafka_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -427,8 +427,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Message PostgreSQL
-The [message postgresql](./message-postgresql.js) bolt updated a table in PostgreSQL database with the given
+## Log PostgreSQL Bolt
+The [log postgresql](./log_postgresql_bolt.ts) bolt updated a table in PostgreSQL database with the given
 messages and literal attributes. It requires the following parameters:
 
 | Parameter              | Description                                                                                        |
@@ -458,10 +458,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "message-postgresql-component-name",
+    "name": "log-postgresql-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "message-postgresql.js",
+    "cmd": "log_postgresql_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -502,8 +502,8 @@ The schema for this bolt in the ontology is:
 ```
 
 
-## Message Validate
-The [message validate](./message-validate.js) bolt validates the if the message object has the structure and values
+## Validate Bolt
+The [validate](./validate_bolt.ts) bolt validates the if the message object has the structure and values
 specified in the given json schema. The bolt adopts the [json schema](https://json-schema.org) format and accepts
 the following parameters:
 
@@ -516,10 +516,10 @@ The schema for this bolt in the ontology is:
 
 ```json
 {
-    "name": "message-validate-component-name",
+    "name": "validate-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "message-validate.js",
+    "cmd": "validate_bolt.js",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],
@@ -530,8 +530,8 @@ The schema for this bolt in the ontology is:
 }
 ```
 
-## Store PostgreSQL template
-The [store postgresql template](./store-postgresql-template.js) bolt serves as a template for creating bolts which
+## Store PostgreSQL Template Bolt
+The [store postgresql template](./store_postgresql_template_bolt.ts) bolt serves as a template for creating bolts which
 stores the message attributes to different postgresql tables. **NOTE:** The bolt needs to be implemented to serve
 the users specifications.
 
@@ -559,7 +559,7 @@ The schema for this bolt in the ontology is:
     "name": "store-postgresql-template-component-name",
     "type": "inproc",
     "working_dir": "./components/bolts",
-    "cmd": "store-postgresql-template.js",
+    "cmd": "store_postgresql_template_bolt.ts",
     "inputs": [{
         "source": "source-spout-or-bolt-name",
     }],

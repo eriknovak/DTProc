@@ -1,11 +1,5 @@
-/**
- * This component makes a request to the UPV's Transcription and
- * Translation Platform (TTP) <https://ttp.mllp.upv.es/index.php>
- * and retrieves the video content as raw text and dfxp.]
- */
-
 // interfaces
-import * as Interfaces from "../../Interfaces";
+import * as INT from "../../Interfaces";
 
 // modules
 import * as bent from "bent";
@@ -13,14 +7,13 @@ import * as delay from "delay";
 import { normalizeString } from "../../library/normalization";
 import * as querystring from "querystring";
 
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 
-
-class ExtractVideoTTP extends BasicBolt {
+class VideoTTPBolt extends BasicBolt {
 
     private _ttpOptions: { user: string, auth_token: string };
     private _ttpURL: string;
-    private _ttpLanguages: Interfaces.ITTPLanguageVideo;
+    private _ttpLanguages: INT.ITTPLanguageVideo;
     private _ttpFormats: { [key: number]: string };
     private _ttpTimeoutMillis: number;
     private _documentLanguagePath: string;
@@ -43,11 +36,11 @@ class ExtractVideoTTP extends BasicBolt {
         this._onEmit = null;
     }
 
-    async init(name: string, config: Interfaces.IExtractVideoTTPConfig, context: any) {
+    async init(name: string, config: INT.IVideoTTPBoltConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractVideoTTP ${this._name}]`;
+        this._prefix = `[VideoTTPBolt ${this._name}]`;
 
         // the user and authentication token used for the requests
         this._ttpOptions = {
@@ -116,7 +109,7 @@ class ExtractVideoTTP extends BasicBolt {
 
     async receive(message: any, stream_id: string) {
         // iteratively check for the process status
-        const _checkTTPStatus: Interfaces.IExtractTTPStatusFunc = async (process_id: string) => {
+        const _checkTTPStatus: INT.IExtractTTPStatusFunc = async (process_id: string) => {
             this._delayObject = delay(this._ttpTimeoutMillis);
             // wait for a number of milliseconds
             await this._delayObject;
@@ -124,7 +117,7 @@ class ExtractVideoTTP extends BasicBolt {
                 const {
                     status_code,
                     status_info
-                }: Interfaces.IExtractTTPStatus = await this._getStatusRequest(`/status?${querystring.stringify({ ...this._ttpOptions, id: process_id })}`);
+                }: INT.IExtractTTPStatus = await this._getStatusRequest(`/status?${querystring.stringify({ ...this._ttpOptions, id: process_id })}`);
                 if (status_code === 6) {
                     return {
                         process_completed: true,
@@ -208,7 +201,7 @@ class ExtractVideoTTP extends BasicBolt {
         }
 
         // create the requested langs object
-        const requestedLanguages: Interfaces.ITTPLanguageVideo = JSON.parse(JSON.stringify(this._ttpLanguages));
+        const requestedLanguages: INT.ITTPLanguageVideo = JSON.parse(JSON.stringify(this._ttpLanguages));
         const constructedLanguages = Object.keys(requestedLanguages)
                 .filter((lang) => lang !== "en");
 
@@ -252,7 +245,7 @@ class ExtractVideoTTP extends BasicBolt {
         const languages = Object.keys(requestedLanguages);
         const formats = Object.keys(this._ttpFormats);
 
-        let response: Interfaces.ITTPIngestNewResponse;
+        let response: INT.ITTPIngestNewResponse;
         try {
             response = await this._postRequest("/ingest/new", options, {
                 "content-type": "application/json"
@@ -364,6 +357,6 @@ class ExtractVideoTTP extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractVideoTTP();
+const create = () => new VideoTTPBolt();
 
 export { create };
