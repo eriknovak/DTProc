@@ -8,7 +8,7 @@ import * as Interfaces from "../../Interfaces";
 
 // modules
 import KafkaProducer from "../../library/kafka-producer";
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 
 /**
  * @class KafkaSender

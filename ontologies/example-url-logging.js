@@ -23,7 +23,7 @@ module.exports = {
             name: "log-message-retrieval",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "message-postgresql.js",
+            cmd: "log_postgresql_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -49,7 +49,7 @@ module.exports = {
             name: "document-type-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-document-type.js",
+            cmd: "document_type_bolt.js",
             inputs: [{
                 source: "log-message-retrieval",
             }],
@@ -62,7 +62,7 @@ module.exports = {
             name: "log-type-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "message-postgresql.js",
+            cmd: "log_postgresql_bolt.js",
             inputs: [{
                 source: "document-type-extraction",
             }],
@@ -81,7 +81,7 @@ module.exports = {
             name: "document-content-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-text-raw.js",
+            cmd: "text_bolt.js",
             inputs: [{
                 source: "log-type-extraction",
             }],
@@ -100,7 +100,7 @@ module.exports = {
             name: "log-content-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "message-postgresql.js",
+            cmd: "log_postgresql_bolt.js",
             inputs: [{
                 source: "document-content-extraction",
             }],
@@ -119,7 +119,7 @@ module.exports = {
             name: "wikipedia-concept-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-wikipedia.js",
+            cmd: "wikipedia_bolt.js",
             inputs: [{
                 source: "log-content-extraction",
             }],
@@ -139,7 +139,7 @@ module.exports = {
             name: "log-wikipedia-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "message-postgresql.js",
+            cmd: "log_postgresql_bolt.js",
             inputs: [{
                 source: "wikipedia-concept-extraction",
             }],
@@ -170,7 +170,7 @@ module.exports = {
             name: "log-finished-processing",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "message-postgresql.js",
+            cmd: "log_postgresql_bolt.js",
             inputs: [
                 {
                     source: "document-type-extraction",

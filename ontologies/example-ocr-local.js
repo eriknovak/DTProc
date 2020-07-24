@@ -23,7 +23,7 @@ module.exports = {
             name: "document-type-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-document-type.js",
+            cmd: "document_type_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -33,10 +33,10 @@ module.exports = {
             }
         },
         {
-            name: "extract-ocr-metadata",
+            name: "ocr-metadata",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-ocr-meta.js",
+            cmd: "ocr_bolt.js",
             inputs: [{
                 source: "document-type-extraction",
             }],
@@ -52,7 +52,7 @@ module.exports = {
             name: "wikipedia-concept-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-wikipedia.js",
+            cmd: "wikipedia_bolt.js",
             inputs: [{
                 source: "extract-ocr-metadata",
             }],

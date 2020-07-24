@@ -23,7 +23,7 @@ module.exports = {
             name: "extract-wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-wikipedia.js",
+            cmd: "wikipedia_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],

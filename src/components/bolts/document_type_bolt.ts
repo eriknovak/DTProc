@@ -10,7 +10,7 @@
 import * as Interfaces from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 
 import got from "got";
 import * as MimeType from "mime-types";

@@ -4,7 +4,7 @@
  */
 
 // libraries
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import Wikifier from "../../library/wikifier";
 
 

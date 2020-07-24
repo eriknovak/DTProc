@@ -1,17 +1,11 @@
-/** **********************************************
- * This component is listening to a Kafka topic
- * and then sends the message forward to the next
- * component in the topology.
- */
-
 // modules
-import BasicSpout from "./basic-spout";
-import KafkaConsumer from "../../library/kafka-consumer";
+import BasicSpout from "./basic_spout";
+import PostgresRecords from "../../library/postgresql-records";
 
+// periodically retrieves the records from the postgreql table
+class PostgresqlSpout extends BasicSpout {
 
-class KafkaSpout extends BasicSpout {
-
-    private _generator: KafkaConsumer;
+    private _generator: PostgresRecords;
 
     constructor() {
         super();
@@ -24,8 +18,12 @@ class KafkaSpout extends BasicSpout {
     async init(name: string, config: any, context: any) {
         this._name = name;
         this._context = context;
-        this._prefix = `[KafkaSpout ${this._name}]`;
-        this._generator = new KafkaConsumer(config.kafka);
+        this._prefix = `[PostgresqlSpout ${this._name}]`;
+        this._generator = new PostgresRecords(
+            config.pg,
+            config.sql_statement,
+            config.time_interval
+        );
     }
 
     heartbeat() {
@@ -33,7 +31,7 @@ class KafkaSpout extends BasicSpout {
     }
 
     async shutdown() {
-        // stop kafka generator
+        // stop postgresql generator
         const promise = new Promise((resolve, reject) => {
             this._generator.stop(() => {
                 return resolve();
@@ -43,23 +41,23 @@ class KafkaSpout extends BasicSpout {
     }
 
     run() {
-        // enable kafka generator
+        // enable postgresql generator
         this._generator.enable();
     }
 
     pause() {
-        // disable kafka generator
+        // disable postgresql generator
         this._generator.disable();
     }
 
     async next() {
         const message = this._generator.next();
         // get the next message from the generator
-        return message ? { data: message } : null;
+        return { data: message };
     }
 }
 
 // create a new instance of the spout
-const create = () => new KafkaSpout();
+const create = () => new PostgresqlSpout();
 
 export { create };

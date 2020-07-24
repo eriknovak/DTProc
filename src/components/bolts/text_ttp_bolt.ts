@@ -19,7 +19,7 @@ import * as fileManager from "../../library/file-manager";
 import { normalizeString } from "../../library/normalization";
 import * as querystring from "querystring";
 
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 
 
 class ExtractTextTTP extends BasicBolt {

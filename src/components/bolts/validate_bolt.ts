@@ -7,7 +7,7 @@
 import * as Interfaces from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import * as jsonschema from "jsonschema";
 import Validator from "../../library/validator";
 

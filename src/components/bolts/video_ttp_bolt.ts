@@ -13,7 +13,7 @@ import * as delay from "delay";
 import { normalizeString } from "../../library/normalization";
 import * as querystring from "querystring";
 
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 
 
 class ExtractVideoTTP extends BasicBolt {

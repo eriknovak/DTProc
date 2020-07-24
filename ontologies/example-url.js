@@ -23,7 +23,7 @@ module.exports = {
             name: "document-type-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-document-type.js",
+            cmd: "document_type_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],
@@ -36,7 +36,7 @@ module.exports = {
             name: "document-content-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-text-raw.js",
+            cmd: "text_bolt.js",
             inputs: [{
                 source: "document-type-extraction",
             }],
@@ -54,7 +54,7 @@ module.exports = {
             name: "wikipedia-concept-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-wikipedia.js",
+            cmd: "wikipedia_bolt.js",
             inputs: [{
                 source: "document-content-extraction",
             }],

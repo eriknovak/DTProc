@@ -8,7 +8,7 @@ import * as Interfaces from "../../Interfaces";
 
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import PostgreSQL from "../../library/postgresql";
 
 

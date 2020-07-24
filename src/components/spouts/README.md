@@ -4,7 +4,7 @@ This folder contains custom spouts used for acquiring documents from different s
 The standard qtopology spouts can be found [here](https://qminer.github.io/qtopology/std-nodes.html).
 
 ## Kafka Spout
-The [kafka](./kafka-spout.js) spout connects to a given [Apache Kafka](https://kafka.apache.org/)
+The [kafka](./kafka_spout.ts) spout connects to a given [Apache Kafka](https://kafka.apache.org/)
 service and listens to a given topic. A kafka group ID can be assigned to the spout to have
 multiple listeners on a given topic. It requires the following parameters.
 
@@ -38,7 +38,7 @@ The schema for this spout in the ontology is:
 ```
 
 ## PostgreSQL Spout
-The [postgresql](./postgresql-spout.js) spout connects to a given [PostgreSQL service](https://www.postgresql.org/)
+The [postgresql](./postgresql_spout.ts) spout connects to a given [PostgreSQL service](https://www.postgresql.org/)
 service and periodically retrieves the records form the specified database. Here, the user needs
 to be careful to assign some constraint to the SQL statement that will handle retrieving unique
 records (not sending the same records). It requires the following parameters.

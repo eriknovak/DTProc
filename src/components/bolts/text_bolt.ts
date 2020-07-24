@@ -9,8 +9,8 @@
 import * as Interfaces from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
-import * as textract from "../../../pkgs/textract";
+import BasicBolt from "./basic_bolt";
+import * as textract from "../../../pkgs/textract/lib";
 
 class ExtractTextRaw extends BasicBolt {
 

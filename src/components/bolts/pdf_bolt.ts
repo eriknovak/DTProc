@@ -2,7 +2,7 @@
 import * as Interfaces from "../../Interfaces";
 
 // modules
-import BasicBolt from "./basic-bolt";
+import BasicBolt from "./basic_bolt";
 import * as fs from "fs";
 import * as pdf from "pdf-parse";
 import got from "got";
