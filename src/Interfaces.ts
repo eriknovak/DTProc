@@ -109,6 +109,18 @@ export interface IKafkaConsumerParams {
     low_water: number;
 }
 
+
+/////////////////////////////////////////////////////////////////////
+// Languages Interfaces
+/////////////////////////////////////////////////////////////////////
+
+export enum ILanguageTypes {
+    FULLNAME = "fullname",
+    ALPHA2 = "alpha2",
+    ALPHA3 = "alpha3"
+}
+
+
 /////////////////////////////////////////////////////////////////////
 // PostgreSQL Interfaces
 /////////////////////////////////////////////////////////////////////
@@ -219,13 +231,29 @@ import * as qtolopology from "qtopology";
 
 export interface IExtractDocumentTypeConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
-    document_url_path: string;
+    document_location_path: string;
     document_type_path: string;
     document_error_path?: string;
 }
 
 ///////////////////////////////////////
-// Extract Pdf Raw
+// Extract OCR Meta
+///////////////////////////////////////
+
+export interface IExtractOCRMetaConfig {
+    onEmit?: qtolopology.BoltEmitCallbackAsync;
+    document_location_path: string;
+    document_location_type?: string;
+    document_language_path: string;
+    document_ocr_path: string;
+    ocr_data_folder?: string;
+    ocr_verbose?: boolean;
+    document_error_path?: string;
+    temporary_folder: string;
+}
+
+///////////////////////////////////////
+// Extract PDF Meta
 ///////////////////////////////////////
 
 export enum IExtractPdfMetadata {
@@ -235,8 +263,7 @@ export enum IExtractPdfMetadata {
     TEXT = "text"
 }
 
-
-export interface IExtractPdfRawConfig {
+export interface IExtractPdfMetaConfig {
     onEmit?: qtolopology.BoltEmitCallbackAsync;
     document_location_path: string;
     document_pdf_path: string;
@@ -245,7 +272,6 @@ export interface IExtractPdfRawConfig {
     extract_metadata?: IExtractPdfMetadata[];
     convert_to_pdf?: boolean;
 }
-
 
 ///////////////////////////////////////
 // Extract Text Raw

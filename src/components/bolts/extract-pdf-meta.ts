@@ -1,10 +1,3 @@
-/**
- * This component extracts raw content text from the file provided.
- * To do this we use textract <https://github.com/dbashford/textract>
- * which is a text extraction library. It returns the content in raw
- * text.
- */
-
 // interfaces
 import * as Interfaces from "../../Interfaces";
 
@@ -16,12 +9,12 @@ import got from "got";
 // used for converting text documents into pdfs
 import libre = require("libreoffice-convert");
 
-class ExtractPdfRaw extends BasicBolt {
+class ExtractPdfMeta extends BasicBolt {
 
     private _documentLocationPath: string;
+    private _documentLocationType: string;
     private _documentPdfPath: string;
     private _documentErrorPath: string;
-    private _documentLocationType: string;
     private _extractMetadata: Interfaces.IExtractPdfMetadata[];
     private _convertToPDF: boolean;
 
@@ -33,11 +26,11 @@ class ExtractPdfRaw extends BasicBolt {
     }
 
     // initialize the bolt
-    async init(name: string, config: Interfaces.IExtractPdfRawConfig, context: any) {
+    async init(name: string, config: Interfaces.IExtractPdfMetaConfig, context: any) {
         this._name = name;
         this._context = context;
         this._onEmit = config.onEmit;
-        this._prefix = `[ExtractPdfRaw ${this._name}]`;
+        this._prefix = `[ExtractPdfMeta ${this._name}]`;
 
         // the path to where to get the url
         this._documentLocationPath = config.document_location_path;
@@ -92,16 +85,16 @@ class ExtractPdfRaw extends BasicBolt {
             const metadata = {};
             for (const type of this._extractMetadata) {
                 switch (type) {
-                case "pages":
+                case Interfaces.IExtractPdfMetadata.PAGES:
                     metadata[type] = pdfMeta.numpages;
                     break;
-                case "info":
+                case Interfaces.IExtractPdfMetadata.INFO:
                     metadata[type] = pdfMeta.info;
                     break;
-                case "metadata":
+                case Interfaces.IExtractPdfMetadata.METADATA:
                     metadata[type] = pdfMeta.metadata;
                     break;
-                case "text":
+                case Interfaces.IExtractPdfMetadata.TEXT:
                     metadata[type] = pdfMeta.text;
                     break;
                 default:
@@ -130,6 +123,6 @@ class ExtractPdfRaw extends BasicBolt {
 }
 
 // create a new instance of the bolt
-const create = () => new ExtractPdfRaw();
+const create = () => new ExtractPdfMeta();
 
 export { create };

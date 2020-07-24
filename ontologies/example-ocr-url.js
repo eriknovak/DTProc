@@ -33,19 +33,19 @@ module.exports = {
             }
         },
         {
-            name: "extract-pdf-metadata",
+            name: "extract-ocr-metadata",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "extract-pdf-meta.js",
+            cmd: "extract-ocr-meta.js",
             inputs: [{
                 source: "document-type-extraction",
             }],
             init: {
                 document_location_path: "url",
                 document_location_type: "remote",
-                document_pdf_path: "metadata.pdf",
-                extract_metadata: ["pages", "info", "metadata", "text"],
-                convert_to_pdf: true
+                document_language_path: "language",
+                document_ocr_path: "metadata.text",
+                temporary_folder: "../tmp"
             }
         },
         {
@@ -54,7 +54,7 @@ module.exports = {
             working_dir: "./components/bolts",
             cmd: "extract-wikipedia.js",
             inputs: [{
-                source: "extract-pdf-metadata",
+                source: "extract-ocr-metadata",
             }],
             init: {
                 // wikifier related configurations
@@ -63,7 +63,7 @@ module.exports = {
                     wikifier_url: config.wikifier.wikifierURL,
                     max_length: 10000
                 },
-                document_text_path: "metadata.pdf.text",
+                document_text_path: "metadata.text",
                 wikipedia_concept_path: "metadata.wiki",
                 document_error_path: "error"
             }
@@ -77,7 +77,7 @@ module.exports = {
                 { source: "wikipedia-concept-extraction" }
             ],
             init: {
-                file_name_template: "../example/example_pdf_url_output.jl"
+                file_name_template: "../example/example_ocr_url_output.jl"
             }
         },
         {
@@ -91,7 +91,7 @@ module.exports = {
                     stream_id: "stream_error"
                 },
                 {
-                    source: "extract-pdf-metadata",
+                    source: "extract-ocr-metadata",
                     stream_id: "stream_error"
                 },
                 {
