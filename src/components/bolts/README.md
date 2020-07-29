@@ -152,7 +152,7 @@ to use the conversion feature). It requires the following parameters:
 | document_pdf_path                                  | The path where the pdf metadata and content is stored                                              |
 | document_error_path                                | (optional) The path to store the error message (default: `error`)                                  |
 | pdf_extract_metadata                               | (optional) The PDF values to be extracted (default: `["pages", "info", "metadata", "text"]`)       |
-| pdf_trim_text                                      | (optional) Trims the extracted PDF text                                                            |
+| pdf_trim_text                                      | (optional) Trims the extracted PDF text (default: `false`)                                                    |
 | convert_to_pdf                                     | (optional) The boolean value if the files should be converted to PDF; requires installed `libreoffice` (default: `false`)   |
 
 The schema for this bolt in the ontology is:
