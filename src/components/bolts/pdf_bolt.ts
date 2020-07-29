@@ -15,8 +15,9 @@ class PdfBolt extends BasicBolt {
     private _documentLocationType: string;
     private _documentPdfPath: string;
     private _documentErrorPath: string;
-    private _extractMetadata: INT.IPdfMetadata[];
+    private _PDFextractMetadata: INT.IPdfMetadata[];
     private _convertToPDF: boolean;
+    private _PDFtrimText: boolean;
 
     constructor() {
         super();
@@ -41,12 +42,14 @@ class PdfBolt extends BasicBolt {
         // the path to where to store the error
         this._documentErrorPath = config.document_error_path || "error";
         // the extraction types
-        this._extractMetadata = config.extract_metadata || [
+        this._PDFextractMetadata = config.pdf_extract_metadata || [
             INT.IPdfMetadata.PAGES,
             INT.IPdfMetadata.INFO,
             INT.IPdfMetadata.METADATA,
             INT.IPdfMetadata.TEXT
         ];
+        // the trim PDF text
+        this._PDFtrimText = config.pdf_trim_text || false;
         // the convert to PDF flag, requires libreoffice
         this._convertToPDF = config.convert_to_pdf || false;
     }
@@ -83,7 +86,7 @@ class PdfBolt extends BasicBolt {
             const pdfMeta = await pdf(dataBuffer);
 
             const metadata = {};
-            for (const type of this._extractMetadata) {
+            for (const type of this._PDFextractMetadata) {
                 switch (type) {
                 case INT.IPdfMetadata.PAGES:
                     metadata[type] = pdfMeta.numpages;
@@ -95,7 +98,9 @@ class PdfBolt extends BasicBolt {
                     metadata[type] = pdfMeta.metadata;
                     break;
                 case INT.IPdfMetadata.TEXT:
-                    metadata[type] = pdfMeta.text;
+                    metadata[type] = this._PDFtrimText
+                        ? pdfMeta.text.trim()
+                        : pdfMeta.text;
                     break;
                 default:
                     break;
