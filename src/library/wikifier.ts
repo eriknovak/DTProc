@@ -3,14 +3,13 @@ import * as INT from "../Interfaces";
 
 // modules
 import * as async from "async";
-import * as bent from "bent";
+import { default as got, Response as gotResponse } from "got";
 
 export default class Wikifier {
 
     private _userKey: string;
     private _wikifierURL: string;
     private _maxLength: number;
-    private _postRequest: bent.RequestFunction<any>;
 
     // creates the wikifier instance
     constructor(config: INT.IWikifierParams) {
@@ -19,8 +18,6 @@ export default class Wikifier {
         this._maxLength = config.max_length && config.max_length > 20000
             ? 20000
             : config.max_length || 10000;
-        // prepare the POST request object
-        this._postRequest = bent(this._wikifierURL, "POST", "json", 200);
     }
 
 
@@ -61,15 +58,21 @@ export default class Wikifier {
 
     // annotate provided text with wikipedia concepts
     async _createRequest(text: string) {
-        return await this._postRequest("/annotate-article", {
-            text,
-            lang: "auto",
-            support: true,
-            ranges: false,
-            includeCosines: true,
-            userKey: this._userKey,
-            nTopDfValuesToIgnore: 50,
-            nWordsToIgnoreFromList: 50
+        return await got.post(`annotate-article`, {
+            prefixUrl: this._wikifierURL,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            form: {
+                text,
+                lang: "auto",
+                support: true,
+                ranges: false,
+                includeCosines: true,
+                userKey: this._userKey,
+                nTopDfValuesToIgnore: 50,
+                nWordsToIgnoreFromList: 50
+            }
         });
     }
 
@@ -77,8 +80,9 @@ export default class Wikifier {
     // extract and weight the wikipedia concepts
     async _getWikipediaConcepts(text: string, weight: number) {
         try {
-            // make wikipedia concept request and handle concepts
-            const data: INT.IWikifierResponse = await this._createRequest(text);
+             // make wikipedia concept request and handle concepts
+             const response: gotResponse<string> = await this._createRequest(text);
+             const data: INT.IWikifierResponse = JSON.parse(response.body);
             // get annotations
             let { annotations } = data;
 
