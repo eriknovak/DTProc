@@ -23,7 +23,7 @@ module.exports = {
             name: "document-type-extraction",
             type: "inproc",
             working_dir: "./components/bolts",
-            cmd: "document_type_bolt.js",
+            cmd: "doc_type_bolt.js",
             inputs: [{
                 source: "text-input-reader",
             }],
