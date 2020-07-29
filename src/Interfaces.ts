@@ -242,7 +242,8 @@ export interface IPdfBoltConfig {
     document_pdf_path: string;
     document_error_path?: string;
     document_location_type?: string;
-    extract_metadata?: IPdfMetadata[];
+    pdf_extract_metadata?: IPdfMetadata[];
+    pdf_trim_text?: boolean;
     convert_to_pdf?: boolean;
 }
 
