@@ -8,7 +8,7 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
@@ -20,12 +20,12 @@ module.exports = {
     ],
     bolts: [
         {
-            name: "extract-wikipedia",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
                 wikifier: {
@@ -43,7 +43,7 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "extract-wikipedia" }
+                { source: "wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_text_output.jl"
@@ -56,7 +56,7 @@ module.exports = {
             cmd: "console",
             inputs: [
                 {
-                    source: "extract-wikipedia",
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],
