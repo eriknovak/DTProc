@@ -56,9 +56,4 @@ npm run build
 
 This work is developed by [AILab](http://ailab.ijs.si/) at [Jozef Stefan Institute](https://www.ijs.si/).
 
-The work is supported by the X5GON and EnviroLENS projects.
-
-The [X5GON](https://www.x5gon.org/) is a project connecting OER repositories and providing services
-to improve the educational process. The [EnviroLens](https://envirolens.eu/) project is a project
-that demonstrates and promotes the use of Earth observation as direct evidence for environmental
-law enforcement, including in a court of law and in related contractual negotiations.
+The work is supported by the [X5GON](https://www.x5gon.org/), a project that connects OER repositories and provides services to improve the educational process.
