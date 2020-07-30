@@ -8,7 +8,7 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
@@ -20,12 +20,12 @@ module.exports = {
     ],
     bolts: [
         {
-            name: "document-content-extraction",
+            name: "doc-text",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "text_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
                 textract_config: {
@@ -39,12 +39,12 @@ module.exports = {
             }
         },
         {
-            name: "wikipedia-concept-extraction",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "doc-text",
             }],
             init: {
                 // wikifier related configurations
@@ -64,28 +64,24 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "wikipedia-concept-extraction" }
+                { source: "wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_local_output.jl"
             }
         },
         {
-            name: "file-error-listener",
+            name: "error-listener",
             working_dir: ".",
             type: "sys",
             cmd: "console",
             inputs: [
                 {
-                    source: "document-type-extraction",
+                    source: "doc-text",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "document-content-extraction",
-                    stream_id: "stream_error"
-                },
-                {
-                    source: "wikipedia-concept-extraction",
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],

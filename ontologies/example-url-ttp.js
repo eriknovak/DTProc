@@ -8,7 +8,7 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
@@ -20,12 +20,12 @@ module.exports = {
     ],
     bolts: [
         {
-            name: "document-type-extraction",
+            name: "doc-type",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "doc_type_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
                 document_location_path: "url",
@@ -33,12 +33,12 @@ module.exports = {
             }
         },
         {
-            name: "document-content-extraction",
+            name: "doc-text",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "text_bolt.js",
             inputs: [{
-                source: "document-type-extraction",
+                source: "doc-type",
             }],
             init: {
                 textract_config: {
@@ -52,12 +52,12 @@ module.exports = {
             }
         },
         {
-            name: "extract-text-ttp",
+            name: "doc-text-ttp",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "text_ttp_bolt.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "doc-text",
             }],
             init: {
                 ttp: {
@@ -74,12 +74,12 @@ module.exports = {
             }
         },
         {
-            name: "wikipedia-concept-extraction",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "extract-text-ttp",
+                source: "doc-text-ttp",
             }],
             init: {
                 // wikifier related configurations
@@ -99,7 +99,7 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "wikipedia-concept-extraction" }
+                { source: "wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_url_ttp_output.jl"
@@ -112,15 +112,19 @@ module.exports = {
             cmd: "console",
             inputs: [
                 {
-                    source: "document-type-extraction",
+                    source: "doc-type",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "document-content-extraction",
+                    source: "doc-text",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "wikipedia-concept-extraction",
+                    source: "doc-text-ttp",
+                    stream_id: "stream_error"
+                },
+                {
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],

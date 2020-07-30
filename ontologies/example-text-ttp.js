@@ -8,7 +8,7 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
@@ -20,12 +20,12 @@ module.exports = {
     ],
     bolts: [
         {
-            name: "extract-text-ttp",
+            name: "doc-text-ttp",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "text_ttp_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
                 ttp: {
@@ -42,12 +42,12 @@ module.exports = {
             }
         },
         {
-            name: "extract-wikipedia",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "extract-text-ttp",
+                source: "doc-text-ttp",
             }],
             init: {
                 wikifier: {
@@ -65,7 +65,7 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "extract-wikipedia" }
+                { source: "wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_text_ttp_output.jl"
@@ -78,11 +78,11 @@ module.exports = {
             cmd: "console",
             inputs: [
                 {
-                    source: "extract-text-ttp",
+                    source: "doc-text-ttp",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "extract-wikipedia",
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],

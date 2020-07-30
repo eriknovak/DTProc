@@ -8,7 +8,7 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
@@ -20,12 +20,12 @@ module.exports = {
     ],
     bolts: [
         {
-            name: "extract-pdf-metadata",
+            name: "doc-pdf",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "pdf_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
                 document_location_path: "path",
@@ -35,12 +35,12 @@ module.exports = {
             }
         },
         {
-            name: "wikipedia-concept-extraction",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "extract-pdf-metadata",
+                source: "doc-pdf",
             }],
             init: {
                 // wikifier related configurations
@@ -50,8 +50,8 @@ module.exports = {
                     max_length: 10000
                 },
                 document_text_path: "metadata.pdf.text",
-                document_error_path: "error",
                 wikipedia_concept_path: "metadata.wiki",
+                document_error_path: "error"
             }
         },
         {
@@ -60,7 +60,7 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "wikipedia-concept-extraction" }
+                { source: "wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_pdf_local_output.jl"
@@ -73,15 +73,11 @@ module.exports = {
             cmd: "console",
             inputs: [
                 {
-                    source: "document-type-extraction",
+                    source: "doc-pdf",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "document-content-extraction",
-                    stream_id: "stream_error"
-                },
-                {
-                    source: "wikipedia-concept-extraction",
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],

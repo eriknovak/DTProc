@@ -8,7 +8,7 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
@@ -20,12 +20,12 @@ module.exports = {
     ],
     bolts: [
         {
-            name: "log-message-retrieval",
+            name: "log-file-reader",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "log_postgresql_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
                 pg: config.pg,
@@ -46,12 +46,12 @@ module.exports = {
             }
         },
         {
-            name: "document-type-extraction",
+            name: "doc-type",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "doc_type_bolt.js",
             inputs: [{
-                source: "log-message-retrieval",
+                source: "log-file-reader",
             }],
             init: {
                 document_location_path: "url",
@@ -59,12 +59,12 @@ module.exports = {
             }
         },
         {
-            name: "log-type-extraction",
+            name: "log-doc-type",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "log_postgresql_bolt.js",
             inputs: [{
-                source: "document-type-extraction",
+                source: "doc-type",
             }],
             init: {
                 pg: config.pg,
@@ -78,12 +78,12 @@ module.exports = {
             }
         },
         {
-            name: "document-content-extraction",
+            name: "doc-text",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "text_bolt.js",
             inputs: [{
-                source: "log-type-extraction",
+                source: "log-doc-type",
             }],
             init: {
                 textract_config: {
@@ -97,12 +97,12 @@ module.exports = {
             }
         },
         {
-            name: "log-content-extraction",
+            name: "log-doc-text",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "log_postgresql_bolt.js",
             inputs: [{
-                source: "document-content-extraction",
+                source: "doc-text",
             }],
             init: {
                 pg: config.pg,
@@ -116,12 +116,12 @@ module.exports = {
             }
         },
         {
-            name: "wikipedia-concept-extraction",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "log-content-extraction",
+                source: "log-doc-text",
             }],
             init: {
                 // wikifier related configurations
@@ -136,12 +136,12 @@ module.exports = {
             }
         },
         {
-            name: "log-wikipedia-extraction",
+            name: "log-wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "log_postgresql_bolt.js",
             inputs: [{
-                source: "wikipedia-concept-extraction",
+                source: "wikipedia",
             }],
             init: {
                 pg: config.pg,
@@ -160,28 +160,28 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "log-wikipedia-extraction" }
+                { source: "log-wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_url_logging_output.jl"
             }
         },
         {
-            name: "log-finished-processing",
+            name: "log-error-processing",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "log_postgresql_bolt.js",
             inputs: [
                 {
-                    source: "document-type-extraction",
+                    source: "doc-type",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "document-content-extraction",
+                    source: "doc-text",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "wikipedia-concept-extraction",
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],

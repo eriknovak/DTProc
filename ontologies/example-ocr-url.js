@@ -8,53 +8,53 @@ module.exports = {
     },
     spouts: [
         {
-            name: "text-input-reader",
+            name: "file-reader",
             working_dir: ".",
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_urls.jl",
+                file_name: "../example/file_local.jl",
                 file_format: "json"
             }
         }
     ],
     bolts: [
         {
-            name: "document-type-extraction",
+            name: "doc-type",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "doc_type_bolt.js",
             inputs: [{
-                source: "text-input-reader",
+                source: "file-reader",
             }],
             init: {
-                document_location_path: "url",
+                document_location_path: "path",
                 document_type_path: "type"
             }
         },
         {
-            name: "extract-ocr-metadata",
+            name: "doc-ocr",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "ocr_bolt.js",
             inputs: [{
-                source: "document-type-extraction",
+                source: "doc-type",
             }],
             init: {
-                document_location_path: "url",
-                document_location_type: "remote",
+                document_location_path: "path",
+                document_location_type: "local",
                 document_language_path: "language",
                 document_ocr_path: "metadata.text",
                 temporary_folder: "../tmp"
             }
         },
         {
-            name: "wikipedia-concept-extraction",
+            name: "wikipedia",
             type: "inproc",
             working_dir: "./components/bolts",
             cmd: "wikipedia_bolt.js",
             inputs: [{
-                source: "extract-ocr-metadata",
+                source: "doc-ocr",
             }],
             init: {
                 // wikifier related configurations
@@ -74,7 +74,7 @@ module.exports = {
             type: "sys",
             cmd: "file_append",
             inputs: [
-                { source: "wikipedia-concept-extraction" }
+                { source: "wikipedia" }
             ],
             init: {
                 file_name_template: "../example/example_ocr_url_output.jl"
@@ -87,15 +87,15 @@ module.exports = {
             cmd: "console",
             inputs: [
                 {
-                    source: "document-type-extraction",
+                    source: "doc-type",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "extract-ocr-metadata",
+                    source: "doc-ocr",
                     stream_id: "stream_error"
                 },
                 {
-                    source: "wikipedia-concept-extraction",
+                    source: "wikipedia",
                     stream_id: "stream_error"
                 }
             ],
