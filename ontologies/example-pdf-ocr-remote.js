@@ -13,7 +13,7 @@ module.exports = {
             type: "sys",
             cmd: "file_reader",
             init: {
-                file_name: "../example/file_local.jl",
+                file_name: "../example/file_urls.jl",
                 file_format: "json"
             }
         }
@@ -28,7 +28,7 @@ module.exports = {
                 source: "file-inputs",
             }],
             init: {
-                document_location_path: "path",
+                document_location_path: "url",
                 document_type_path: "type"
             }
         },
@@ -68,8 +68,8 @@ module.exports = {
                     preserve_only_multiple_line_breaks: false,
                     include_alt_text: false
                 },
-                document_location_path: "path",
-                document_location_type: "local",
+                document_location_path: "url",
+                document_location_type: "remote",
                 document_text_path: "metadata.text",
             }
         },
@@ -83,8 +83,8 @@ module.exports = {
                 stream_id: "pdf"
             }],
             init: {
-                document_location_path: "path",
-                document_location_type: "local",
+                document_location_path: "url",
+                document_location_type: "remote",
                 document_pdf_path: "metadata",
                 pdf_extract_metadata: ["pages", "meta", "text"],
                 pdf_trim_text: true,
@@ -125,8 +125,8 @@ module.exports = {
                 stream_id: "ocr"
             }],
             init: {
-                document_location_path: "path",
-                document_location_type: "local",
+                document_location_path: "url",
+                document_location_type: "remote",
                 document_language_path: "language",
                 document_ocr_path: "metadata.text",
                 temporary_folder: "../tmp",
@@ -180,7 +180,7 @@ module.exports = {
                 }
             ],
             init: {
-                file_name_template: "../example/example_pdf_ocr_local_output.jl"
+                file_name_template: "../example/example_pdf_ocr_remote_output.jl"
             }
         },
         {
