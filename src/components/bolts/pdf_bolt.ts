@@ -79,7 +79,7 @@ class PdfBolt extends BasicBolt {
                 break;
             }
             // convert the document if requested
-            if (this._convertToPDF) {
+            if (this._convertToPDF && !documentURL.includes(".pdf")) {
                 dataBuffer = await this.convertFile(dataBuffer, "pdf");
             }
             // get the pdf metadata
